@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="#幹 改到/etc/passwd 結果整個虛擬機開不起來 為自己的白痴做個紀錄，還好有留下這個
+以下正文
+安安
+為了慶祝我的部落格復活(改版了) 特別打一篇教學如何利用hexo deploy blog on GitHub
+首先的話當然是先把node js 和 npm給搞定
+之後用以下指令安裝 hex">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="如何把部落格架在GitHub上"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>如何把部落格架在GitHub上 - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+</head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/0YWlPp2.png')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>如何把部落格架在GitHub上</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2018-05-19
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>#幹 改到/etc/passwd 結果整個虛擬機開不起來 為自己的白痴做個紀錄，還好有留下這個</p>
+<p>以下正文</p>
+<p>安安</p>
+<p>為了慶祝我的部落格復活(改版了) 特別打一篇教學如何利用hexo deploy blog on GitHub</p>
+<p>首先的話當然是先把node js 和 npm給搞定</p>
+<p>之後用以下指令安裝 hexo 套件</p>
+<pre><code>npm install hexo-cli -g
+</code></pre><p>產生一個初始部落格</p>
+<pre><code>hexo init [blog name]
+</code></pre><p>這樣就成功產生一個部落格樣本囉，真的很簡單</p>
+<p>之後</p>
+<pre><code>cd [blog name]
+npm install
+</code></pre><p>完成前置作業</p>
+<p>到這裡後可以試著開啟server看看</p>
+<pre><code>hexo server 
+hexo s
+</code></pre><p>run看看能不能正常啟動，如果成功的話，恭喜你，可以開始經營自己的部落格了</p>
+<p>以下開始進行改造部落格的動作:</p>
+<h1 id="如何更改布景主題"><a href="#如何更改布景主題" class="headerlink" title="如何更改布景主題"></a>如何更改布景主題</h1><p>首先進入</p>
+<pre><code>https://hexo.io/themes/index.html
+</code></pre><p>尋找順眼的主題，找到之後進入該主題的GitHub，把它的repo clone到themes的資料 夾內， 之後再看看GitHub page裡面有沒有要求進行其他的動作(ex. npm install)， 打開<code>[blag name]</code>內的<code>_config.yml</code></p>
+<p>把裡面的themes改成自己的主題名稱(就是clone下來的資料夾名稱)</p>
+<p><img src="/img/theme.PNG" alt=""></p>
+<p>如果有興趣的話可以看看該主題的GitHub page，主題內的_config可自訂主題一些超連結之類的</p>
+<h1 id="如何發文"><a href="#如何發文" class="headerlink" title="如何發文"></a>如何發文</h1><p>先是新增一篇文章</p>
+<pre><code>hexo new [layout] [title]
+</code></pre><p>預設是<code>post</code> 你可以自訂想要的layout方式，或是在_config.yml內修改預設的layout方式 hexo的layout分為<code>page</code>、<code>post</code>、<code>draft</code>， 每個layout生成後也分別在<code>source</code>內歸類好</p>
+<table>
+<thead>
+<tr>
+<th>layout</th>
+<th>locate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>page</td>
+<td>source/</td>
+</tr>
+<tr>
+<td>post</td>
+<td>source/_post</td>
+</tr>
+<tr>
+<td>draft</td>
+<td>source/_draft</td>
+</tr>
+</tbody>
+</table>
+<p>生成後的檔案除了page是資料夾之外其他都是markdown檔案，可以順便讓自己練習markdown語法</p>
+<p>P.S:在hexo上好像用html刻表格的時候會顯示過多br，解決方法是不要縮排直接變成一行，個人對於hexo表格的表現方式不太滿意</p>
+<h1 id="如何deploy到自己的server上"><a href="#如何deploy到自己的server上" class="headerlink" title="如何deploy到自己的server上"></a>如何deploy到自己的server上</h1><p>編輯完文章後最重要的當然就是讓全世界的人看到自己的作品了</p>
+<p>首先進去_config.yml裡面，找到deploy這個設定去做修改，這裡有更詳細的說明:</p>
+<p><a href="https://hexo.io/zh-tw/docs/deployment.html" target="_blank" rel="noopener">https://hexo.io/zh-tw/docs/deployment.html</a><br>以我自己deploy到GitHub上為例子，做起來就會像是這個樣子:</p>
+<p><img src="/img/deploy.PNG" alt=""></p>
+<p>其中message就是commit的內容</p>
+<p>再來就是下個指令generate它</p>
+<pre><code>hexo g
+</code></pre><p>然後再把它deploy到server端上</p>
+<pre><code>hexo d
+</code></pre><p>介紹就大概到這邊 &lt;(_ _)&gt;</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2018 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

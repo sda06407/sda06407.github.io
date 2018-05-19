@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="安安，第二篇文
+這次是想紀錄一下之前聽木棍大大的pwn基礎，做個筆記，不得不說pwn真的蠻有趣的， 只是無奈門檻真的好高….
+[1]array
+這一題比較簡單，提示有說 control EIP to 0x80485a6 to get a shell! 就是把EIP指標指向0x80485a6這個位置就">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="inndy-pwn101"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>inndy-pwn101 - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+</head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/0YWlPp2.png')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>inndy-pwn101</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2018-05-19
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>安安，第二篇文</p>
+<p>這次是想紀錄一下之前聽木棍大大的pwn基礎，做個筆記，不得不說pwn真的蠻有趣的， 只是無奈門檻真的好高….</p>
+<p>[1]array</p>
+<p>這一題比較簡單，提示有說 <code>control EIP to 0x80485a6 to get a shell!</code> 就是把EIP指標指向<code>0x80485a6</code>這個位置就好了</p>
+<p>剛開始開程式會是這個樣子</p>
+<p><img src="/img/pwnarray1.PNG" alt=""></p>
+<p>看source code</p>
+<p><img src="/img/pwnarray2.PNG" alt=""></p>
+<p>可以看到他已經幫我們寫好 /bin/sh/ 了</p>
+<p>提示有說明更改index=20的位置就可以修改EIP指向的位置了， 所以我們只要把EIP指到/bin/sh那個function的記憶體位置我們就可以拿到shell了<br>最後小提醒還是要進行overflow讓程式crash才能喔，如果是正常退出的話不會成功</p>
+<p>[2] overflow</p>
+<p>這一題比較難，但個人覺得有趣多了</p>
+<p>一樣，執行的畫面是這樣</p>
+<p><img src="/img/pwnoverflow1.png" alt=""></p>
+<p>提示說題目已經幫我們把<code>jmp esp</code>這段機器碼塞入程式裡了，我們要藉由overflow讓EIP 停在<code>jmp esp</code>的記憶體位置，好讓它指向我們的shell code執行</p>
+<p>先用gdb打開應用程式讓它overflow，觀察記憶體狀態:</p>
+<p><img src="/img/pwnoverflow3.png" alt=""></p>
+<p><img src="/img/pwnoverflow4.png" alt=""></p>
+<p>可以發現stack都被’a’占滿了，而上面的0x61616161 拿去比對acsii table 可以知道是 ‘a’ (或是你也可以用python的chr(0x61)去解更快)</p>
+<p>ok, 現在overflow成功後又有另一個問題，我要怎麼知道我該段在哪裡去塞jmp? 做法是把aaaaa替換成一個有順序的ascii，看他斷在哪裡就知道哪裡該塞了 可以利用python快速達成</p>
+<p><img src="/img/pwnoverflow5.png" alt=""></p>
+<p>利用 <code>open(&#39;bin&#39;,&#39;wb&#39;).write(s)</code>就可以把ascii塞進bin檔案裡<br>用xxd打開來看就會是這個樣子</p>
+<p><img src="/img/pwnoverflow6.png" alt=""></p>
+<p>要注意0x0a是換行符號，這會造成我們overflow失敗，所以必須把0a那段改成其他數字</p>
+<p>再利用gdb insert 一次，</p>
+<pre><code>$gdb r &lt; bin
+</code></pre><p>然後看一下結果</p>
+<p><img src="/img/pwnoverflow7.png" alt=""></p>
+<p>可以發現EIP的位置最後指向<code>0x2f2e2d2c</code>，你可能會有疑問 為什麼會這樣排列呢? 這種反著排的排列的方式叫做Little Endian，反而言之就是Big Endian</p>
+<p>以目前常見的CPU為例：</p>
+<ol>
+<li>INTEL X86、DEC VAX 使用 LITTLE-ENDIAN 設計；</li>
+<li>HP、IBM、MOTOROLA 68K 系列使用 BIG-ENDIAN 設計；</li>
+<li>POWERPC 同時支援兩種格式，稱為 BI-ENDIAN。</li>
+</ol>
+<p>至於為什麼叫做Little Endian和Big Endian呢? <a href="https://bcc16.ncu.edu.tw/pool/1.33.shtml" target="_blank" rel="noopener">可以參考這裡的最後一段</a></p>
+<p>好，我們現在知道改哪一段就可以改變EIP的位置了，那要改到哪裡呢?</p>
+<p>使用<code>objdump -d -M intel ./overflow | less</code>切到main欄位可以看到我們目標的記憶體位置，</p>
+<p><img src="/img/pwnoverflow8.png" alt=""></p>
+<p>你可能會有疑問怎麼每個hex長度都不同，這是x86的特性，我們可以利用這點去截斷中間的指令，下面就用實作來說明吧</p>
+<p>利用<code>gdb x/i [address]</code>可以查看該記憶體位址的指令，x=要輸出記憶體的值，i=instruction，另還有8b=輸出8個位元 16b=16個位元…<br>透過剛剛objdump的圖可以數出來0xe4ff的記憶體位置在哪(0x8048595)</p>
+<p>所以我們就修改bin的hex，把<code>0x2f2e2d2c</code>改成<code>0x95850408</code>(因為Little Endian的緣故) 這樣我們就可以確定他會執行stack內的東西了，</p>
+<p>先用<code>xxd bin &gt; bin.hex</code> 把bin匯出成hex檔，把<code>0x2f2e2d2c</code>改成<code>0x95850408</code>然後在下面放入我們要執行的shellcode，這樣<code>jmp esp</code>後就會去往下執行stack的第一行指令就是我們放在下面的shellcode</p>
+<p>google “ /bin/sh shellcode “ 就可以得到簡易的shellcode，放在下面後就大概是這個樣子</p>
+<p><img src="/img/pwnoverflow9.png" alt=""></p>
+<p>再利用<code>cat bin - | overflow</code>最後就可以得到我們要的shell</p>
+<p>用cat -的原因是，這個指令可以在輸入完成後不會斷開，繼續保持input的模式，如果沒加後面的減號，等於我們一拿到shell就馬上斷開了，那沒什麼用</p>
+<p>你可能會有另一個疑問，為什麼不用gdb的 r &lt; bin 來輸入呢?<br>原因是，我們這個行為是讓程式crash並且去叫(執行) /bin/sh ，而gdb只會去分析overflow這個程式，並不會跟著程式一起去執行 /bin/sh ，所以當gdb看到overflow停止執行了 當然就exit了</p>
+<p>[3] guess-number</p>
+<p>這題我覺得是比較簡單的一題</p>
+<p>先看執行:</p>
+<p><img src="/img/pwnguess1.png" alt=""></p>
+<p>可以知道是一猜數字遊戲，總共有3條命，只要有1條命猜對五次就算贏 但我們不可能傻傻地真的去猜，當然是要嘗試破解遊戲</p>
+<p>先嘗試overflow</p>
+<p><img src="/img/pwnguess2.png" alt=""></p>
+<p>雖然我們可以嘗試很多次，但是發現win的次數要剛好停在5才算成功，所以就不能無腦輸入來進行overflow了</p>
+<p>打開source code我們可以看到</p>
+<p><img src="/img/pwnguess3.png" alt=""></p>
+<p>作法就是把<code>username</code>和<code>play_count</code>蓋掉，直接去修改wins的值</p>
+<p>第一步就是我們要產出32(char)+4(int)個位元的字元</p>
+<p>利用 echo + python 快速達成</p>
+<pre><code>echo `python -c &apos;print(&quot;a&quot;*36)&apos;` &gt; payload 
+</code></pre><p>之後我們要把payload匯出成payload.hex，因為要把最後wins的5次加上去</p>
+<p>把payload匯出成payload.hex並加上後面的5次:</p>
+<p><img src="/img/pwnguess4.png" alt=""></p>
+<p>利用cat把payload輸入進guess_number裡:</p>
+<pre><code>cat payload | ./guess_number
+</code></pre><p><img src="/img/pwnguess5.png" alt=""></p>
+<p>you win!</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2018 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
