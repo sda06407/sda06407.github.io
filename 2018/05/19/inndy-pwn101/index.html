@@ -12,8 +12,10 @@
     
         <meta name="description" content="安安，第二篇文
 這次是想紀錄一下之前聽木棍大大的pwn基礎，做個筆記，不得不說pwn真的蠻有趣的， 只是無奈門檻真的好高….
+在看文章錢建議先看一下這篇
+https://blog.csdn.net/zhu2695/article/details/16813425
 [1]array
-這一題比較簡單，提示有說 control EIP to 0x80485a6 to get a shell! 就是把EIP指標指向0x80485a6這個位置就">
+這一題比較簡單，提">
     
 
     <!--Author-->
@@ -185,6 +187,8 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <p>安安，第二篇文</p>
 <p>這次是想紀錄一下之前聽木棍大大的pwn基礎，做個筆記，不得不說pwn真的蠻有趣的， 只是無奈門檻真的好高….</p>
+<p>在看文章錢建議先看一下這篇</p>
+<p><a href="https://blog.csdn.net/zhu2695/article/details/16813425" target="_blank" rel="noopener">https://blog.csdn.net/zhu2695/article/details/16813425</a></p>
 <p>[1]array</p>
 <p>這一題比較簡單，提示有說 <code>control EIP to 0x80485a6 to get a shell!</code> 就是把EIP指標指向<code>0x80485a6</code>這個位置就好了</p>
 <p>剛開始開程式會是這個樣子</p>
@@ -252,6 +256,43 @@
 <pre><code>cat payload | ./guess_number
 </code></pre><p><img src="/img/pwnguess5.png" alt=""></p>
 <p>you win!</p>
+<h1 id="Pwntools"><a href="#Pwntools" class="headerlink" title="Pwntools"></a>Pwntools</h1><p>以下開始會利用一個工具來加速我們製作exploit code 的速度</p>
+<p>pwntool的常用的範例如下</p>
+<p><img src="/img/pwntool1.PNG" alt=""></p>
+<p><code>process</code>就是要開啟的程式，但pwn的題目幾本上都是要你nc過去他們的伺服器進行攻擊</p>
+<p>所以這時候就會需要<code>remote</code>進行連線</p>
+<p>p32就是pack這個int轉換成機器碼<br>除此還有<code>p64 p8 p16</code>等等，但基本上常用的就是p32和p64</p>
+<p>相對於p32,u32就是把機器馬轉換回int，一樣也有<code>u64 u8 16</code></p>
+<p>send和sendline都是一樣是傳送數據的指令</p>
+<p>差別在於sendline是傳送一行條指令，字串結尾會有<code>\n</code>，而send沒有<br>而跟<code>p32</code>、<code>u32</code>一樣，<code>send</code>的反向就是<code>recv</code>，當然也有recvline</p>
+<p>知道了這些之後就可以開始用pwntools了</p>
+<h3 id="以guess為例子"><a href="#以guess為例子" class="headerlink" title="以guess為例子"></a>以guess為例子</h3><p>我們要先開啟程式來做作動</p>
+<pre><code>io = process(&apos;path/to/program&apos;)
+</code></pre><p>然後塞入36個字元+贏5次</p>
+<pre><code>g = sendline(&apos;A&apos;*36 + p32(5))
+</code></pre><p>然後猜錯六次讓程式檢查我們贏幾次</p>
+<pre><code>for i in range(6):
+    a = sendline(&apos;0&apos;)
+</code></pre><p>最後加一個<code>interactive()</code>結尾<br>加這個的用意是，如果程式還有什麼沒吐出來的東西他會一起吐出來給你，<br>然後他也會有一個shell跟你交談，有點類似cat - 一樣</p>
+<p>全部整合起來就會是這個樣子</p>
+<p><img src="/img/pwntoolguess1.PNG" alt=""></p>
+<p><img src="/img/pwntoolguess2.png" alt=""></p>
+<h3 id="以overflow為例子"><a href="#以overflow為例子" class="headerlink" title="以overflow為例子"></a>以overflow為例子</h3><p>這邊就直接貼code逐行講解(懶得再截圖了)</p>
+<p><img src="/img/pwntooloverflow1.PNG" alt=""></p>
+<p>最一開始先把pwntools import 進來</p>
+<p>再來</p>
+<pre><code>context(arch=&apos;i386&apos;, os=&apos;linux&apos;)
+</code></pre><p>這個是宣告說這個應用程式要怎麼開他，是x86架構的，os是linux</p>
+<pre><code>elf = ELF(&apos;overflow&apos;)
+</code></pre><p>這一行就是以elf檔案的格式搭配我們上面宣告好的context 去打開程式</p>
+<p>elf有一個很方便的function</p>
+<pre><code>ret = next(elf.search(&apos;\xc3&apos;))
+jmp_esp = next(elf.search(&apos;\xff\xe4&apos;)
+</code></pre><p>這個就是幫我們找<code>return</code>和<code>jmp esp</code>這兩個的位址在哪<br>可以透過ELF去解析後直接給我們結果</p>
+<p>再來就是<code>shell</code>這行的指令了<br>還記得我們在上面手動打overflow的時候要自己去找<code>/bin/sh</code>的shellcode嗎?<br>現在pwntools就有內建好shellcode給我們使用了<br>使用<code>shellcraft.sh()</code>然後用asm包住把它變成machine code<br>因為<code>shellcraft.sh()</code>出來的是組合語言，我們必須用asm把輸出成machine code才能執行</p>
+<p>所以~我們的payload就是</p>
+<pre><code>a*32 + p32(ret) * 10 + p32(jmp_esp) + shell
+</code></pre><p>前面的a32故意不塞滿是為了塞return還可以理解，那為什麼 return 要做十次呢?<br>其實return做不只十次也可以，這邊的ret還蠻重要的，畢竟是能不能成功到jmp_esp很重要的點<br>只能多不能少，因為多出來的return只會在原地執行，消耗完後就會開始執行jmp_esp<br>大概是這樣<br>後面的三行就不贅述了</p>
 
 
                 
