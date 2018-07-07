@@ -12,12 +12,7 @@
     
         <meta name="description" content="最近建服務越來越覺得docker好用
 想說來寫個note，以後忘記了可以直接翻這個看不用再google了
-下載image檔:
-docker pull [image]
-跑image檔:
-docker run [image]
-其中run裡面有一些參數算比較常用的 在此紀錄一下
--d是print id後在">
+相關好文:http://oomusou.io/docker/dockerfile-dockercompose/https://docs.docker.com/config/containers/">
     
 
     <!--Author-->
@@ -189,14 +184,18 @@ docker run [image]
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <p>最近建服務越來越覺得docker好用</p>
 <p>想說來寫個note，以後忘記了可以直接翻這個看不用再google了</p>
+<p>相關好文:<br><a href="http://oomusou.io/docker/dockerfile-dockercompose/" target="_blank" rel="noopener">http://oomusou.io/docker/dockerfile-dockercompose/</a><br><a href="https://docs.docker.com/config/containers/container-networking/" target="_blank" rel="noopener">https://docs.docker.com/config/containers/container-networking/</a></p>
 <p>下載image檔:</p>
 <pre><code>docker pull [image]
 </code></pre><p>跑image檔:</p>
-<pre><code>docker run [image]
+<pre><code>docker run [options] [image id]
 </code></pre><p>其中run裡面有一些參數算比較常用的 在此紀錄一下</p>
-<p><code>-d</code>是print id後在背景執行<br><code>-p</code>就是指定port forward給host<br>看現在擁有的image</p>
+<p><code>-d</code>是print id後在背景執行<br><code>-p</code>就是指定port forward給host，也可以ip forward</p>
+<pre><code>ex. docker run -p 127.0.0.1:8080:80 [image id]
+</code></pre><p>這在run一些server服務的時候蠻實用的</p>
+<p>查看現在擁有的image</p>
 <pre><code>docker image list
-</code></pre><p>看現在正在執行的container</p>
+</code></pre><p>查看現在正在執行的container</p>
 <pre><code>docker container list
 </code></pre><p>停用container</p>
 <pre><code>docker container stop [container id]
@@ -204,13 +203,31 @@ docker run [image]
 <pre><code>docker ps -a
 </code></pre><p>如果要移除container</p>
 <pre><code>docker rm [container id]
+</code></pre><p>移除全部的container</p>
+<pre><code>docker rm $(docker ps -a -q)
 </code></pre><p>如果要移除image</p>
 <pre><code>dokcer rmi [image id]
-</code></pre><p>像ctfd有自己的docker-compose 不用pull image可以直接產container</p>
+</code></pre><p>移除全部的image</p>
+<pre><code>docker rmi $(docker images -q)
+</code></pre><p>像ctfd有自己的docker-compose 不用pull image可以直接產container<br>只要進去資料夾內進行指定command</p>
 <pre><code>docker-compose up
 </code></pre><p>之後要啟動(停止)服務要到該資料夾內</p>
 <pre><code>docker-compose start(stop)
-</code></pre><p>大概是這樣 如果後面有用到還會再補充</p>
+</code></pre><p>如果想(不想)要docker container 開機就啟動的話可以用下面的參數處理</p>
+<pre><code>docker update --restart=yes(no) [container ID] 
+</code></pre><p>遇到dockerfile需要先build他</p>
+<pre><code>docker build -t [name] . --no-cache
+</code></pre><p>使用<code>--no-cache</code>是因為避免在 Build Docker image 時被 cache 住，而造成沒有 build 到修改過的 Dockerfile</p>
+<p>之後docker會吐給你一串image的token，run那個token之後就可以啟動服務了</p>
+<p>剛剛run <code>docker container ps -a</code> 發現container的名稱好亂，剛剛又找了rename的方法，意外簡單</p>
+<pre><code>docker rename [old name] [new name]
+</code></pre><p>如何在正在進行中的container裡面開一個shell?</p>
+<p>網路上看過不少方法，覺得最好的方法就是<code>nsenter</code>，用<code>nsenter</code>的好處是─他是獨立開一個shell交互，不會跟正在進行command的shell同步，<br>所以不管進入或退出都對現有的container沒有影響<br>可以直接寫一個腳本來完成他</p>
+<pre><code>$ cat /bin/docker_enter
+#!/bin/bash
+sudo nsenter --target `docker inspect --format {{.State.Pid}} $1` --mount --uts --ipc --net --pid bash
+</code></pre><p>這樣每次要進入某個container只要 <code>docker_enter [container id]</code>就可以了</p>
+<p>大概是這樣 如果後面有用到還會再補充</p>
 
 
                 
