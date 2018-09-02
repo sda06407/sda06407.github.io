@@ -208,7 +208,7 @@
 <li><p>BP/EBP/RBP: Stack base pointer for holding the address of the current stack frame.<br>[Stack裡面的指標暫存器，總是指向Stack的最下面]</p>
 </li>
 </ul>
-<p>這兩個registers是規劃Stack Frame很重要的兩個registers<br>Stack是一個倒過來放的空間，最底下的記憶體位置最大，越上面會數字會越小<br>關於Stack的說明可以看看我寫的其他篇文章</p>
+<p>這兩個registers是規劃Stack Frame很重要的兩個registers<br>Stack是一個倒過來放的空間，最底下的記憶體位置最大，越上面數字會越小<br>關於Stack的說明可以看看我寫的其他篇文章</p>
 <ul>
 <li>IP/EIP/RIP: Instruction pointer. Holds the program counter, the address of next instruction.<br>[暫存器會存放下一個CPU指令的記憶體位址，当CPU執行完現在的指令後，從EIP暫存器中讀取下一個指令的記憶體地址，然後繼續執行]</li>
 </ul>
@@ -222,7 +222,7 @@
 <li>GS: Extra data #3</li>
 </ul>
 <p>因為Segment registers基本上objdump看不到，所以這邊直接引用一篇我覺得寫得很好的<a href="http://finalfrank.pixnet.net/blog/post/22992166-x86-cpu-暫存器-register-大全" target="_blank" rel="noopener">文章</a></p>
-<p>P.S 一開始很疑惑為什麼找X86 CPU的暫存器會有AX、BX、CX這些暫存器，X86不是=32-BIT嗎?那應該是EAX、EBX、ECX才對啊</p>
+<p>P.S 一開始很疑惑為什麼找X86 CPU的暫存器會有AX、BX、CX這些暫存器，<br>    X86不是=32-BIT嗎?那應該是EAX、EBX、ECX才對啊</p>
 <p>仔細查了之後才發現原來我錯了~~查了<a href="https://en.wikipedia.org/wiki/X86" target="_blank" rel="noopener">英文wiki</a>對照<a href="https://zh.wikipedia.org/wiki/X86" target="_blank" rel="noopener">中文WIKI</a>之後才知道原來~</p>
 <p>x86是一系列向下相容的指令及架構，基於8086的CPU在1978年被intel提出，x86是intel根據8位元的8080處理器為基底製作出的架構</p>
 <p>為什麼會叫x86的原因是8086後繼的CPU(80186, 80286, 80386 and 80486)尾數都有86所以就以x86架構為總稱</p>
