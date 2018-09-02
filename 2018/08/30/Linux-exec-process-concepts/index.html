@@ -10,6 +10,10 @@
 
     <!--Description-->
     
+        <meta name="description" content="假設我們執行了一個程式(./hello)會發生什麼事情?
+
+首先系統他會先fork一個跟他一模一樣的process這兩個process內的記憶體內容完全一模一樣在fork出child process後，parent process就會進入wait()的狀態等到child process執行結束後會變">
+    
 
     <!--Author-->
     
@@ -18,7 +22,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="AStar&#39;s Blog"/>
+        <meta property="og:title" content="Linux_exec_process_concepts(未完)"/>
     
 
     <!--Open Graph Description-->
@@ -29,7 +33,7 @@
 
     <!--Type page-->
     
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="article" />
     
 
     <!--Page Cover-->
@@ -40,7 +44,7 @@
 
     <!-- Title -->
     
-    <title>Archives - AStar&#39;s Blog</title>
+    <title>Linux_exec_process_concepts(未完) - AStar&#39;s Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -142,127 +146,70 @@
 </nav>
 
     <!-- Main Content -->
-    
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
 
-<!-- Page Header -->
-<!-- Set your background image for this header in the theme's configuration: index_cover -->
 <header class="intro-header" style="background-image: url('https://i.imgur.com/0YWlPp2.png')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>Archives</h1>
+                <div class="post-heading">
+                    <h1>Linux_exec_process_concepts(未完)</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2018-08-30
+                        
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
             
-                <div class="post-preview">
-    <a href="/2018/08/31/assembly-note/">
-        <h1 class="post-title archive">
-            assembly-note
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-31
-    </p>
-</div>
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>假設我們執行了一個程式(./hello)會發生什麼事情?</p>
+<p><img src="/img/Linux_exec_process_concepts/Linux-processes-life-cycle.png" alt=""></p>
+<p>首先系統他會先fork一個跟他一模一樣的process<br>這兩個process內的記憶體內容完全一模一樣<br>在fork出child process後，parent process就會進入wait()的狀態<br>等到child process執行結束後會變成zombie process，並且允許parent process讀取他的的exit status</p>
+<pre><code>exit status是什麼呢?
+
+當child process運行結束時向其parent process(或調用方)返回的一個相對小的值。在DOS中，這個值被稱作errorlevel
+</code></pre><p>當parent process讀到child process的exit status時候就會結束<code>wait()</code><br>一旦parent process退出wait()後，zombie process 就會被<code>回收(reaped)</code><br>要記住這個<code>wait()</code>並不等於lock住parent的狀態，parent process還是可以繼續做其他事情<br>當初自己讀到這邊的時候也很confuse這點，因為shell可以透過<code>&amp;</code>當結尾符來進行後景執行<br><img src="/img/Linux_exec_process_concepts/backgroundrun.png" alt=""></p>
+<p>所以我自己覺得這樣的比喻是比較恰當的:</p>
+<p>parents process與child process之間的關係就像老闆與職員一樣<br>老闆在指派一位職員做事的同時可以指派另一位職員做其他事情<br>而老闆在指派其他職員任務的同時也在等待(wait)其他職員完成任務跟他回報(exit status)</p>
+<p>不過這是建立在職員與職員之間做的事情沒有相衝突到的前提之下<br>像是如果服務需要port的話，那相同的port號被使用到當然會跳錯誤<br>不過這比較偏向是port被lock住而不是parent process被lock住</p>
+<p>這邊開始會比較詳細的說明他們在做什麼動作:</p>
+<p>parent process fork 出一個child process之後進入wait()，<br>被fork出來的這個child process會去執行<code>execve</code>這個system call<br>那這個<code>execve</code>做的事情就是叫後面的程式(ex. hello)<br>他就會把hello和其相應的參數放進現在child process使用的這個記憶體空間<br>並且會取代這個child process，也就是說他會跟bash fork出來的child process擁有同樣的pid<br>但是他會把bash之類的東西全部扔掉，把hello的東西放進來執行<br>進到kernel後就會進到sys_execve這個system call的入口<br>之後會進到<code>do_execve</code>的function，<code>do_execve</code>裡面有一個<code>search_binary_hendler()</code>的function<br>這個function就是在讀取hello的檔頭資料去判斷這是什麼檔案<br>像是64bit的系統可以執行64/32bit的elf，甚至如果有裝qemu的話可以執行<code>arm</code>或<code>misp</code>的檔案<br>那這個function就是去辨識這是一個什麼類型的檔案，能不能執行?<br>可以執行就會去load <code>load_elf_binary()</code>的function把elf的opcode load進來<br>到這邊其實程式的user space就會都define好了，換到user mode去執行的時候，他會去<br>elf 檔頭的資料，檔頭會define程式的起始點在哪，通常會用<code>_start</code>標示，最後再由_start做一些初始化工作後<br>才會進到main開始執行code，像是如果有調用到<code>malloc</code>的話他會先去跟記憶體要一塊位置</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
             
-                <div class="post-preview">
-    <a href="/2018/08/30/Linux-exec-process-concepts/">
-        <h1 class="post-title archive">
-            Linux_exec_process_concepts(未完)
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-30
-    </p>
-</div>
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
             
-                <div class="post-preview">
-    <a href="/2018/08/25/calling_convention/">
-        <h1 class="post-title archive">
-            Calling convention on x86 CPU
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-25
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/07/23/some-ctf-writeup/">
-        <h1 class="post-title archive">
-            some_ctf_writeup
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-07-23
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/docker-note/">
-        <h1 class="post-title archive">
-            docker_note
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/inndy-pwn101/">
-        <h1 class="post-title archive">
-            inndy-pwn101
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/hexo-on-github/">
-        <h1 class="post-title archive">
-            如何把部落格架在GitHub上
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-            <div class="archive-before-pagination"></div>
-            <ul class="pager">
-    
-    
-</ul>
         </div>
     </div>
-</div>
-
+</article>
 
     <!-- Footer -->
     <hr />

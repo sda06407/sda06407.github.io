@@ -10,6 +10,10 @@
 
     <!--Description-->
     
+        <meta name="description" content="之前在寫pwn的筆記時，一直很猶豫要不要把x86的call convention(呼叫約定)特別拿出來講畢竟這是pwn的基礎，像是overflow和rop都需要這個觀念，但是網路找不到一個對此有很通篇透徹的解說，剛好最近也研究出一個結果了決定po一篇作紀錄
+在講解前可以先看看這個和這個
+個人覺得寫得">
+    
 
     <!--Author-->
     
@@ -18,7 +22,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="AStar&#39;s Blog"/>
+        <meta property="og:title" content="Calling convention on x86 CPU"/>
     
 
     <!--Open Graph Description-->
@@ -29,7 +33,7 @@
 
     <!--Type page-->
     
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="article" />
     
 
     <!--Page Cover-->
@@ -40,7 +44,7 @@
 
     <!-- Title -->
     
-    <title>Archives - AStar&#39;s Blog</title>
+    <title>Calling convention on x86 CPU - AStar&#39;s Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -142,127 +146,103 @@
 </nav>
 
     <!-- Main Content -->
-    
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
 
-<!-- Page Header -->
-<!-- Set your background image for this header in the theme's configuration: index_cover -->
 <header class="intro-header" style="background-image: url('https://i.imgur.com/0YWlPp2.png')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>Archives</h1>
+                <div class="post-heading">
+                    <h1>Calling convention on x86 CPU</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2018-08-25
+                        
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/PWN/">#PWN</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                </div>
             
-                <div class="post-preview">
-    <a href="/2018/08/31/assembly-note/">
-        <h1 class="post-title archive">
-            assembly-note
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-31
-    </p>
-</div>
+
+            <!-- Gallery -->
             
-                <div class="post-preview">
-    <a href="/2018/08/30/Linux-exec-process-concepts/">
-        <h1 class="post-title archive">
-            Linux_exec_process_concepts(未完)
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-30
-    </p>
-</div>
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>之前在寫pwn的筆記時，一直很猶豫要不要把x86的call convention(呼叫約定)特別拿出來講<br>畢竟這是pwn的基礎，像是overflow和rop都需要這個觀念，但是網路找不到一個對此<br>有很通篇透徹的解說，剛好最近也研究出一個結果了決定po一篇作紀錄</p>
+<p>在講解前可以先看看<a href="https://blog.gtwang.org/programming/memory-layout-of-c-program/" target="_blank" rel="noopener">這個</a>和<a href="https://medium.com/@ktecv2000/%E7%B7%A9%E8%A1%9D%E5%8D%80%E6%BA%A2%E4%BD%8D%E6%94%BB%E6%93%8A%E4%B9%8B%E4%B8%80-buffer-overflow-83516aa80240" target="_blank" rel="noopener">這個</a></p>
+<p>個人覺得寫得還不錯  <del>說不定看完上面這兩篇大家都懂了也不需要我在寫這一篇了</del></p>
+<p>其中Stack Frame就是我們這次的主題(個人覺得call convention其實就是暫存器與stack之間的互動)</p>
+<h1 id="Stack-Frame"><a href="#Stack-Frame" class="headerlink" title="Stack Frame"></a>Stack Frame</h1><p>Stack Frame 就是程式在記憶體內執行的一個區間</p>
+<p>每一個function執行前都會先畫一個Stack Frame<br>那Stack Frame是做什麼用的呢?是拿來存放一些區域變數(之類的)需要的空間</p>
+<p>講Stack Frame之前要先認識兩個暫存器</p>
+<pre><code>esp: 指向Stack內最後一個push(pop)的位置
+ebp: 指向Stack Frame的最上面位置
+</code></pre><p>ebp到esp的這個位置區間我們稱之為Stack Frame</p>
+<p>一個正常的x86 Stack Frame 有下列的特徵:</p>
+<p><img src="/img/stack_frame_ppt.PNG" alt=""></p>
+<p>為什麼要用<code>ebp</code>來當基準，而不用<code>esp</code>呢?因為<code>esp</code>每<code>push(pop)</code>一個值他的位置就會-(+)4<br>隨著<code>push(pop)</code>的值越多就必須讓<code>esp-(+)</code>越多的值才能得到參數的位置<br>相較於<code>esp</code>，<code>ebp</code>就是一直指著記憶體頂端，相對static<br>當初出現ebp的理由好像也是讓CPU讀取變數位置譨夠更加方便</p>
+<p>這邊用C語言粗略的講一下Stack Frame<br>這是source code:</p>
+<p><img src="/img/stack_frame.PNG" alt=""></p>
+<p>這是main function的組合語言:</p>
+<p><img src="/img/mainfunction.png" alt=""></p>
+<p>這是add function的組合語言:</p>
+<p><img src="/img/addfunction.png" alt=""></p>
+<p>現在說明add function是如何劃出一個Stack Frame的</p>
+<p>第一行我們先push ebp，把ebp現在的address(也就是main的ebp address)<br>存進stack內</p>
+<p>第二行是把esp的address(就是main 的esp address-4)放進ebp內取得return address<br>這邊筆記一下─ <code>所以現在的ebp address + 4 = main的esp address</code><br>(因為前面push ebp導致esp-4)</p>
+<p>第三步是拉出function需要使用的stack範圍大小(esp-n, n取決於function需要的大小)<br>這是call function的前置步驟<br>下面的leave其實就只是把上面的前兩條指令倒回去而已</p>
+<pre><code>mov esp,ebp
+pop ebp
+</code></pre><p>mov esp,ebp就是把esp跟ebp的address對齊(即程式執行結束後把Stack Frame歸0)<br>然後把ebp pop出去(回到之前main的ebp address)<br>這個動作會順便把esp+4，補足最上面push ebp造成的esp-4<br>最後的ret其實就是<code>pop eip</code><br>再細一點就是執行這兩個步驟</p>
+<pre><code>lea esp, [esp+4]
+mov eip, [esp-4]
+</code></pre><p>把esp的address(也就是main的esp address)先丟給EIP，esp自己再+4(因為是pop阿)<br>讓add function結束後能回到main function中斷的地方繼續執行</p>
+<p>以上就是main function呼叫add function的流程，最後用一張圖結尾<br><img src="/img/function call.PNG" alt=""></p>
+<p>而Stack overflow 就是能控制return address要去什麼地方，<br>可以跳到任何我們想要的地方執行shellcode或是跳到我們想要的函示庫(ex.libc.so)<br>先有這個概念之後再看Lays大大的ROP輕鬆談會比較友善點…</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
             
-                <div class="post-preview">
-    <a href="/2018/08/25/calling_convention/">
-        <h1 class="post-title archive">
-            Calling convention on x86 CPU
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-25
-    </p>
-</div>
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
             
-                <div class="post-preview">
-    <a href="/2018/07/23/some-ctf-writeup/">
-        <h1 class="post-title archive">
-            some_ctf_writeup
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-07-23
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/docker-note/">
-        <h1 class="post-title archive">
-            docker_note
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/inndy-pwn101/">
-        <h1 class="post-title archive">
-            inndy-pwn101
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/hexo-on-github/">
-        <h1 class="post-title archive">
-            如何把部落格架在GitHub上
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-            <div class="archive-before-pagination"></div>
-            <ul class="pager">
-    
-    
-</ul>
         </div>
     </div>
-</div>
-
+</article>
 
     <!-- Footer -->
     <hr />

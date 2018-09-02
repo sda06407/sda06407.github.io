@@ -10,6 +10,18 @@
 
     <!--Description-->
     
+        <meta name="description" content="第一次自己出CTF題目 紀錄一下
+Crypto
+easyyyyyhex to text
+
+SaladCaesar cipher
+
+F**kBrainfuck
+
+a little hard[python3]
+from base64 import *
+cipher = &amp;quot;Nm@rmLsBy{N">
+    
 
     <!--Author-->
     
@@ -18,7 +30,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="AStar&#39;s Blog"/>
+        <meta property="og:title" content="some_ctf_writeup"/>
     
 
     <!--Open Graph Description-->
@@ -29,7 +41,7 @@
 
     <!--Type page-->
     
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="article" />
     
 
     <!--Page Cover-->
@@ -40,7 +52,7 @@
 
     <!-- Title -->
     
-    <title>Archives - AStar&#39;s Blog</title>
+    <title>some_ctf_writeup - AStar&#39;s Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -142,127 +154,95 @@
 </nav>
 
     <!-- Main Content -->
-    
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
 
-<!-- Page Header -->
-<!-- Set your background image for this header in the theme's configuration: index_cover -->
 <header class="intro-header" style="background-image: url('https://i.imgur.com/0YWlPp2.png')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>Archives</h1>
+                <div class="post-heading">
+                    <h1>some_ctf_writeup</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2018-07-23
+                        
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
             
-                <div class="post-preview">
-    <a href="/2018/08/31/assembly-note/">
-        <h1 class="post-title archive">
-            assembly-note
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-31
-    </p>
-</div>
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>第一次自己出CTF題目 紀錄一下</p>
+<h1 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h1><hr>
+<h2 id="easyyyyy"><a href="#easyyyyy" class="headerlink" title="easyyyyy"></a>easyyyyy</h2><p>hex to text</p>
+<hr>
+<h2 id="Salad"><a href="#Salad" class="headerlink" title="Salad"></a>Salad</h2><p>Caesar cipher</p>
+<hr>
+<h2 id="F-k"><a href="#F-k" class="headerlink" title="F**k"></a>F**k</h2><p>Brainfuck</p>
+<hr>
+<h2 id="a-little-hard"><a href="#a-little-hard" class="headerlink" title="a little hard"></a>a little hard</h2><pre><code>[python3]
+from base64 import *
+cipher = &quot;Nm@rmLsBy{Nm5u=Ha1L9PgYP@S2I*lPc=|iMOjQ#O;t2ROIR~PPFhn&amp;Hd$0cPfk-*M@&gt;&gt;UP*puWJv}`=&quot;
+decode1 = b85decode(cipher)
+decode2 = b32decode(decode1)
+print(decode2)
+</code></pre><hr>
+<h1 id="Forensic"><a href="#Forensic" class="headerlink" title="Forensic"></a>Forensic</h1><h2 id="Corgi1"><a href="#Corgi1" class="headerlink" title="Corgi1"></a>Corgi1</h2><p>steganography</p>
+<hr>
+<h2 id="Broken-zip-file"><a href="#Broken-zip-file" class="headerlink" title="Broken zip file"></a>Broken zip file</h2><p>Fix broken file header or just <code>strings</code> file</p>
+<hr>
+<h2 id="Glace"><a href="#Glace" class="headerlink" title="Glace"></a>Glace</h2><p>把gif的所有圖片片段結合起來即可得到Flag</p>
+<p><a href="https://ezgif.com/split" target="_blank" rel="noopener">https://ezgif.com/split</a></p>
+<p>ref: Tokyo Western CTF 2016</p>
+<hr>
+<h2 id="Lectures"><a href="#Lectures" class="headerlink" title="Lectures"></a>Lectures</h2><p>使用wireshark打開檔案，以password或username作為關鍵字去找即可找到Flag<br>(或是偷懶用YUBITSEC找也可以)，FLAG是username以後~&amp;password之前的字串<br>大括弧自己加上去</p>
+<hr>
+<h2 id="easy-pdf"><a href="#easy-pdf" class="headerlink" title="easy pdf"></a>easy pdf</h2><p>tool:pdf2txt</p>
+<p>ref: hackme.inndy.tw</p>
+<hr>
+<h2 id="this-is-a-pen"><a href="#this-is-a-pen" class="headerlink" title="this is a pen"></a>this is a pen</h2><p>tool:pdfimages</p>
+<p>ref: hackme.inndy.tw</p>
+<hr>
+<h2 id="Corgi-2"><a href="#Corgi-2" class="headerlink" title="Corgi 2"></a>Corgi 2</h2><p>binwalk 檔案 可發現裡面有zip檔案<br>利用binwalk把zip解出來後發現了一張圖片和一個加密的zip，zip內有flag<br>可以發現binwalk解出來的圖片和加密zip裡面的圖片名稱一樣，可以推測為同一張<br>利用pkcrack可解出zip內的flag</p>
+<hr>
+<h1 id="OSINT"><a href="#OSINT" class="headerlink" title="OSINT"></a>OSINT</h1><h2 id="Mobile-Number"><a href="#Mobile-Number" class="headerlink" title="Mobile Number"></a>Mobile Number</h2><p>利用google 以圖搜圖，找到拍攝者的姓名，再google拍攝者的姓名嘗試找出他的手機</p>
+<hr>
+<h1 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h1><h2 id="CoffeeBreak"><a href="#CoffeeBreak" class="headerlink" title="CoffeeBreak"></a>CoffeeBreak</h2><p>decompiler class file得到 source code</p>
+<p>把main裡面的<code>println</code>改成輸出<code>get_flag()</code>再重新包回去執行就可以得到flag</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
             
-                <div class="post-preview">
-    <a href="/2018/08/30/Linux-exec-process-concepts/">
-        <h1 class="post-title archive">
-            Linux_exec_process_concepts(未完)
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-30
-    </p>
-</div>
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
             
-                <div class="post-preview">
-    <a href="/2018/08/25/calling_convention/">
-        <h1 class="post-title archive">
-            Calling convention on x86 CPU
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-25
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/07/23/some-ctf-writeup/">
-        <h1 class="post-title archive">
-            some_ctf_writeup
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-07-23
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/docker-note/">
-        <h1 class="post-title archive">
-            docker_note
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/inndy-pwn101/">
-        <h1 class="post-title archive">
-            inndy-pwn101
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/hexo-on-github/">
-        <h1 class="post-title archive">
-            如何把部落格架在GitHub上
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-            <div class="archive-before-pagination"></div>
-            <ul class="pager">
-    
-    
-</ul>
         </div>
     </div>
-</div>
-
+</article>
 
     <!-- Footer -->
     <hr />
