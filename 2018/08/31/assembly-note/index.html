@@ -205,7 +205,7 @@
 <ul>
 <li><p>SP/ESP/RSP: Stack pointer for top address of the stack.<br>[Stack裡面的指標暫存器，用來指向Stack的最上面，每push/pop一個值，SP就會-+2、ESP-+4以此類推]</p>
 </li>
-<li><p>BP/EBP/RBP: Stack base pointer for holding the address of the current stack frame.<br>[Stack裡面的指標暫存器，總是指向Stack的最下面]</p>
+<li><p>BP/EBP/RBP: Stack base pointer for holding the address of the current stack frame.<br>[Stack裡面的指標暫存器，總是指向Stack Frame的最下面]</p>
 </li>
 </ul>
 <p>這兩個registers是規劃Stack Frame很重要的兩個registers<br>Stack是一個倒過來放的空間，最底下的記憶體位置最大，越上面數字會越小<br>關於Stack的說明可以看看我寫的其他篇文章</p>
