@@ -227,6 +227,8 @@ mov eip, [esp-4]
 </code></pre><p>把esp的address(也就是main的esp address)先丟給EIP，esp自己再+4(因為是pop阿)<br>讓add function結束後能回到main function中斷的地方繼續執行</p>
 <p>以上就是main function呼叫add function的流程，最後用一張圖結尾<br><img src="/img/function call.PNG" alt=""></p>
 <p>而Stack overflow 就是能控制return address要去什麼地方，<br>可以跳到任何我們想要的地方執行shellcode或是跳到我們想要的函示庫(ex.libc.so)<br>先有這個概念之後再看Lays大大的ROP輕鬆談會比較友善點…</p>
+<p>最後附上參考資料:<br>ROP輕鬆談:<br><a href="https://www.slideshare.net/hackstuff/rop-40525248" target="_blank" rel="noopener">https://www.slideshare.net/hackstuff/rop-40525248</a></p>
+<p>NTUSTISC - Pwn Basic II [2018.05.10]<br><a href="https://www.youtube.com/watch?v=I7qCc0Xuhdc&amp;feature=youtu.be" target="_blank" rel="noopener">https://www.youtube.com/watch?v=I7qCc0Xuhdc&amp;feature=youtu.be</a></p>
 
 
                 
