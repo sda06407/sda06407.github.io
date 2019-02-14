@@ -10,6 +10,15 @@
 
     <!--Description-->
     
+        <meta name="description" content="終於把難解卻很好玩的format string搞懂了，趕快來記一下
+說到學習的來源:https://paper.seebug.org/246/
+source code:
+#include &amp;lt;stdio.h&amp;gt;
+
+int main(int argc, char * argv[])
+{
+   ">
+    
 
     <!--Author-->
     
@@ -18,7 +27,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="AStar&#39;s Blog"/>
+        <meta property="og:title" content="Format_string_attack(未完)"/>
     
 
     <!--Open Graph Description-->
@@ -29,7 +38,7 @@
 
     <!--Type page-->
     
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="article" />
     
 
     <!--Page Cover-->
@@ -40,7 +49,7 @@
 
     <!-- Title -->
     
-    <title>Archives: 2018 - AStar&#39;s Blog</title>
+    <title>Format_string_attack(未完) - AStar&#39;s Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -142,140 +151,115 @@
 </nav>
 
     <!-- Main Content -->
-    
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
 
-<!-- Page Header -->
-<!-- Set your background image for this header in the theme's configuration: index_cover -->
 <header class="intro-header" style="background-image: url('https://i.imgur.com/0YWlPp2.png')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>2018</h1>
+                <div class="post-heading">
+                    <h1>Format_string_attack(未完)</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-02-11
+                        
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
             
-                <div class="post-preview">
-    <a href="/2018/09/08/got-plt-note/">
-        <h1 class="post-title archive">
-            got&plt-note
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-09-08
-    </p>
-</div>
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>終於把難解卻很好玩的format string搞懂了，趕快來記一下</p>
+<p>說到<br>學習的來源:<a href="https://paper.seebug.org/246/" target="_blank" rel="noopener">https://paper.seebug.org/246/</a></p>
+<p>source code:</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(int argc, char * argv[])
+{
+    char a[1024];
+    while(1) 
+    {
+        memset(a, &apos;\0&apos;, 1024);
+        read(0, a, 1024);
+        printf(a);
+        fflush(stdout);
+    }
+    return 0;
+}
+</code></pre><p>透過執行可以知道就是一個我們輸入什麼他printf什麼<br><img src="/img/Format_string_attack/pwnformatstring1.PNG" alt=""></p>
+<p>但他的printf因為是直接使用<code>printf(a)</code>來做輸出<br>因此有format string的弱點，盲測的時候可以試著輸入看看<code>%x</code>或其他printf的關鍵字。<br>只要有像這樣的回應就代表有戲(?<br><img src="/img/Format_string_attack/pwnformatstring2.PNG" alt=""></p>
+<p>可以透過<code>aaaa%n$x</code>來找offset，n是任意數，就是透過<code>aaaa%1$x</code> <code>aaaa%2$x</code>…這樣子下去爆破取得offset<br><code>%n</code>是代表第n個參數，<code>$x</code>是以hex的方式輸出，參照<a href="https://en.wikipedia.org/wiki/Printf_format_string" target="_blank" rel="noopener">wiki</a>和<a href="https://www.owasp.org/index.php/Format_string_attack" target="_blank" rel="noopener">owasp</a>:</p>
+<pre><code>For example, printf(&quot;%2$d %2$#x; %1$d %1$#x&quot;,16,17) produces 17 0x11; 16 0x10.
+
+Below are some format parameters which can be used and their consequences:
+
+•&quot;%x&quot; Read data from the stack
+
+•&quot;%s&quot; Read character strings from the process&apos; memory
+
+•&quot;%n&quot; Write an integer to locations in the process&apos; memory
+%d - 十进制 - 输出十进制整数
+%s - 字符串 - 从内存中读取字符串
+%x - 十六进制 - 输出十六进制数
+%c - 字符 - 输出字符
+%p - 指针 - 指针地址
+%n - 到目前为止所写的字符数
+</code></pre><p>運氣不錯，在第四個就找到了<br><img src="/img/Format_string_attack/pwnformatstring3.PNG" alt=""></p>
+<p>或是你可以透過pwntool來找offset:</p>
+<p><img src="/img/Format_string_attack/pwnformatstring4.PNG" alt=""></p>
+<p><img src="/img/Format_string_attack/pwnformatstring5.PNG" alt=""></p>
+<p>61616161就是ascii的aaaa，我們可以透過這樣的方式把<code>$x</code>改成<code>$s</code>去leak binary裡面的內容<br>嘗試一下，先objdump這個ELF，選一個address，假設我想要leak <code>_start</code>的內容</p>
+<p><img src="/img/Format_string_attack/pwnformatstring6.PNG" alt=""></p>
+<p>那我可以這樣取得檔案內容</p>
+<pre><code>echo -e &apos;\x70\x90\x04\x08%4$s&apos; | ./fmt
+</code></pre><p><img src="/img/Format_string_attack/pwnformatstring7.PNG" alt=""></p>
+<p>但看起來成效不好，因為它會把hex轉成ascii顯示，如果想看raw data的話這不是一個好方法<br>所以可以用pwntool來看:</p>
+<p><img src="/img/Format_string_attack/pwnformatstring8.PNG" alt=""></p>
+<p>雖然好了點，可是這樣子還是不太好看<br>於是再動些手腳:</p>
+<p><img src="/img/Format_string_attack/pwnformatstring9.PNG" alt=""></p>
+<p>好了!拿這個opcode跟上面的objdump的結果比對看看，是不是一樣呢?</p>
+<p>但這邊會遇到一個問題</p>
+<p>不開PIE，x86 ELF預設都是從<code>0x8048000</code>開始，但<code>%s</code>遇到<code>\x00</code>就會中斷，<br>要怎麼解決呢?</p>
+<p>把位置顛倒放就好了，這樣他就會先leak出內容再print address，但因為位置換了，所以我們的offset要跟著換才行</p>
+<p>以這題來說就是<code>%5$s+p32(address)</code>，因為<code>p32(address)</code>移到後面去，而且要把<code>%4$s</code>這四個byte算進去，所以要往後一個offset</p>
+<p>以上面教學網址的範例是<code>%13$saaa+p32(address)</code>這點讓我比較不解，後面得知的結論是，如果沒加aaa<br><code>%13$s</code>共5byte，這樣子在他後面的address會被stack切到而讀不完整，所以要塞aaa讓他變成8個byte<br>讓後面的address能完整個放在一格stack上，這樣子讀stack的時候才能完整讀到address</p>
+<p><img src="/img/Format_string_attack/pwnformatstring10.PNG" alt=""></p>
+<p>方法都知道了，現在我們可以leak整個binary</p>
+<p><img src="/img/Format_string_attack/pwnformatstring11.PNG" alt=""></p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
             
-                <div class="post-preview">
-    <a href="/2018/08/31/regiesters-note/">
-        <h1 class="post-title archive">
-            regiesters-note
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-31
-    </p>
-</div>
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
             
-                <div class="post-preview">
-    <a href="/2018/08/30/Linux-exec-process-concepts/">
-        <h1 class="post-title archive">
-            Linux_exec_process_concepts(未完)
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-30
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/08/25/calling_convention/">
-        <h1 class="post-title archive">
-            Calling convention on x86 CPU
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-25
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/07/23/some-ctf-writeup/">
-        <h1 class="post-title archive">
-            some_ctf_writeup
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-07-23
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/docker-note/">
-        <h1 class="post-title archive">
-            docker_note
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/inndy-pwn101/">
-        <h1 class="post-title archive">
-            inndy-pwn101
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/hexo-on-github/">
-        <h1 class="post-title archive">
-            如何把部落格架在GitHub上
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-            <div class="archive-before-pagination"></div>
-            <ul class="pager">
-    
-    
-</ul>
         </div>
     </div>
-</div>
-
+</article>
 
     <!-- Footer -->
     <hr />

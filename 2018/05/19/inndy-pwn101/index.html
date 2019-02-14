@@ -306,6 +306,57 @@ jmp_esp = next(elf.search(&apos;\xff\xe4&apos;)
 <p>所以~我們的payload就是</p>
 <pre><code>a*32 + p32(ret) * 10 + p32(jmp_esp) + shell
 </code></pre><p>前面的a32故意不塞滿是為了塞return還可以理解，那為什麼 return 要做十次呢?<br>其實return做不只十次也可以，這邊的ret還蠻重要的，畢竟是能不能成功到jmp_esp很重要的點<br>只能多不能少，因為多出來的return只會在原地執行，消耗完後就會開始執行jmp_esp<br>大概是這樣<br>後面的三行就不贅述了</p>
+<h3 id="leak"><a href="#leak" class="headerlink" title="leak"></a>leak</h3><p>沉寂許久之後終於又開始寫了</p>
+<p>leak的特點是─直接告訴你stack位置、沒有system function、沒有strcpy給你存bin_sh、有buffer overflow、可洩漏任意address內容<br>只能透過程式的資訊洩漏取得system的address</p>
+<p>首先先看source code吧</p>
+<p><img src="/img/leak_sourcecode.PNG" alt=""><br><img src="/img/leak_sourcecode2.PNG" alt=""></p>
+<p>可以看到有一個menu，然後有一個argument叫做ununsed<br>他也如其名並沒有被用到<br>再來看看執行的樣子</p>
+<p><img src="/img/pwnleakRun.PNG" alt=""></p>
+<p>選第一個他會吐給你一個address，這個address就是unused的address<br>所以你可以再選2，把1的address餵給他會得到0xcafecafe的字串<br>第3個就是我們熟悉的buffer overflow</p>
+<p>首先可以用gdb去開他，先用r把他跑起來，再ctrl+c中斷，再下vmm(或vmmap)去看他的virtual memory</p>
+<p><img src="/img/pwnleakvmm.PNG" alt=""></p>
+<p>上面可以一個區段的開頭與結尾，以及他的權限，和來自哪個檔案<br>看到第一段的Perminsion(Perm)是可讀可執行，來源又是leak，可能程式碼的區段在那<br>第二段是僅可讀，那可能就是一些唯獨的資料，可能靜態的字串就在這裡<br>第三段是可讀可寫，可能一些global value或是GOT table在這裡</p>
+<p>同樣的東西你可以再我們的libc和ld.so都找的到，還有stack的address</p>
+<p>然後這個address你可以用gdb表示出來</p>
+<p><img src="/img/pwnleak4xb.PNG" alt=""></p>
+<p>4b代表4個bytes，x代表hex，所以x/4bx = 我要print 4個bytes，用hex的方式</p>
+<p>回到正題，上面得知，我們可以leak出shared library的address，但是shared library的address是dynamic的<br>所以我們需要的是程式內的address，雖然說shared library的address會變動，但是他們function與function之間的距離是不變的<br>也就是說我們可以在shared library內找到puts &amp; system &amp; /bin/sh 的address，得到他們之間的相對距離後<br>就能在程式執行時加上相對位置得到當時執行的位置了<br>下面直接細說:</p>
+<p>我們第一步要先構造 <code>system(bin/sh)</code>這個東西<br>那這個東西拆成兩個部分，system的部分可以去libc裡面找到<br>至於/bin/sh有兩個方法，第一個方法是可以自己把<code>/bin/sh</code>字串丟進stack內，畢竟都知道stack的位置了<br>第二個方法是libc裡面也有/bin/sh的字串可以找</p>
+<p>這時候又要請到偉大的gdb了，gdb可以直接用<code>searchmem</code>來幫我們找位置在哪</p>
+<p><img src="/img/pwnleakbinsh.PNG" alt=""></p>
+<p>這樣就拿到/bin/sh在libc裡面的address了<br>然後我們要怎麼拿到puts呢，可以上GOT表去找<br>如何看GOT表內的資料呢?可以用<code>objdump</code>去看到</p>
+<pre><code>objdump -R ./leak
+</code></pre><p><img src="/img/pwnleakGOT.PNG" alt=""></p>
+<p>你可能會好奇puts的這個address是什麼，用gdb去看看這個address</p>
+<p><img src="/img/pwnleakputs.PNG" alt=""></p>
+<p>可以知道這個address(0x0804a018)會指向shared library裡面的puts<br>而<code>p puts</code>也有相同的功能<br>用以上方法我們可以很容易地知道system的shared library的位置</p>
+<p><img src="/img/pwnleaksystem.PNG" alt=""></p>
+<p>做到這裡有一個疑問，那我可以用p去找”/bin/sh”的字串嗎?<br>答案是不行的，下面是結果</p>
+<p><img src="/img/pwnleakpbinsh.PNG" alt=""></p>
+<p>所以可以理解為─gdb 裡面的<code>p</code>是用來找function的address，<code>searchmem</code>拿來找字串的</p>
+<p>好了，現在我們有binsh &amp; puts &amp; system 的address，可以來構造我們的payload了</p>
+<p>以下是exploit code:</p>
+<p><img src="/img/pwnleakPOC.PNG" alt=""></p>
+<h3 id="rop2"><a href="#rop2" class="headerlink" title="rop2"></a>rop2</h3><p>source code:</p>
+<p><img src="/img/pwnrop2source.png" alt=""></p>
+<p>程式碼看起來很簡單，恩 很恐怖</p>
+<p>可以看到他只給我們一個gets和1格buffer<br>看起來很恐怖</p>
+<p>執行起來會是這個樣子<br><img src="/img/pwnrop2run.png" alt=""><br>其中gets我們只經知道可以利用這個進行buffer overflow</p>
+<p>再來就是想該怎麼構成<code>system(&quot;/bin/sh&quot;)</code></p>
+<p>透過<code>objdump -R</code> 可以得知他有用到<code>puts</code>這個libc function</p>
+<p><img src="/img/pwnrop2GOT.png" alt=""></p>
+<p>So~ 解法就是我們透過Bof去call 他在binary的puts，把puts在GOT的內容print出來<br>puts在GOT的內容就會是puts的libc位置<br>藉此取得libc的地址</p>
+<p>然後後面的東西就跟leak差不多了</p>
+<p>這邊有個地雷點，之前都傻傻得，現在才知道原來<code>io.recvline</code>會從第一行開始接收(如果是第一次用的話)<br>所以如果要recv puts的libc address必須先把第一行那個Just什麼的先recv之後再設變數去接收libc address</p>
+<pre><code>io.recvline()
+recv = io.recvline()
+putsInlibc = u32(recv[:4])
+</code></pre><p>第一行就是把Just接收掉，那因爲他是垃圾所以我們不用任何變數去接他<br>第三行就是用變數接收puts libc的address，爲什麼要recv[:4]呢<br>因爲recv除了address之外還會丟一些東西給GOT table<br>(算是一個記號用來標示這是puts的libc address)<br>但我們不需要這些記號，所以只接收前四個byte，然後用u32去把他轉成address，<br>因爲他預設從libc吐回來給GOT的位置會是以byte的形式回傳<br>不信你看：</p>
+<p><img src="/img/pwnrop2byte.png" alt=""></p>
+<p>用u32取得puts 在libc的位置後再來就是算出<code>system</code>和<code>/bin/sh</code>的位置了<br>這部分跟leak一樣就不多贅述</p>
+<p>最後開始構造我們的payload，先是透過Bof呼叫<code>puts</code>顯示puts在GOT的內容<br>用recv去接他，然後算出<code>system</code>和<code>/bin/sh</code>的位置，之後我們要重新跳回去<code>main</code><br>再注入一次，這裏有一點要注意，再次注入的offset不會是第一次注入的offset<br>因爲call 他的是pwntools不是<code>start_main</code>，這時候可以透過<code>gdb.attach(io)</code>，<br>這樣可以用pwntools呼叫gdb來attach，然後下一行<code>io.sendline(cyclic(100))</code>可以<br>透過pwntools呼叫<code>cyclic</code>產生gadget來知道新的offset</p>
+<p>exploit code就像這個樣子：</p>
+<p><img src="/img/pwnrop2payload.png" alt=""></p>
 
 
                 
@@ -353,7 +404,7 @@ jmp_esp = next(elf.search(&apos;\xff\xe4&apos;)
 
                     
                 </ul>
-                <p class="copyright text-muted">&copy; 2018 AStar<br></p>
+                <p class="copyright text-muted">&copy; 2019 AStar<br></p>
                 <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
                 <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
             </div>
