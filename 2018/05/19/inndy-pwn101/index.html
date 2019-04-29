@@ -351,7 +351,7 @@ jmp_esp = next(elf.search(&apos;\xff\xe4&apos;)
 <pre><code>io.recvline()
 recv = io.recvline()
 putsInlibc = u32(recv[:4])
-</code></pre><p>第一行就是把Just接收掉，那因爲他是垃圾所以我們不用任何變數去接他<br>第三行就是用變數接收puts libc的address，爲什麼要recv[:4]呢<br>因爲recv除了address之外還會丟一些東西給GOT table<br>(算是一個記號用來標示這是puts的libc address)<br>但我們不需要這些記號，所以只接收前四個byte，然後用u32去把他轉成address，<br>因爲他預設從libc吐回來給GOT的位置會是以byte的形式回傳<br>不信你看：</p>
+</code></pre><p>第一行就是把Just接收掉，那因爲他是垃圾所以我們不用任何變數去接他<br>第三行就是用變數接收puts libc的address，爲什麼要recv[:4]呢<br>因爲<code>linker</code>除了address之外還會丟一些東西給GOT table<br>(算是一個記號用來標示這是puts的libc address)<br>但我們不需要這些記號，所以只接收前四個byte，然後用u32去把他轉成address，<br>因爲他預設從libc吐回來給GOT的位置會是以byte的形式回傳<br>不信你看：</p>
 <p><img src="/img/pwnrop2byte.png" alt=""></p>
 <p>用u32取得puts 在libc的位置後再來就是算出<code>system</code>和<code>/bin/sh</code>的位置了<br>這部分跟leak一樣就不多贅述</p>
 <p>最後開始構造我們的payload，先是透過Bof呼叫<code>puts</code>顯示puts在GOT的內容<br>用recv去接他，然後算出<code>system</code>和<code>/bin/sh</code>的位置，之後我們要重新跳回去<code>main</code><br>再注入一次，這裏有一點要注意，再次注入的offset不會是第一次注入的offset<br>因爲call 他的是pwntools不是<code>start_main</code>，這時候可以透過<code>gdb.attach(io)</code>，<br>這樣可以用pwntools呼叫gdb來attach，然後下一行<code>io.sendline(cyclic(100))</code>可以<br>透過pwntools呼叫<code>cyclic</code>產生gadget來知道新的offset</p>

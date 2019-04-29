@@ -192,7 +192,7 @@ Dynamic linking的話就會需要PLT&amp;amp;GOT table去定義要呼叫的函�
 <p>詳細一點的話可以看看這篇<br><a href="http://fred-zone.blogspot.com/2006/03/static-shared.html" target="_blank" rel="noopener">http://fred-zone.blogspot.com/2006/03/static-shared.html</a></p>
 <p>如果懶得看只想看個大概的可以看我下面的整理</p>
 <p>什麼是 static library?<br>以C語言來說，<br>今天我們需要使用到其他自定義的函式，可以寫進不同的檔案，在編譯時可以透過編譯器<br>去把他們全包再一起變成一個執行檔，優點是執行效能高(跟shared library相比)，也不會有<br>執行時找不到library的問題<br>缺點是維護成本很高，今天假如函式庫出現bug時必須要重新連結一次執行檔</p>
-<p>那什麼是 shared library呢?<br>就是我們不需要把他們全包再一起，可以把函式庫放在系統資料夾，並透過編譯器define好<br>在執行時才被動態載入，因為函式庫與main.c是分離的，所以維護性比較好，當然相應的缺點<br>救世會找不到所需的library或版本號對不上出現錯誤之類的</p>
+<p>那什麼是 shared library呢?<br>就是我們不需要把他們全包再一起，可以把函式庫放在系統資料夾，並透過編譯器define好<br>在執行時才被動態載入，因為函式庫與main.c是分離的，所以維護性比較好，當然相應的缺點<br>就是會找不到所需的library或版本號對不上出現錯誤之類的</p>
 <p>知道了這些之後…讓我們放在dynamic linking&amp;shared library上</p>
 <h2 id="GOT的作用是什麼"><a href="#GOT的作用是什麼" class="headerlink" title="GOT的作用是什麼?"></a>GOT的作用是什麼?</h2><p>以gcc 內建的libc.so為例，因為你不可能用到libc.so內的所有函式，所以其實不用知道所有函式在記憶體內的位置。<br>其中GOT table只會列出你會用到的 fuction 或是 global variable的絕對位置。這樣會節省許多解析時間。</p>
 <h2 id="PLT的功用是什麼"><a href="#PLT的功用是什麼" class="headerlink" title="PLT的功用是什麼?"></a>PLT的功用是什麼?</h2><p>既然GOT已經列出需要的東西，那照理說工作就結束了，還需要PLT幹麻？<br>試想，當你的程式也大到跟 libc.so 一樣大時，你可能會呼叫上百個libc的函式，<br>所以當你的程式載入記憶體時，linker 會解析你需要的函式，這也會花上不少時間，<br>並導致使用者認為反應很慢。為了解決這個問題，所以GCC 改為呼叫shared library的函式前，<br>才去把位置填入GOT內。而PLT的功用就是呼叫 linker去填入 GOT，這個機制就是延遲解析 (lazy binding)。<br>(以linux來看的話上文的linker的部分都是ld.so這個shared library在做的事)<br>你可以把 PLT 當作Lazy binding機制的實現</p>

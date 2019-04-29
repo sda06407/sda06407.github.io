@@ -10,14 +10,15 @@
 
     <!--Description-->
     
-        <meta name="description" content="終於把難解卻很好玩的format string搞懂了，趕快來記一下
-說到學習的來源:https://paper.seebug.org/246/
-source code:
-#include &amp;lt;stdio.h&amp;gt;
+        <meta name="description" content="這學期的pwn又開始了，跟上次不同的是這次以x64為主要平台，算是比較真實一點了
+Lab0這題是訓練你使用pwntools
+主要是先有一個問題讓你輸入3735928559(0xdeadbeef)
 
-int main(int argc, char * argv[])
-{
-   ">
+之後會有一千個隨機的算術問答，要你在90秒內完成
+
+就降，阿解法也很簡單，用eval就可解決了
+
+阿不">
     
 
     <!--Author-->
@@ -27,7 +28,7 @@ int main(int argc, char * argv[])
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="Format_string_attack(未完)"/>
+        <meta property="og:title" content="ntust_pwn"/>
     
 
     <!--Open Graph Description-->
@@ -49,7 +50,7 @@ int main(int argc, char * argv[])
 
     <!-- Title -->
     
-    <title>Format_string_attack(未完) - AStar&#39;s Blog</title>
+    <title>ntust_pwn - AStar&#39;s Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -159,13 +160,13 @@ int main(int argc, char * argv[])
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="post-heading">
-                    <h1>Format_string_attack(未完)</h1>
+                    <h1>ntust_pwn</h1>
                     
                     <span class="meta">
                         <!-- Date and Author -->
                         
                         
-                            2019-02-11
+                            2019-03-17
                         
                     </span>
                 </div>
@@ -181,77 +182,82 @@ int main(int argc, char * argv[])
 
             <!-- Tags and categories -->
            
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/pwn/">#pwn</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                </div>
+            
 
             <!-- Gallery -->
             
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <p>終於把難解卻很好玩的format string搞懂了，趕快來記一下</p>
-<p>說到<br>學習的來源:<a href="https://paper.seebug.org/246/" target="_blank" rel="noopener">https://paper.seebug.org/246/</a></p>
-<p>source code:</p>
-<pre><code>#include &lt;stdio.h&gt;
+                <p>這學期的pwn又開始了，跟上次不同的是這次以x64為主要平台，算是比較真實一點了</p>
+<h1 id="Lab0"><a href="#Lab0" class="headerlink" title="Lab0"></a>Lab0</h1><p>這題是訓練你使用pwntools</p>
+<p>主要是先有一個問題讓你輸入3735928559(0xdeadbeef)</p>
+<p><img src="/img/ntust_pwn/pwntools1.png" alt=""></p>
+<p>之後會有一千個隨機的算術問答，要你在90秒內完成</p>
+<p><img src="/img/ntust_pwn/pwntools2.png" alt=""></p>
+<p>就降，阿解法也很簡單，用<code>eval</code>就可解決了</p>
+<p><img src="/img/ntust_pwn/eval.png" alt=""></p>
+<p>阿不過題目會多print一個<code>= ?</code></p>
+<p>記得要把它recv掉</p>
+<p>payload長這樣：</p>
+<p><img src="/img/ntust_pwn/pwntools3.png" alt=""><br>或是智障一點的解法是，把他的<code>alarm</code>改成<code>isnan</code>然後一個一個算XD</p>
+<p>這裡一個注意的地方是上面的<code>0xdeadbeef</code>要用<code>p32</code> 而不是<code>p64</code>，被這個表到</p>
+<p>因為<code>0xdeadbeef</code>總共4個bytes，用<code>p64</code>它會把後面補完8 bytes送出去，這樣在if就會出錯了</p>
+<p>執行的畫面：</p>
+<p><img src="/img/ntust_pwn/pwntools4.png" alt=""></p>
+<h1 id="Lab1"><a href="#Lab1" class="headerlink" title="Lab1"></a>Lab1</h1><p>看source code:</p>
+<p><img src="/img/ntust_pwn/bof1-5.png" alt=""></p>
+<p>執行：</p>
+<p><img src="/img/ntust_pwn/bof1-1.png" alt=""></p>
+<p>嘗試overflow它：</p>
+<p><img src="/img/ntust_pwn/bof1-2.png" alt=""></p>
+<p>用gdb去看他的offset：</p>
+<p><img src="/img/ntust_pwn/bof1-3.png" alt=""></p>
+<p>可以看到雖然RIP還是指向main<br>但實際上我們已經可以控制RIP了<br>因為它crash的原因是<code>ret</code>的部份，<br>而<code>ret</code>就是<code>pop rip</code><br>所以只要知道stack那個gadget的offset就算控制rip了<br>或是可以套calling convention的概念，將rbp + 8 = rip，因為rbp也是能控制的，</p>
+<p><img src="/img/ntust_pwn/bof1-4.png" alt=""></p>
+<p>上面是rbp的offset下面是stack的</p>
+<p>rbp的部份還要再加4bytp才能蓋滿rbp，所以20+4 後面的bytes就是開始蓋return address了</p>
+<p>跟直接看stack的offset是一樣的</p>
+<p>exploit code:</p>
+<p><img src="/img/ntust_pwn/bof1-6.png" alt=""></p>
+<h1 id="Lab2"><a href="#Lab2" class="headerlink" title="Lab2"></a>Lab2</h1><p>source code:</p>
+<p><img src="/img/ntust_pwn/bof2-1.png" alt=""></p>
+<p>可以看到他有一個strlen擋住，上面的shell function有也有一個<code>int allows = 0;</code>，所以也不能直接跳到function上面。</p>
+<p>前面的問題可以用<code>\0</code>做null byte截斷，跟strcmp一樣，後面的問題就是不要跳到function就好了，直接跳到它執行shell的那一段。</p>
+<p>第一部還是先用gdb找offset:</p>
+<p><img src="/img/ntust_pwn/bof2-2.png" alt=""></p>
+<p>然後很順利的找到offset</p>
+<p><img src="/img/ntust_pwn/bof2-3.png" alt=""></p>
+<p>把<code>agaa</code>拿去對offset得到的是23，strlen的問題解決了，再來是看我們要跳到哪</p>
+<p>objdump它:</p>
+<p><img src="/img/ntust_pwn/bof2-5.png" alt=""></p>
+<p>這裡可以看到，我們要跳的地方是<code>0x4006c7</code></p>
+<p>為什麼呢?</p>
+<p>在說這個之前先大概寫一���<code>execv</code>這個function的使用方式</p>
+<pre><code>#include &lt;unistd.h&gt;
 
-int main(int argc, char * argv[])
-{
-    char a[1024];
-    while(1) 
-    {
-        memset(a, &apos;\0&apos;, 1024);
-        read(0, a, 1024);
-        printf(a);
-        fflush(stdout);
-    }
-    return 0;
-}
-</code></pre><p>透過執行可以知道就是一個我們輸入什麼他printf什麼<br><img src="/img/Format_string_attack/pwnformatstring1.PNG" alt=""></p>
-<p>但他的printf因為是直接使用<code>printf(a)</code>來做輸出<br>因此有format string的弱點，盲測的時候可以試著輸入看看<code>%x</code>或其他printf的關鍵字。<br>只要有像這樣的回應就代表有戲(?<br><img src="/img/Format_string_attack/pwnformatstring2.PNG" alt=""></p>
-<p>可以透過<code>aaaa%n$x</code>來找offset，n是任意數，就是透過<code>aaaa%1$x</code> <code>aaaa%2$x</code>…這樣子下去爆破取得offset<br><code>%n</code>是代表第n個參數，<code>$x</code>是以hex的方式輸出，參照<a href="https://en.wikipedia.org/wiki/Printf_format_string" target="_blank" rel="noopener">wiki</a>和<a href="https://www.owasp.org/index.php/Format_string_attack" target="_blank" rel="noopener">owasp</a>:</p>
-<pre><code>For example, printf(&quot;%2$d %2$#x; %1$d %1$#x&quot;,16,17) produces 17 0x11; 16 0x10.
-
-Below are some format parameters which can be used and their consequences:
-
-•&quot;%x&quot; Read data from the stack
-
-•&quot;%s&quot; Read character strings from the process&apos; memory
-
-•&quot;%n&quot; Write an integer to locations in the process&apos; memory
-%d - 十进制 - 输出十进制整数
-%s - 字符串 - 从内存中读取字符串
-%x - 十六进制 - 输出十六进制数
-%c - 字符 - 输出字符
-%p - 指针 - 指针地址
-%n - 到目前为止所写的字符数
-</code></pre><p>運氣不錯，在第四個就找到了<br><img src="/img/Format_string_attack/pwnformatstring3.PNG" alt=""></p>
-<p>或是你可以透過pwntool來找offset:</p>
-<p><img src="/img/Format_string_attack/pwnformatstring4.PNG" alt=""></p>
-<p><img src="/img/Format_string_attack/pwnformatstring5.PNG" alt=""></p>
-<p>61616161就是ascii的aaaa，我們可以透過這樣的方式把<code>$x</code>改成<code>$s</code>去leak binary裡面的內容<br>嘗試一下，先objdump這個ELF，選一個address，假設我想要leak <code>_start</code>的內容</p>
-<p><img src="/img/Format_string_attack/pwnformatstring6.PNG" alt=""></p>
-<p>那我可以這樣取得檔案內容</p>
-<pre><code>echo -e &apos;\x70\x90\x04\x08%4$s&apos; | ./fmt
-</code></pre><p><img src="/img/Format_string_attack/pwnformatstring7.PNG" alt=""></p>
-<p>但看起來成效不好，因為它會把hex轉成ascii顯示，如果想看raw data的話這不是一個好方法<br>所以可以用pwntool來看:</p>
-<p><img src="/img/Format_string_attack/pwnformatstring8.PNG" alt=""></p>
-<p>雖然好了點，可是這樣子還是不太好看<br>於是再動些手腳:</p>
-<p><img src="/img/Format_string_attack/pwnformatstring9.PNG" alt=""></p>
-<p>好了!拿這個opcode跟上面的objdump的結果比對看看，是不是一樣呢?</p>
-<p>但這邊會遇到一個問題</p>
-<p>不開PIE，x86 ELF預設都是從<code>0x8048000</code>開始，但<code>%s</code>遇到<code>\x00</code>就會中斷，<br>要怎麼解決呢?</p>
-<p>把位置顛倒放就好了，這樣他就會先leak出內容再print address，但因為位置換了，所以我們的offset要跟著換才行</p>
-<p>以這題來說就是<code>%5$s+p32(address)</code>，因為<code>p32(address)</code>移到後面去，而且要把<code>%4$s</code>這四個byte算進去，所以要往後一個offset</p>
-<p>以上面教學網址的範例是<code>%13$saaa+p32(address)</code>這點讓我比較不解，後面得知的結論是，如果沒加aaa<br><code>%13$s</code>共5byte，這樣子在他後面的address會被stack切到而讀不完整，所以要塞aaa讓他變成8個byte<br>讓後面的address能完整個放在一格stack上，這樣子讀stack的時候才能完整讀到address</p>
-<p><img src="/img/Format_string_attack/pwnformatstring10.PNG" alt=""></p>
-<p>方法都知道了，現在我們可以leak整個binary</p>
-<p><img src="/img/Format_string_attack/pwnformatstring11.PNG" alt=""></p>
-<p>雖然我們無法繞過opcode裡面的<code>\x00</code>，但可以寫一個遇到<code>\x00</code>時就從中斷的部分加一個<code>\x00</code>再繼續leak</p>
-<p>如果怕<code>recvall()</code>收到不必要的字元，我自己是習慣payload後面再加aaaa並把offset+1，然後用<code>recvuntil(&quot;aaaa&quot;)</code>來接收這樣子</p>
-<p>leak出來之後，用objdump看:</p>
-<p><img src="/img/Format_string_attack/pwnformatstring12.PNG" alt=""></p>
-<p>看不出個什麼鳥，用readelf看才勉強看出plt table的address</p>
-<p><img src="/img/Format_string_attack/pwnformatstring13.PNG" alt=""></p>
-<p>這點不得不佩服IDA Pro…</p>
-
+int execve(const char *filename, char *const argv[],char *const envp[]);
+</code></pre><p>然後看一下overflow完後registers的狀態</p>
+<p><img src="/img/ntust_pwn/bof2-4.png" alt=""></p>
+<p>因為跟這張圖可以知道，我們overflow的時候已經把rbp的位置蓋爛了，<br>而參數擺放的位置都是以rbp為機準下去做相對位置的計算，所以rdx, rsi是廢掉的不能用了<br>rdx, rsi對應到execv的參數就是<code>char *const argv[],char *const envp[]</code></p>
+<p>那其實影響不大，因為後面兩個參數不是必要的，<br>我們用<code>execv(&quot;/bin/sh&quot;)</code>還是可以拿到shell，<br>而第一個參數是以rip為基準下去擺的，<br>當我們控制rip到<code>0x4006c7</code>的時候rip還是好的，<br>所以這一條指令<code>lea    rdi,[rip+0x11a]</code>還是可以成功的導到<code>/bin/sh</code>，<br>那怎麼知道rdi就是<code>/bin/sh</code>呢？除了看source code之外，透過radare2也可以:</p>
+<p><img src="/img/ntust_pwn/bof2-6.png" alt=""></p>
+<p>兩個問題都解決之後就是exploit code了:</p>
+<p><img src="/img/ntust_pwn/bof2-7.png" alt=""></p>
+<h1 id="Lab3"><a href="#Lab3" class="headerlink" title="Lab3"></a>Lab3</h1>
 
                 
             </div>

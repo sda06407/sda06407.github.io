@@ -176,6 +176,20 @@
 
             <!-- Tags and categories -->
            
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/docker/">#docker</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                </div>
+            
 
             <!-- Gallery -->
             
@@ -184,16 +198,20 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <p>最近建服務越來越覺得docker好用</p>
 <p>想說來寫個note，以後忘記了可以直接翻這個看不用再google了</p>
-<p>相關好文:<br><a href="http://oomusou.io/docker/dockerfile-dockercompose/" target="_blank" rel="noopener">http://oomusou.io/docker/dockerfile-dockercompose/</a><br><a href="https://docs.docker.com/config/containers/container-networking/" target="_blank" rel="noopener">https://docs.docker.com/config/containers/container-networking/</a></p>
+<p>相關好文:<br><a href="http://oomusou.io/docker/dockerfile-dockercompose/" target="_blank" rel="noopener">http://oomusou.io/docker/dockerfile-dockercompose/</a><br><a href="https://docs.docker.com/config/containers/container-networking/" target="_blank" rel="noopener">https://docs.docker.com/config/containers/container-networking/</a><br><a href="https://www.cnblogs.com/guoguojj/p/9404781.html" target="_blank" rel="noopener">https://www.cnblogs.com/guoguojj/p/9404781.html</a><br><a href="https://www.jianshu.com/p/adb0350557dc" target="_blank" rel="noopener">https://www.jianshu.com/p/adb0350557dc</a><br><a href="https://godleon.github.io/blog/Docker/docker-network-overview/" target="_blank" rel="noopener">https://godleon.github.io/blog/Docker/docker-network-overview/</a><br><a href="https://blog.yowko.com/change-container-port-mapping/" target="_blank" rel="noopener">https://blog.yowko.com/change-container-port-mapping/</a></p>
 <p>下載image檔:</p>
 <pre><code>docker pull [image]
 </code></pre><p>跑image檔:</p>
 <pre><code>docker run [options] [image id]
 </code></pre><p>其中run裡面有一些參數算比較常用的 在此紀錄一下</p>
-<p><code>-d</code>是print id後在背景執行<br><code>-p</code>就是指定port forward給host，也可以ip forward</p>
-<pre><code>ex. docker run -p 127.0.0.1:8080:80 [image id]
+<p><code>-d</code>是print id後在背景執行<br><code>-p</code>就是指定port forward給host，也可以ip forward<br><code>--hostname=[hostname]</code> 可以指定hostname，注意！create container之後就不能改hostname了<br><code>--name=[name]</code> 可以指定container name</p>
+<pre><code>ex.
+docker run -p 127.0.0.1:8080:80 [image id]
 </code></pre><p>這在run一些server服務的時候蠻實用的</p>
-<p>查看現在擁有的image</p>
+<p>被container雷了，因此特別做個筆記，container如果沒加上<code>--privileged</code>，就算是root用戶也還是有受到限制<br>另一個問題是預設情況下docker會禁止container使用系統指令<br>所以還必須加上 <code>--security-opt seccomp:unconfined</code><br>再來就是ptrace，這個是gdb能不能hook elf很重要的參數<br>所以我們也要讓docker允許container修改他<br><code>--cap-add=SYS_PTRACE</code>，另一件事：如果你想修改hostname也必須在run image的時候define好<br><code>--hostname=[hostname]</code><br><code>--name=[container name]</code></p>
+<p>我現在run image都用下這個：</p>
+<pre><code>docker run --cap-add=SYS_PTRACE --security-opt seccomp:unconfined --privileged --hostname=kali --name=kali -it 5424cd86f9e1 bash
+</code></pre><p>查看現在擁有的image</p>
 <pre><code>docker image list
 </code></pre><p>查看現在正在執行的container</p>
 <pre><code>docker container list
@@ -215,6 +233,8 @@
 <pre><code>docker-compose start(stop)
 </code></pre><p>如果想(不想)要docker container 開機就啟動的話可以用下面的參數處理</p>
 <pre><code>docker update --restart=yes(no) [container ID] 
+</code></pre><p>想要在 container 與 host 之間複製檔案</p>
+<pre><code>docker cp [container name]:[location] [host location]
 </code></pre><p>遇到dockerfile需要先build他</p>
 <pre><code>docker build -t [name] . --no-cache
 </code></pre><p>使用<code>--no-cache</code>是因為避免在 Build Docker image 時被 cache 住，而造成沒有 build 到修改過的 Dockerfile</p>
@@ -222,12 +242,18 @@
 <p>剛剛run <code>docker container ps -a</code> 發現container的名稱好亂，剛剛又找了rename的方法，意外簡單</p>
 <pre><code>docker rename [old name] [new name]
 </code></pre><p>如何在正在進行中的container裡面開一個shell?</p>
-<p>網路上看過不少方法，覺得最好的方法就是<code>nsenter</code>，用<code>nsenter</code>的好處是─他是獨立開一個shell交互，不會跟正在進行command的shell同步，<br>所以不管進入或退出都對現有的container沒有影響<br>可以直接寫一個腳本來完成他</p>
-<pre><code>$ cat /bin/docker_enter
-#!/bin/bash
-sudo nsenter --target `docker inspect --format {{.State.Pid}} $1` --mount --uts --ipc --net --pid bash
-</code></pre><p>這樣每次要進入某個container只要 <code>docker_enter [container id]</code>就可以了</p>
-<p>大概是這樣 如果後面有用到還會再補充</p>
+<pre><code>docker exec -it [container id] bash
+</code></pre><p>如果要指定登入的user要再加<code>--user [username]</code>(記得要先在機器裡面adduser)<br>如果要讓shell 呈現256色彩的話則是<code>-e TERM=&quot;xterm-256color&quot;</code>, -e = env</p>
+<p>我目前的設定大概是這樣：</p>
+<pre><code>#!/bin/bash
+docker container start f9f07a4d171a
+docker exec -it --user astar -e TERM=&quot;xterm-256color&quot;  f9f07a4d171a bash
+</code></pre><p>大概是這樣 如果後面有用到還會再補充</p>
+<h3 id="在-zsh-上自動補完"><a href="#在-zsh-上自動補完" class="headerlink" title="在 zsh 上自動補完"></a>在 zsh 上自動補完</h3><p>最近從ubnutu轉移到mac上(對發光蘋果沒有抵抗&gt;&lt;)發現很多東西都還要學習www</p>
+<p>光zsh對docker 的autocomplete 的設定又花了我一點時間<br>大概參考了這篇：</p>
+<p><a href="https://tommy.net.cn/2015/02/24/enable-zsh-completion-of-brew-under-mac-os-x/" target="_blank" rel="noopener">https://tommy.net.cn/2015/02/24/enable-zsh-completion-of-brew-under-mac-os-x/</a><br><a href="https://docs.docker.com/compose/completion/" target="_blank" rel="noopener">https://docs.docker.com/compose/completion/</a></p>
+<p>成果：</p>
+<p><img src="https://i.imgur.com/TXJ242o.png" alt=""></p>
 
 
                 
