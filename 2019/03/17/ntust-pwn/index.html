@@ -205,59 +205,105 @@ Lab0這題是訓練你使用pwntools
                 <p>這學期的pwn又開始了，跟上次不同的是這次以x64為主要平台，算是比較真實一點了</p>
 <h1 id="Lab0"><a href="#Lab0" class="headerlink" title="Lab0"></a>Lab0</h1><p>這題是訓練你使用pwntools</p>
 <p>主要是先有一個問題讓你輸入3735928559(0xdeadbeef)</p>
-<p><img src="/img/ntust_pwn/pwntools1.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/pwntools1.png" alt=""></p>
 <p>之後會有一千個隨機的算術問答，要你在90秒內完成</p>
-<p><img src="/img/ntust_pwn/pwntools2.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/pwntools2.png" alt=""></p>
 <p>就降，阿解法也很簡單，用<code>eval</code>就可解決了</p>
-<p><img src="/img/ntust_pwn/eval.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/eval.png" alt=""></p>
 <p>阿不過題目會多print一個<code>= ?</code></p>
 <p>記得要把它recv掉</p>
 <p>payload長這樣：</p>
-<p><img src="/img/ntust_pwn/pwntools3.png" alt=""><br>或是智障一點的解法是，把他的<code>alarm</code>改成<code>isnan</code>然後一個一個算XD</p>
+<p><img src="/img/2019/ntust_pwn/pwntools3.png" alt=""><br>或是智障一點的解法是，把他的<code>alarm</code>改成<code>isnan</code>然後一個一個算XD</p>
 <p>這裡一個注意的地方是上面的<code>0xdeadbeef</code>要用<code>p32</code> 而不是<code>p64</code>，被這個表到</p>
 <p>因為<code>0xdeadbeef</code>總共4個bytes，用<code>p64</code>它會把後面補完8 bytes送出去，這樣在if就會出錯了</p>
 <p>執行的畫面：</p>
-<p><img src="/img/ntust_pwn/pwntools4.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/pwntools4.png" alt=""></p>
 <h1 id="Lab1"><a href="#Lab1" class="headerlink" title="Lab1"></a>Lab1</h1><p>看source code:</p>
-<p><img src="/img/ntust_pwn/bof1-5.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/bof1-5.png" alt=""></p>
 <p>執行：</p>
-<p><img src="/img/ntust_pwn/bof1-1.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/bof1-1.png" alt=""></p>
 <p>嘗試overflow它：</p>
-<p><img src="/img/ntust_pwn/bof1-2.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/bof1-2.png" alt=""></p>
 <p>用gdb去看他的offset：</p>
-<p><img src="/img/ntust_pwn/bof1-3.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/bof1-3.png" alt=""></p>
 <p>可以看到雖然RIP還是指向main<br>但實際上我們已經可以控制RIP了<br>因為它crash的原因是<code>ret</code>的部份，<br>而<code>ret</code>就是<code>pop rip</code><br>所以只要知道stack那個gadget的offset就算控制rip了<br>或是可以套calling convention的概念，將rbp + 8 = rip，因為rbp也是能控制的，</p>
-<p><img src="/img/ntust_pwn/bof1-4.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/bof1-4.png" alt=""></p>
 <p>上面是rbp的offset下面是stack的</p>
 <p>rbp的部份還要再加4bytp才能蓋滿rbp，所以20+4 後面的bytes就是開始蓋return address了</p>
 <p>跟直接看stack的offset是一樣的</p>
 <p>exploit code:</p>
-<p><img src="/img/ntust_pwn/bof1-6.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/bof1-6.png" alt=""></p>
 <h1 id="Lab2"><a href="#Lab2" class="headerlink" title="Lab2"></a>Lab2</h1><p>source code:</p>
-<p><img src="/img/ntust_pwn/bof2-1.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/bof2-1.png" alt=""></p>
 <p>可以看到他有一個strlen擋住，上面的shell function有也有一個<code>int allows = 0;</code>，所以也不能直接跳到function上面。</p>
 <p>前面的問題可以用<code>\0</code>做null byte截斷，跟strcmp一樣，後面的問題就是不要跳到function就好了，直接跳到它執行shell的那一段。</p>
 <p>第一部還是先用gdb找offset:</p>
-<p><img src="/img/ntust_pwn/bof2-2.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/bof2-2.png" alt=""></p>
 <p>然後很順利的找到offset</p>
-<p><img src="/img/ntust_pwn/bof2-3.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/bof2-3.png" alt=""></p>
 <p>把<code>agaa</code>拿去對offset得到的是23，strlen的問題解決了，再來是看我們要跳到哪</p>
 <p>objdump它:</p>
-<p><img src="/img/ntust_pwn/bof2-5.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/bof2-5.png" alt=""></p>
 <p>這裡可以看到，我們要跳的地方是<code>0x4006c7</code></p>
 <p>為什麼呢?</p>
-<p>在說這個之前先大概寫一���<code>execv</code>這個function的使用方式</p>
+<p>在說這個之前先大概寫一下<code>execve</code>這個function的使用方式</p>
 <pre><code>#include &lt;unistd.h&gt;
 
 int execve(const char *filename, char *const argv[],char *const envp[]);
 </code></pre><p>然後看一下overflow完後registers的狀態</p>
-<p><img src="/img/ntust_pwn/bof2-4.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/bof2-4.png" alt=""></p>
 <p>因為跟這張圖可以知道，我們overflow的時候已經把rbp的位置蓋爛了，<br>而參數擺放的位置都是以rbp為機準下去做相對位置的計算，所以rdx, rsi是廢掉的不能用了<br>rdx, rsi對應到execv的參數就是<code>char *const argv[],char *const envp[]</code></p>
 <p>那其實影響不大，因為後面兩個參數不是必要的，<br>我們用<code>execv(&quot;/bin/sh&quot;)</code>還是可以拿到shell，<br>而第一個參數是以rip為基準下去擺的，<br>當我們控制rip到<code>0x4006c7</code>的時候rip還是好的，<br>所以這一條指令<code>lea    rdi,[rip+0x11a]</code>還是可以成功的導到<code>/bin/sh</code>，<br>那怎麼知道rdi就是<code>/bin/sh</code>呢？除了看source code之外，透過radare2也可以:</p>
-<p><img src="/img/ntust_pwn/bof2-6.png" alt=""></p>
+<p><img src="/img/2019/ntust_pwn/bof2-6.png" alt=""></p>
 <p>兩個問題都解決之後就是exploit code了:</p>
-<p><img src="/img/ntust_pwn/bof2-7.png" alt=""></p>
-<h1 id="Lab3"><a href="#Lab3" class="headerlink" title="Lab3"></a>Lab3</h1>
+<p><img src="/img/2019/ntust_pwn/bof2-7.png" alt=""></p>
+<h1 id="Lab3"><a href="#Lab3" class="headerlink" title="Lab3"></a>Lab3</h1><p>這題在教怎麼return to shellcode address，</p>
+<p>直接看source code:</p>
+<p><img src="/img/2019/ntust_pwn/ret2sc_1.png" alt=""></p>
+<p>和checksec:</p>
+<p><img src="/img/2019/ntust_pwn/ret2sc_2.png" alt=""></p>
+<p>大概知道就是，我們可以把shellcode放在message，然後在第二個輸入的時候overflow他<br>跳到shellcode的位址執行shellcode(因為沒開NX)</p>
+<p>然後payload大概是這樣子：</p>
+<p><img src="/img/2019/ntust_pwn/ret2sc_3.png" alt=""></p>
+<h2 id="Lab4"><a href="#Lab4" class="headerlink" title="Lab4"></a>Lab4</h2><p>source code:</p>
+<p><img src="/img/2019/ntust_pwn/gothijack_1.png" alt=""></p>
+<p>題目有給我們可以任意改寫got的</p>
+<p>簡單來說，我們可以把shellcode寫進第一個read的記憶體內，然後在scanf給puts_got的address</p>
+<p>在第二個read給name的 address 的內容，這樣在下一行<code>printf(&quot;Thank you&quot;)</code>就會被替換成shellcode執行</p>
+<p>payload:</p>
+<p><img src="/img/2019/ntust_pwn/gothijack_2.png" alt=""></p>
+<h2 id="Lab5"><a href="#Lab5" class="headerlink" title="Lab5"></a>Lab5</h2><p>這一題拿到後，我們一樣先<code>checksec</code></p>
+<p><img src="/img/2019/ntust_pwn/rop_1.png" alt=""></p>
+<p>嘗試執行它：</p>
+<p><img src="/img/2019/ntust_pwn/rop_2.png" alt=""></p>
+<p>可以看到是一隻很簡單的程式</p>
+<p>那我們用objdump看他的got table看看</p>
+<p><img src="/img/2019/ntust_pwn/rop_3.png" alt=""></p>
+<p>可以發現他沒有用到 got table, 這邊有兩個結論，因為透過剛剛的執行發現他是有用到printf或是puts的function的</p>
+<p>代表有兩個可能，一個是他用static的方式把libc的function包進ELF裡面，另一個是他自幹一個printf/puts的function,<br>前者的可能性大一點（誰沒事會自幹一個printf），如果是static的compile方式，<br>那就可以用<code>ROPgadget</code>這個工具去找他有哪些可利用的指令來構成我們要的syscall，<br>由於他有開stack canary，為保起見我們進去看他的main是不是真的有開，</p>
+<p>下面是我找的一個真的有開stack canary的function</p>
+<p><img src="/img/2019/ntust_pwn/rop_4.png" alt=""></p>
+<p>下面是rop的main function</p>
+<p><img src="/img/2019/ntust_pwn/rop_5.png" alt=""></p>
+<p>可以看到有stack canary的function在做完calling convention之後還會再塞一個值在return address之前<br>但rop的main function卻沒有，所以可以判定我們可以透過main 進行overflow的動作。</p>
+<p>那rop chain要怎麼構呢？<br>借一張圖來說明：</p>
+<p><img src="/img/2019/ntust_pwn/rop_6.png" alt=""></p>
+<p>詳細的syscall可以參考這裡：</p>
+<p><a href="https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/" target="_blank" rel="noopener">https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/</a></p>
+<p>就如上面所說，我們用<code>ROPgadget</code>看看他有哪些碎片能用</p>
+<pre><code>ROPgadget --binary rop &gt; ropgadget
+</code></pre><p>可以用grep等等的指令方便我們尋找是否有需要的指令</p>
+<p>基本上就如同上面的圖一樣</p>
+<p>我們先讓<code>rdi</code>指向<code>bss</code>區段, 然後把<code>/bin/sh</code>放進<code>rsi</code>裡面</p>
+<p>再把<code>rsi</code>的值放進<code>rdi</code>指向的記憶體位置(也就是bss段)，然後再把<code>rdx</code>和<code>rsi</code>歸零，</p>
+<p>把rax改成0x3b後叫<code>syscall</code>來執行</p>
+<p>就構成<code>execve(/bin/sh)</code>了</p>
+<p>exploit code:</p>
+<p><img src="/img/2019/ntust_pwn/rop_7.png" alt=""></p>
+<p>P.S 仔細讀了一下後才知道原來<code>rdi</code>要吃記憶體位置….</p>
+<pre><code>59 sys_execve     const char *filename const char *const argv[] const char *const envp[]
+</code></pre><p>那個星號rrrrrr, 我還傻傻的以為放字串進去也可以（對就是那些註解在嘗試的）。</p>
+
 
                 
             </div>

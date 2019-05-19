@@ -10,11 +10,14 @@
 
     <!--Description-->
     
-        <meta name="description" content="最近發現了hxp CTF 2018 有釋出VM，這是我打過的CTF裡面第一個有給整個主機的比賽ww
-還貼心的附上ctf time 的 wp，如此好的學習機會當然不能放過
-angrme
-angrmeby kirschjurev  baby
-I hope you do not need more tha">
+        <meta name="description" content="這場CTF打得好開心XD, 有不少水題解出來，分享一下
+打完才發現資料夾名稱取錯了，算了就將錯就錯吧
+intergover這題就是個問答題，這支程式只會給你兩種種回答
+
+
+用checksec去看他，發現有開Canary，所以應該不是overflow
+
+用r2去看他，發現程式很單純，只要答對就給你Fl">
     
 
     <!--Author-->
@@ -24,7 +27,7 @@ I hope you do not need more tha">
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="hxp-ctf_2018"/>
+        <meta property="og:title" content="INSHACK_ctf_2019"/>
     
 
     <!--Open Graph Description-->
@@ -46,7 +49,7 @@ I hope you do not need more tha">
 
     <!-- Title -->
     
-    <title>hxp-ctf_2018 - AStar&#39;s Blog</title>
+    <title>INSHACK_ctf_2019 - AStar&#39;s Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -156,13 +159,13 @@ I hope you do not need more tha">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="post-heading">
-                    <h1>hxp-ctf_2018</h1>
+                    <h1>INSHACK_ctf_2019</h1>
                     
                     <span class="meta">
                         <!-- Date and Author -->
                         
                         
-                            2019-04-22
+                            2019-05-07
                         
                     </span>
                 </div>
@@ -184,37 +187,78 @@ I hope you do not need more tha">
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <p>最近發現了hxp CTF 2018 有釋出VM，這是我打過的CTF裡面第一個有給整個主機的比賽ww</p>
-<p>還貼心的附上ctf time 的 wp，如此好的學習機會當然不能放過</p>
-<h1 id="angrme"><a href="#angrme" class="headerlink" title="angrme"></a>angrme</h1><hr>
-<p>angrme<br>by kirschju<br>rev  baby</p>
-<p>I hope you do not need more than <a href="https://angr.io/" target="_blank" rel="noopener">three lines of python</a> to solve this.</p>
-<p>Download:<br>angrme-9b74a376a923552b.tar.xz</p>
-<hr>
-<p>下載完解壓縮後試著跑他：<br><img src="/img/2019/hxp-ctf_2018/angrme_1.png" alt=""></p>
-<p>猜測可能也是猜到一個正確的字就會吐FLAG<br>但strings 出來的疑似都被加密了，連個”correct”都看不到</p>
-<p>看了下function也沒有什麼特點</p>
-<p><img src="/img/2019/hxp-ctf_2018/angrme_2.png" alt=""></p>
-<p>用r2看了下發現超多迴圈的</p>
-<p><img src="/img/2019/hxp-ctf_2018/angrme_3.png" alt=""></p>
-<p><img src="/img/2019/hxp-ctf_2018/angrme_4.png" alt=""></p>
-<p><img src="/img/2019/hxp-ctf_2018/angrme_5.png" alt=""></p>
-<p><img src="/img/2019/hxp-ctf_2018/angrme_6.png" alt=""></p>
-<p>想了下題目都給angr這個hint了</p>
-<p>查了下angr怎麼用</p>
-<p>參考<a href="https://stfpeak.github.io/2017/11/08/use_angr_for_ctf/" target="_blank" rel="noopener">這篇</a></p>
-<p>首先先把程式跑起來</p>
-<pre><code>p = angr.Project(&quot;./angrme&quot;)
-</code></pre><p>取得程式入口的狀態</p>
-<pre><code>state = p.factory.entry_state()
-</code></pre><p>初始化process的模擬器</p>
-<pre><code>sm = p.factory.simgr(state)
-</code></pre><p>取得結果為<code>:)</code>的路徑</p>
-<pre><code>sm.explore(find=lambda s:&quot;:)&quot; in s.posix.dumps(1))
-</code></pre><p>執行所屬的function</p>
-<pre><code>sm.found[0].posix.dumps(0)    
-</code></pre><p>程式全貌</p>
-<p><img src="/img/2019/hxp-ctf_2018/angrme_7.png" alt=""></p>
+                <p>這場CTF打得好開心XD, 有不少水題解出來，分享一下</p>
+<p><del>打完才發現資料夾名稱取錯了，算了就將錯就錯吧</del></p>
+<h1 id="intergover"><a href="#intergover" class="headerlink" title="intergover"></a>intergover</h1><p>這題就是個問答題，這支程式只會給你兩種種回答</p>
+<p><img src="/img/2019/inshack_ctf_2019/intergover_1.png" alt=""></p>
+<p><img src="/img/2019/inshack_ctf_2019/intergover_2.png" alt=""></p>
+<p>用<code>checksec</code>去看他，發現有開Canary，所以應該不是overflow</p>
+<p><img src="/img/2019/inshack_ctf_2019/intergover_3.png" alt=""></p>
+<p>用<code>r2</code>去看他，發現程式很單純，只要答對就給你Flag了：</p>
+<p><img src="/img/2019/inshack_ctf_2019/intergover_4.png" alt=""></p>
+<p>進去看main，第一個是判斷是不是整數的if條件式</p>
+<p><img src="/img/2019/inshack_ctf_2019/intergover_5.png" alt=""></p>
+<p>第二個就是我們要的，判斷是不是正確數字的if條件式</p>
+<p><img src="/img/2019/inshack_ctf_2019/intergover_6.png" alt=""></p>
+<p><code>0xf2</code>轉10進位就是242，所以….</p>
+<p><img src="/img/2019/inshack_ctf_2019/intergover_7.png" alt=""></p>
+<p>因為這是pwn題，但我們在本機跑的，所以出現這個就算成功了</p>
+<h2 id="signed-or-not-signed"><a href="#signed-or-not-signed" class="headerlink" title="signed_or_not_signed"></a>signed_or_not_signed</h2><p>這一題跟剛剛的<code>intergover</code>有幾分相似</p>
+<p><img src="/img/2019/inshack_ctf_2019/signed_or_not_signed_1.png" alt=""></p>
+<p>可以看到他多了一個數值的確認，太大他會寫too big</p>
+<p>r2他，看一些比較重要的if條件式</p>
+<p><img src="/img/2019/inshack_ctf_2019/signed_or_not_signed_2.png" alt=""></p>
+<p>這一個是判斷數字是否太大的條件式，可以看到當我們輸入的值大於10就會說太大了</p>
+<p>另外要特別注意</p>
+<pre><code>movzx eax, ax
+mov edi, eax
+</code></pre><p>movzx是什麼呢？</p>
+<p><img src="/img/2019/inshack_ctf_2019/signed_or_not_signed_4.png" alt=""></p>
+<p><a href="http://godleon.blogspot.com/2008/02/unsigned-signed-unsigned-signed-2-2-1-0.html" target="_blank" rel="noopener">來源</a></p>
+<p>從這一行可以知道，他把我輸入的值以<code>short int</code>的型別傳入vuln的function裡面<br>然後在vuln裡面做判定是否為正確數字的條件判斷：</p>
+<p><img src="/img/2019/inshack_ctf_2019/signed_or_not_signed_3.png" alt=""></p>
+<p>這邊也可以看出他以<code>short int</code>的型別進行判斷</p>
+<pre><code>mov eax, edi
+mov word [local_4h], ax
+cmp word [local_4h], 0xfd66
+</code></pre><p>他將vuln的參數放進eax內，然後把eax的後16 bits拿去做cmp，<br>阿因為前面<code>movzx</code>也會把前16 bits用0蓋過去，所以結果不影響，</p>
+<p>然後根據<a href="https://programming.im.ncnu.edu.tw/Chapter5.htm" target="_blank" rel="noopener">資料型態</a></p>
+<p><img src="/img/2019/inshack_ctf_2019/signed_or_not_signed_5.png" alt=""></p>
+<p>所以我們的數字最大就是<code>65535</code>, 0xfd66 = 64870 但這個數字大於10，沒辦法用</p>
+<p>因此可以用<a href="https://notfalse.net/20/signed-number-representations" target="_blank" rel="noopener"><code>2補數的特性</code></a>解決<br>64870 = 65535 = -666, 所以答案就是<code>-666</code></p>
+<p><img src="/img/2019/inshack_ctf_2019/signed_or_not_signed_6.png" alt=""></p>
+<h2 id="Overcobol"><a href="#Overcobol" class="headerlink" title="Overcobol"></a>Overcobol</h2><p>這題是給你cobol的source code，但我看不懂cobol QQ，所以研究了一下就把它complie 成elf來執行</p>
+<p>用r2進去看還是看不出所以然，所以就直接進去執行了，做法就是，產一個gadget，然後看他哪個地方會overflow，</p>
+<p><img src="/img/2019/inshack_ctf_2019/overcobol_1.png" alt=""></p>
+<p><img src="/img/2019/inshack_ctf_2019/overcobol_2.png" alt=""></p>
+<p><code>libcob: module &#39;iaaajaaa&#39; not found</code> 代表可以注入，</p>
+<p>我們嘗試讓他用 <code>SYSTEM</code> 的module</p>
+<p><img src="/img/2019/inshack_ctf_2019/overcobol_3.png" alt=""></p>
+<p>成功了！他可以執行command！<br>所以接著只要把command not found那一段改成<code>/bin/sh</code>就可以成功執行我們的shell</p>
+<p>可以利用Linux無視<code>/</code>個數的特性去補完中間所需的padding</p>
+<p>最後payload: <code>baaacaaa/////bin//////////////shSYSTEM</code></p>
+<p><img src="/img/2019/inshack_ctf_2019/overcobol_4.png" alt=""></p>
+<h2 id="ropberry"><a href="#ropberry" class="headerlink" title="ropberry"></a>ropberry</h2><p>執行的樣子：</p>
+<p><img src="/img/2019/inshack_ctf_2019/ropberry_1.png" alt=""></p>
+<p>然後他可以被overflow</p>
+<p><img src="/img/2019/inshack_ctf_2019/ropberry_2.png" alt=""></p>
+<p>看一下checksec 和 got table</p>
+<p><img src="/img/2019/inshack_ctf_2019/ropberry_3.png" alt=""></p>
+<p><img src="/img/2019/inshack_ctf_2019/ropberry_4.png" alt=""></p>
+<p>可以看到他開了<code>NX</code>，然後是static的方式compile的</p>
+<p>這個情況下可以嘗試使用<code>ROPgadget</code>來產rop chain</p>
+<p><img src="/img/2019/inshack_ctf_2019/ropberry_5.png" alt=""></p>
+<p>產出來的結果：</p>
+<p><img src="/img/2019/inshack_ctf_2019/ropberry_6.png" alt=""></p>
+<p>這一段是他發現程式內可以使用的gadget</p>
+<p><img src="/img/2019/inshack_ctf_2019/ropberry_7.png" alt=""></p>
+<p>這一段是他發現的一些比較關鍵的gadget</p>
+<p><img src="/img/2019/inshack_ctf_2019/ropberry_8.png" alt=""></p>
+<p>這一段是產出來的ropchain, 也是我們想要的東西</p>
+<p>把他複製下來貼到我們的exploit code上</p>
+<p>擷取部分 exploit code:</p>
+<p><img src="/img/2019/inshack_ctf_2019/ropberry_9.png" alt=""></p>
+<p>要注意的是，<code>pwntools</code>的module要在<code>struct</code>之上，因為pwntools也會用到<code>pack</code>這個字<br>那這就跟<code>struct</code>的有衝突到了，這邊我們要的是<code>struct</code>的pack而不是<code>pwntools</code>的<code>pack</code></p>
 
 
                 
