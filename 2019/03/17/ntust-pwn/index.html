@@ -265,14 +265,14 @@ int execve(const char *filename, char *const argv[],char *const envp[]);
 <p>大概知道就是，我們可以把shellcode放在message，然後在第二個輸入的時候overflow他<br>跳到shellcode的位址執行shellcode(因為沒開NX)</p>
 <p>然後payload大概是這樣子：</p>
 <p><img src="/img/2019/ntust_pwn/ret2sc_3.png" alt=""></p>
-<h2 id="Lab4"><a href="#Lab4" class="headerlink" title="Lab4"></a>Lab4</h2><p>source code:</p>
+<h1 id="Lab4"><a href="#Lab4" class="headerlink" title="Lab4"></a>Lab4</h1><p>source code:</p>
 <p><img src="/img/2019/ntust_pwn/gothijack_1.png" alt=""></p>
 <p>題目有給我們可以任意改寫got的</p>
 <p>簡單來說，我們可以把shellcode寫進第一個read的記憶體內，然後在scanf給puts_got的address</p>
 <p>在第二個read給name的 address 的內容，這樣在下一行<code>printf(&quot;Thank you&quot;)</code>就會被替換成shellcode執行</p>
 <p>payload:</p>
 <p><img src="/img/2019/ntust_pwn/gothijack_2.png" alt=""></p>
-<h2 id="Lab5"><a href="#Lab5" class="headerlink" title="Lab5"></a>Lab5</h2><p>這一題拿到後，我們一樣先<code>checksec</code></p>
+<h1 id="Lab5"><a href="#Lab5" class="headerlink" title="Lab5"></a>Lab5</h1><p>這一題拿到後，我們一樣先<code>checksec</code></p>
 <p><img src="/img/2019/ntust_pwn/rop_1.png" alt=""></p>
 <p>嘗試執行它：</p>
 <p><img src="/img/2019/ntust_pwn/rop_2.png" alt=""></p>
@@ -303,6 +303,72 @@ int execve(const char *filename, char *const argv[],char *const envp[]);
 <p>P.S 仔細讀了一下後才知道原來<code>rdi</code>要吃記憶體位置….</p>
 <pre><code>59 sys_execve     const char *filename const char *const argv[] const char *const envp[]
 </code></pre><p>那個星號rrrrrr, 我還傻傻的以為放字串進去也可以（對就是那些註解在嘗試的）。</p>
+<h1 id="Lab6"><a href="#Lab6" class="headerlink" title="Lab6"></a>Lab6</h1><p>這一題考驗的是ret2plt，其實相對比較簡單…</p>
+<p>先看source code :</p>
+<p><img src="/img/2019/ntust_pwn/ret2plt_1.png" alt=""></p>
+<p>checksec:</p>
+<p><img src="/img/2019/ntust_pwn/ret2plt_2.png" alt=""></p>
+<p>可以看到有一個local buffer 和 global buffer, 只要沒開PIE我們可以知道global buffer的位址</p>
+<p>然後我們還發現了他有用<code>system</code>這個function, 有了去年木棍大大的教課，可以直接想到如何構exploit code</p>
+<p>我們先用第一個global buffer 寫入<code>/bin/sh</code>然後在第二個local buffer進行overflow跳到system</p>
+<p>參數就放global buffer的位址，就達到<code>system(&#39;/bin/sh&#39;)</code>這個的功能了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">為什麼不能直接放字串呢？因為~</span><br><span class="line"></span><br><span class="line">int system(const char *command)</span><br><span class="line"></span><br><span class="line">他是要記憶體位置</span><br></pre></td></tr></table></figure>
+<p>但這邊要注意一下，這裡不同於x86的地方是，argument是存放在<code>rdi</code>而不是<code>stack</code><br>內，因此我們還要進 objdump 裡面看有沒有<code>pop rdi</code>，這樣放進stack裡面<br>的<code>/bin/sh</code>才會被pop到rdi上，<code>pop rdi</code>的opcode是<code>5f</code><br>幸運的是，我在objdump內有發現這個opcode, 而且後面正好接著return</p>
+<p><img src="/img/2019/ntust_pwn/ret2plt_3.png" alt=""></p>
+<p>global buffer 也可以在objdump內輕鬆找到（突然覺得PIE很重要了吧）</p>
+<p><img src="/img/2019/ntust_pwn/ret2plt_4.png" alt=""></p>
+<p>再來就是取得他overflow的offset, 由於我的gdb怪怪的，所以換到ubnutu來做</p>
+<p>啊這台沒有peda的套件，所以會比較醜一點，不過不會影響到結果</p>
+<p><img src="/img/2019/ntust_pwn/ret2plt_5.png" alt=""></p>
+<p><code>0x6161616861616167</code> = haaagaaa, 考量到little endian我們取小的<code>gaaa</code> = 24</p>
+<p>exploit code</p>
+<p><img src="/img/2019/ntust_pwn/ret2plt_6.png" alt=""></p>
+<p>#Lab7</p>
+<p>checksec:</p>
+<p><img src="/img/2019/ntust_pwn/ret2libc_1.png" alt=""></p>
+<p>GOT table:</p>
+<p><img src="/img/2019/ntust_pwn/ret2libc_2.png" alt=""></p>
+<p>有NX, 沒PIE和stack canary 第一時間猜測可以構ROP去串</p>
+<p>但題目寫ret2libc，所以除了ROP 之外，我們可以透過buffer overflow</p>
+<p>return to libc 從而構出一個<code>system(&quot;/bin/sh&quot;)</code></p>
+<p>source code:</p>
+<p><img src="/img/2019/ntust_pwn/ret2libc_3.png" alt=""></p>
+<p>看完source code之後發現好像更簡單，他直接幫你leak出libc address，而且連libc檔案都給了</p>
+<p>所以可以不用透過buffer overflow去leak，但這樣感覺太簡單了，所以我自己的作法應該會預設</p>
+<p>程式不給你leak libc address而且沒給你libc的檔案</p>
+<p>這跟去年木棍的pwn basic會很像，但因為是x64架構，所以做法上來說還是會有不一樣的地方</p>
+<p>我們先看看這支程式有沒有湊齊我們所需要的gadget</p>
+<p><img src="/img/2019/ntust_pwn/ret2libc_4.png" alt=""></p>
+<p>看起來是沒有，官方的解答是從libc裡面找到需要的gadget，因為有libc的檔案</p>
+<p>所以可以很輕易的得到libc base和offset，所以直接拼ROP chain 構syscall</p>
+<p>但如前面所說，覺得這樣不夠好玩</p>
+<p>所以這邊應該是，我們用buffer overflow去leak出puts的</p>
+<p>libc address然後透過libc的檔案取得puts的address</p>
+<p>把這兩個相減就會是libc base</p>
+<p>同樣方式透過libc檔案取得的<code>system</code>和<code>/bin/sh</code>兩個address</p>
+<p>再去跟同個檔案內的puts address相減就可以取得offset</p>
+<p>把libc base加上offset就可以得到對應的address從而構出system(“/bin/sh”)</p>
+<p>用寫的感覺有點不清楚，這邊圖文解說</p>
+<p>首先先動態分析出他的offset是<code>56</code></p>
+<p>然後可以透過gdb得到他的libc位置</p>
+<p><img src="/img/2019/ntust_pwn/ret2libc_5.png" alt=""></p>
+<p>如果是要用遠端的話則要用題目給的libc</p>
+<p>用pwntools的<code>ELF</code>的function去得到這些address</p>
+<p>有了libc位置後，我們還需要能leak出current libc address,<br>前面說了用buffer overflow可以做到，所以我們來做一次</p>
+<p><img src="/img/2019/ntust_pwn/ret2libc_6.png" alt=""></p>
+<p>前面我們用<code>400000</code>去糖塞他，我只需要一個input就夠了</p>
+<p>因為x64跟x86還是有點不一樣，他的第一個參數是放在rdi這個暫存器</p>
+<p>所以我們要先找到<code>pop rdi</code>這個opcode前面說了是<code>5f</code>，但除了<code>5f</code>之外<br>我們下一個opcode要是<code>c3</code>才能讓我們繼續控<code>rip</code></p>
+<p>那實際執行下來就是這樣：</p>
+<p><img src="/img/2019/ntust_pwn/ret2libc_7.png" alt=""></p>
+<p>我們還需要recv去接這個input</p>
+<p>並且跳回main去執行我們第二次的overflow, 這邊我是跳回<code>libc_start_main</code></p>
+<p>這邊就直接付exploit code了</p>
+<p><img src="/img/2019/ntust_pwn/ret2libc_8.png" alt=""></p>
+<p>這邊說一下recv puts current libc address 那部分</p>
+<p>雖然x64的記憶體位置長度是8 bytes, 但他不一定會用滿8 bytes, </p>
+<p>我自己測試後發現puts 的 libc address 是6 bytes</p>
+<p>於是我recv前六個bytes, 再把前面補0就是puts 的 libc address</p>
 
 
                 

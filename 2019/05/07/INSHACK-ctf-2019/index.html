@@ -225,7 +225,7 @@ cmp word [local_4h], 0xfd66
 <p>然後根據<a href="https://programming.im.ncnu.edu.tw/Chapter5.htm" target="_blank" rel="noopener">資料型態</a></p>
 <p><img src="/img/2019/inshack_ctf_2019/signed_or_not_signed_5.png" alt=""></p>
 <p>所以我們的數字最大就是<code>65535</code>, 0xfd66 = 64870 但這個數字大於10，沒辦法用</p>
-<p>因此可以用<a href="https://notfalse.net/20/signed-number-representations" target="_blank" rel="noopener"><code>2補數的特性</code></a>解決<br>64870 = 65535 = -666, 所以答案就是<code>-666</code></p>
+<p>因此可以用<a href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E8%A3%9C%E6%95%B8" target="_blank" rel="noopener"><code>2補數的特性</code></a>解決<br>64870 = 65535 = -666, 所以答案就是<code>-666</code></p>
 <p><img src="/img/2019/inshack_ctf_2019/signed_or_not_signed_6.png" alt=""></p>
 <h2 id="Overcobol"><a href="#Overcobol" class="headerlink" title="Overcobol"></a>Overcobol</h2><p>這題是給你cobol的source code，但我看不懂cobol QQ，所以研究了一下就把它complie 成elf來執行</p>
 <p>用r2進去看還是看不出所以然，所以就直接進去執行了，做法就是，產一個gadget，然後看他哪個地方會overflow，</p>
