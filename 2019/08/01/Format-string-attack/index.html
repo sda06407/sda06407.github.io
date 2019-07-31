@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="LiveOverflow這一個是看影片趕快做一下筆記，不然我快忘光了ＱＱ
+影片：https://www.youtube.com/watch?v=t1LH9D5cuK4
+題目：https://exploit.education/protostar/format-four/
+先看一下source cod">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Format_string_attack"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Format_string_attack - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+</head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/0YWlPp2.png')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Format_string_attack</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-08-01
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h1 id="LiveOverflow"><a href="#LiveOverflow" class="headerlink" title="LiveOverflow"></a>LiveOverflow</h1><p>這一個是看影片趕快做一下筆記，不然我快忘光了ＱＱ</p>
+<p>影片：<a href="https://www.youtube.com/watch?v=t1LH9D5cuK4" target="_blank" rel="noopener">https://www.youtube.com/watch?v=t1LH9D5cuK4</a></p>
+<p>題目：<a href="https://exploit.education/protostar/format-four/" target="_blank" rel="noopener">https://exploit.education/protostar/format-four/</a></p>
+<p>先看一下source code:</p>
+<p><img src="/img/Format_string_attack/liveformatstring1.png" alt=""></p>
+<p>可以看到他是直接做<code>exit</code>, 並沒有什麼<code>return 0</code>這種的</p>
+<p>所以overflow eip這點是不可行的</p>
+<p>透過執行可以知道就是一個我們輸入什麼他printf什麼<br><img src="/img/Format_string_attack/liveformatstring_exec1.png" alt=""></p>
+<p>但他的printf因為是直接使用<code>printf(buffer)</code>來做輸出<br>因此有format string的弱點，盲測的時候可以試著輸入看看<code>%x</code>或其他printf的關鍵字。<br>只要有像這樣的回應就代表有戲(?</p>
+<p><img src="/img/Format_string_attack/liveformatstring_exec2.png" alt=""></p>
+<p>一般來說Format string可以透過<code>aaaa%N$x</code>來找offset(x86)，N是任意數，就是透過<code>aaaa%1$x</code> <code>aaaa%2$x</code>…這樣子下去爆破取得offset<br><code>%N</code>是代表第N個參數，<code>$x</code>是以hex的方式輸出，參照<a href="https://en.wikipedia.org/wiki/Printf_format_string" target="_blank" rel="noopener">wiki</a>和<a href="https://www.owasp.org/index.php/Format_string_attack" target="_blank" rel="noopener">owasp</a>:</p>
+<pre><code>For example, printf(&quot;%2$d %2$#x; %1$d %1$#x&quot;,16,17) produces 17 0x11; 16 0x10.
+
+Below are some format parameters which can be used and their consequences:
+
+•&quot;%x&quot; Read data from the stack
+
+•&quot;%s&quot; Read character strings from the process&apos; memory
+
+•&quot;%n&quot; Write an integer to locations in the process&apos; memory
+
+%d - 輸出十進位整數
+%s - 從記憶體中讀取字串
+%x - 輸出十六進位整數
+%c - 字符 - 输出字符
+%p - 指针 - 指针地址
+%n - 寫入到目前为止所輸出的字符数
+</code></pre><p>但我懶，pwntool可以直接幫我們找到offset</p>
+<p><img src="/img/Format_string_attack/liveformatstring2.png" alt=""></p>
+<p><img src="/img/Format_string_attack/liveformatstring3.png" alt=""></p>
+<p>可看見他的offset是7</p>
+<p>知道了這些後，我們要做的就是把vuln裡面的exit的got address改指向hello的address</p>
+<p>我們先用gdb改看看，首先先用objdump知道一些address的資訊</p>
+<p><img src="/img/Format_string_attack/liveformatstring4.png" alt=""></p>
+<p>這樣就知道了hello和vuln的exit@PLT address</p>
+<p><img src="/img/Format_string_attack/liveformatstring5.png" alt=""></p>
+<p>這樣就有了exit@GOT address了</p>
+<p>我們把斷點下在<code>0x8049227</code>讓我們方便改exit@GOT的內容</p>
+<pre><code>b *0x8049227
+</code></pre><p>之後<code>r</code>它然後隨便輸入之後他會在斷點停下來<br>再對exit@GOT的內容進行更改</p>
+<pre><code>set {int}0x804c01c=0x080491a2
+</code></pre><p>然後再<code>c</code>它</p>
+<p><img src="/img/Format_string_attack/liveformatstring6.png" alt=""></p>
+<p>boo! 就會是我們要的結果了，接著我們要不透過gdb達到這件事情</p>
+<p>剛剛知道了offset是7，那這個要怎麽利用呢？</p>
+<p>我們先嘗試輸入<code>aaaa%7$x</code></p>
+<p><img src="/img/Format_string_attack/liveformatstring7.png" alt=""></p>
+<p>可以看到<code>0x61616161</code>就是我們剛剛輸入的hex</p>
+<p>那我們輸入<code>0x8048000</code>看看呢？</p>
+<p><img src="/img/Format_string_attack/liveformatstring8.png" alt=""></p>
+<p><img src="/img/Format_string_attack/liveformatstring9.png" alt=""></p>
+<p>可以看到他沒有回傳結果，因為<code>0x8048000</code>他會先輸出<code>00800408</code>才會去leak, <code>0x00</code>就是我們熟知的<code>EOF</code>，所以我們要換個方式來leak</p>
+<p><img src="/img/Format_string_attack/liveformatstring10.png" alt=""></p>
+<p>這樣子就會在leak出<code>0x8048000</code>位子的內容後才會輸出</p>
+<p><img src="/img/Format_string_attack/liveformatstring11.png" alt=""></p>
+<p>但因為相對位置改了，所以我們需要改一下我們的offset, 因為我們的<code>%7$s</code>是在不包含<code>%7$s</code>這個字串在內的offset</p>
+<p>那現在把它放到前面再接address的話就會包含到<code>%7$s</code>這個字串了，所以我們要把offset+1就是這個道理 </p>
+<p>這個在需要leak binary的時候算蠻重要的步驟，因為address不可能沒有<code>00</code></p>
+<p>都準備好了之後我們要開始改寫exit@GOT的內容了，可以利用<code>%n</code>做到</p>
+<p><img src="/img/Format_string_attack/liveformatstring14.png" alt=""></p>
+<p>因為這個address沒有<code>00</code>的問題，所以我用<code>%7$n</code>這樣子還是可以的</p>
+<p>如果要把address放後面的話就要改成</p>
+<pre><code>&quot;aaaa&quot; + &quot;%9$n&quot; + p32(exit_GOT)
+</code></pre><p>因為padding包含了”aaaa”和leak的payload, 所以offset要+2</p>
+<p>讓我們用gdb trace一次看看</p>
+<p><img src="/img/Format_string_attack/liveformatstring12.png" alt=""></p>
+<p>看上面的exploit code可以知道我們在輸入前加了一個<code>gdb.attach()</code></p>
+<p>這個是用來呼叫gdb hook的code<br>所以現在是輸入前的情況，我先看看exit@GOT的內容，現在的話還是正常的內容</p>
+<p><img src="/img/Format_string_attack/liveformatstring13.png" alt=""></p>
+<p>繼續讓它跑就crash了，這時候再看exit@GOT就會是0x8, 而eip也停在0x8, 因為PLT會把GOT的內容餵給eip, 這個0x8就是p32(exit_GOT)加上”aaaa”的長度</p>
+<p>到這邊我們已經成功改寫exit@GOT<br>現在我們要借助<code>%n</code>把exit@GOT改寫成<code>0x80491a2</code><br>但要在寫入前先輸出<code>0x80481a2</code>個字串顯然是不太可行<br>(%n是把至今為止輸出的字串數量寫入特定address)</p>
+<p>我們可以2個bytes 2個bytes寫入, 這樣一次的量就不會那麼多<br>我們首先先寫入後4 bytes比較容易(因為前面都補0就好)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;hello&gt; = 0x080491a2</span><br><span class="line">0x91a2	= 37282</span><br></pre></td></tr></table></figure></p>
+<p>但我們的<code>37282</code>還需要扣掉address本身佔的4 bytes<br>所以是<code>37278</code></p>
+<p><img src="/img/Format_string_attack/liveformatstring15.png" alt=""></p>
+<p>這是一個小技巧，你要輸出37278個a也是可以<code>$x</code>前面加多少數字，他就會輸出多少個空格才輸出hex</p>
+<p>我們用gdb trace看看</p>
+<p><img src="/img/Format_string_attack/liveformatstring16.png" alt=""></p>
+<p>這是輸入前的exit@GOT</p>
+<p><img src="/img/Format_string_attack/liveformatstring17.png" alt=""></p>
+<p>可以看到我們成功改寫後兩bytes了<br>那要怎麼改寫前兩bytes呢？因為<code>%n</code>的特性，我們只能越寫越大，但前兩個bytes我們要寫入<code>0x0804</code>怎麼辦呢？<br>影片中寫到是可以透過寫入<code>0x10804</code>來達到目的，因為GOT只會吃後兩bytes，我自己猜測寫超過的話有可能會影響到前一個<br>GOT的address，不過這也不影響我們的操作</p>
+<p>實作還要再算一下，待我貼圖在慢慢說起</p>
+<p><img src="/img/Format_string_attack/liveformatstring18.png" alt=""></p>
+<p>第一個位址沒問題吧，然後我們把位址+2來寫高位的前兩個位址<br>這有點難說明，借影片的圖來說</p>
+<p><img src="/img/Format_string_attack/liveformatstring19.png" alt=""></p>
+<p>我們看過這麼多次的objdump可以知道，一個記憶體位置是存一個byte<br>所以GOT應該也是一個位址存一個bytes, 存了四個bytes,<br>以little endian的方式存</p>
+<p>所以我們把address+2就會寫到前兩個位址的數值</p>
+<p>再來就是算數學了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0x10804=67588</span><br><span class="line">67588-37278-4-4=30302</span><br></pre></td></tr></table></figure>
+<p>我們一樣執行用gdb去看</p>
+<p><img src="/img/Format_string_attack/liveformatstring20.png" alt=""></p>
+<p>這是執行printf前，還是正常的GOT內容</p>
+<p><img src="/img/Format_string_attack/liveformatstring21.png" alt=""></p>
+<p>可以看到成功被我們更改了</p>
+<p><img src="/img/Format_string_attack/liveformatstring22.png" alt=""></p>
+<h1 id="craxme"><a href="#craxme" class="headerlink" title="craxme"></a>craxme</h1><p>拿黑坑的例題來練習看看</p>
+<p><img src="/img/Format_string_attack/hitconformat.png" alt=""></p>
+<p>首先一樣我們要知道他的 offset 是多少</p>
+<p><img src="/img/Format_string_attack/hitconformat_1.png" alt=""></p>
+<p>然後看一下source code</p>
+<p><img src="/img/Format_string_attack/hitconformat_2.png" alt=""></p>
+<p>雖然這題是要你改寫 magic 的值來取得flag</p>
+<p>但這一題可以取得 shell, 可以直接用一招拿到兩個shell</p>
+<p>我們先看一下code</p>
+<p><img src="/img/Format_string_attack/hitconformat_3.png" alt=""></p>
+<p><img src="/img/Format_string_attack/hitconformat_4.png" alt=""></p>
+<p>我們可以將<code>puts</code>的got更改成<code>0x080485a1</code>, 然後將<code>printf</code>的got改寫為<code>system</code>的PLT address</p>
+<p>這樣我們只要在<code>read</code>輸入<code>/bin/sh</code>就會被構成 <code>system(&quot;/bin/sh&quot;)</code> 執行</p>
+<p>這邊的寫法我研究過一陣子，因為一次寫兩個address, 數字真的不小，算起來燒腦</p>
+<p>原本打算是在第二次<code>read</code>的時候再去蓋<code>printf</code>的GOT address (因為我們一定會跳到puts的那個選項，所以我們其實還可以再叫一次<code>read</code>)</p>
+<p>但是發現透過puts跳過去的<code>read</code>的 offset 就不會是7了，等於要重找更麻煩，於是我還是認命的一次蓋兩個</p>
+<p>跟上面教學如何蓋address一樣，只是它只蓋一個address, 蓋第二個address的話，就變成蓋後兩 bytes 的時候也要多蓋 1 byte 了, 那蓋前兩bytes呢？就變0x20804開頭了</p>
+<p>不過我這裡碰到另一個雷點</p>
+<p>就是好死不死我的 <code>puts@PLT</code> 下面就是 <code>system@PLT</code> </p>
+<p><img src="/img/Format_string_attack/hitconformat_5.png" alt=""></p>
+<p>所以造成一個慘劇發生——我在改寫 <code>puts@GOT</code> 的時候蓋到<code>system@GOT</code></p>
+<p><img src="/img/Format_string_attack/hitconformat_6.png" alt=""></p>
+<p>這時候怎麼辦呢？</p>
+<p>在改寫 <code>puts@GOT</code> 的時候用<code>%hn</code>就好了</p>
+<p>exploit code:</p>
+<p><img src="/img/Format_string_attack/hitconformat_7.png" alt=""></p>
+<pre><code>％hn 代表限制寫入的長度為2bytes
+%hhn 代表寫入的長度限制為1bytes
+</code></pre><p>許多format string attack 的 exploit code 很常看到這種寫法，有些為求精確寫入，會 1 byte 1 byte 的改寫</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2019 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

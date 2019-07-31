@@ -10,11 +10,12 @@
 
     <!--Description-->
     
-        <meta name="description" content="整理一下pico ctf的wp好了。
-今年的題目沒有去年多，可以的話就每一題都寫看看
-Forensics Warmup 1 - Points: 50把flag.zip解壓縮就有flag了
+        <meta name="description" content="網路上發現有題目，於是下載下來練習看看，從stack一路到heap都有，真D佛心
+lab1source code:
 
-Forensics Warmup 2 - Points: 50這一題應該是考你副檔名和header…但我直接開">
+因為我不懂加密法，這邊直接用patch的方式直接把if的判斷式改成nop
+因為ida要錢，而且我又比較偏好在terminal上做事，所以我都用radare2就是這個原因
+不過用 r2">
     
 
     <!--Author-->
@@ -24,7 +25,7 @@ Forensics Warmup 2 - Points: 50這一題應該是考你副檔名和header…但�
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="pico-ctf-2018"/>
+        <meta property="og:title" content="HITCON_Training_2017"/>
     
 
     <!--Open Graph Description-->
@@ -46,7 +47,7 @@ Forensics Warmup 2 - Points: 50這一題應該是考你副檔名和header…但�
 
     <!-- Title -->
     
-    <title>pico-ctf-2018 - AStar&#39;s Blog</title>
+    <title>HITCON_Training_2017 - AStar&#39;s Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -156,13 +157,13 @@ Forensics Warmup 2 - Points: 50這一題應該是考你副檔名和header…但�
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="post-heading">
-                    <h1>pico-ctf-2018</h1>
+                    <h1>HITCON_Training_2017</h1>
                     
                     <span class="meta">
                         <!-- Date and Author -->
                         
                         
-                            2019-05-01
+                            2019-06-22
                         
                     </span>
                 </div>
@@ -198,26 +199,85 @@ Forensics Warmup 2 - Points: 50這一題應該是考你副檔名和header…但�
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <p>整理一下pico ctf的wp好了。</p>
-<p>今年的題目沒有去年多，可以的話就每一題都寫看看</p>
-<h2 id="Forensics-Warmup-1-Points-50"><a href="#Forensics-Warmup-1-Points-50" class="headerlink" title="Forensics Warmup 1 - Points: 50"></a>Forensics Warmup 1 - Points: 50</h2><p>把<code>flag.zip</code>解壓縮就有flag了</p>
-<p><img src="/img/2019/pico_ctf_2018/flag.jpg" alt=""></p>
-<h2 id="Forensics-Warmup-2-Points-50"><a href="#Forensics-Warmup-2-Points-50" class="headerlink" title="Forensics Warmup 2 - Points: 50"></a>Forensics Warmup 2 - Points: 50</h2><p>這一題應該是考你副檔名和header…但我直接開就有了，多虧現在的圖片瀏覽器</p>
-<p><img src="/img/2019/pico_ctf_2018/flag.png" alt=""></p>
-<h2 id="General-Warmup-1"><a href="#General-Warmup-1" class="headerlink" title="General Warmup 1"></a>General Warmup 1</h2><p>考你 ASCII code </p>
-<p><img src="/img/2019/pico_ctf_2018/General1.png" alt=""></p>
-<p>剩下的 Warmup 都差不多 就不列了（懶）</p>
-<h2 id="Crypto-Warmup-1"><a href="#Crypto-Warmup-1" class="headerlink" title="Crypto Warmup 1"></a>Crypto Warmup 1</h2><p>因為對加密法不熟，所以希望是特別寫一些加密法的wp</p>
-<p>這一題是Vigenère Cipher, 可以透過<a href="https://planetcalc.com/2468/" target="_blank" rel="noopener">網站</a></p>
-<p>快速解決， key是<code>thisisalilkey</code>, 密文是 <code>llkjmlmpadkkc</code></p>
-<h2 id="Crypto-Warmup-2"><a href="#Crypto-Warmup-2" class="headerlink" title="Crypto Warmup 2"></a>Crypto Warmup 2</h2><p>凱薩加密法</p>
-<h2 id="HEEEEEEERE’S-Johnny"><a href="#HEEEEEEERE’S-Johnny" class="headerlink" title="HEEEEEEERE’S Johnny!"></a>HEEEEEEERE’S Johnny!</h2><p>用john可以快速解決：</p>
-<p><img src="/img/2019/pico_ctf_2018/HEEEEEEERE&#39;S Johnny!.png" alt=""></p>
-<h2 id="pipe"><a href="#pipe" class="headerlink" title="pipe"></a>pipe</h2><p>可以用 <code>tee</code></p>
-<pre><code>nc 2018shell.picoctf.com 48696 | tee pico
-</code></pre><p><code>&gt;</code> 應該也可以</p>
-<pre><code>nc 2018shell.picoctf.com 48696 &gt; pico
-</code></pre><h2 id="Inspect-Me"><a href="#Inspect-Me" class="headerlink" title="Inspect Me"></a>Inspect Me</h2><p>Flag 都在原始碼裡面</p>
+                <p>網路上發現有題目，於是下載下來練習看看，從stack一路到heap都有，真D佛心</p>
+<h1 id="lab1"><a href="#lab1" class="headerlink" title="lab1"></a>lab1</h1><p>source code:</p>
+<p><img src="/img/2019/hitcon_training_2017/lab1_1.png" alt=""></p>
+<p>因為我不懂加密法，這邊直接用patch的方式直接把if的判斷式改成nop</p>
+<p>因為ida要錢，而且我又比較偏好在terminal上做事，所以我都用radare2就是這個原因</p>
+<p>不過用 r2 patch 真的讓我找了一陣子才搞懂</p>
+<p>首先我們先cp一個檔案當備份，然後用指令先讓r2擁有對ELF的讀寫權限</p>
+<pre><code>r2 -Aw sysmagic_fix
+</code></pre><p>因為我們有source code, 所以很輕易的就找到了處理if的address</p>
+<p><img src="/img/2019/hitcon_training_2017/lab1_2.png" alt=""></p>
+<p>記住這個address , 我們先用<code>q</code>跳回shell 模式，然後<code>s</code>到那個address</p>
+<p>再用<code>Vp</code>對那個 address 進行寫的動作</p>
+<p>這時候的畫面大概長這樣</p>
+<p><img src="/img/2019/hitcon_training_2017/lab1_3.png" alt=""></p>
+<p>可以用<code>&quot;</code>改變registers的擺放位置，第一行就是你要改寫的address,</p>
+<p>我們下<code>A</code>就可以更改他的assambly code</p>
+<p><img src="/img/2019/hitcon_training_2017/lab1_4.png" alt=""></p>
+<p>更改後他會再跟你做一次確認</p>
+<p>然��就成功改好了</p>
+<p><img src="/img/2019/hitcon_training_2017/lab1_5.png" alt=""></p>
+<p>但我們從上面可以知道，他是跑print flag的code是從</p>
+<pre><code>0x08048724 c74588000000.  mov dword [local_78h], 0
+</code></pre><p>這行開始</p>
+<p>但我們的nop到中間這一行還多一個被截斷後新的assambly code, </p>
+<p>所以我們要把這一行也nop, 讓他可以直接跑if true的地方</p>
+<p><img src="/img/2019/hitcon_training_2017/lab1_6.png" alt=""></p>
+<p>結束後我們重新執行一次程式就可以得到flag了</p>
+<p><img src="/img/2019/hitcon_training_2017/lab1_7.png" alt=""></p>
+<p>我們重新回去看被我們 patch 過的ELF</p>
+<p><img src="/img/2019/hitcon_training_2017/lab1_8.png" alt=""></p>
+<p>可以看到原本是<code>cmp+jne</code>的地方變成一條線下來了</p>
+<p>然後下面的<code>if</code>我不太清楚是什麼，但看下來應該都不會跑到那邊去</p>
+<p>因為</p>
+<pre><code>mov dword [local_78h], 0
+mov eax, dword [local_78h]
+cmp eax, 0x30
+jbe 0x804872d;[gh]
+</code></pre><p>這幾行就知道我們恆會去<code>print flag</code>的地方走</p>
+<h1 id="lab2"><a href="#lab2" class="headerlink" title="lab2"></a>lab2</h1><p>//TODO</p>
+<h1 id="lab3"><a href="#lab3" class="headerlink" title="lab3"></a>lab3</h1><p>ret2sc, 很明顯的知道我們要retrun to stack 執行我們的shellcode</p>
+<p>看看執行的樣子：</p>
+<p><img src="/img/2019/hitcon_training_2017/lab3_1.png" alt=""></p>
+<p>看看他的保護機制：</p>
+<p><img src="/img/2019/hitcon_training_2017/lab3_2.png" alt=""></p>
+<p>很棒 什麼都沒開</p>
+<p>最後看看objdump</p>
+<p><img src="/img/2019/hitcon_training_2017/lab3_3.png" alt=""></p>
+<p>第一個input是讓我們把shellcode寫進 global buffer 裡面</p>
+<p>第二個gets則是讓我們利用overflow跳去 name 的buffer裡面執行shellcode</p>
+<p>exp:</p>
+<p><img src="/img/2019/hitcon_training_2017/lab3_4.png" alt=""></p>
+<h1 id="lab4"><a href="#lab4" class="headerlink" title="lab4"></a>lab4</h1><p>這一題是ret2libc</p>
+<p>soruce code:</p>
+<p><img src="/img/2019/hitcon_training_2017/lab4_1.png" alt=""></p>
+<p>執行一下：</p>
+<p><img src="/img/2019/hitcon_training_2017/lab4_2-1.png" alt=""></p>
+<p>chekcsec:</p>
+<p><img src="/img/2019/hitcon_training_2017/lab4_2.png" alt=""></p>
+<p>可以看到他很好心的會幫我們print出記憶體裡面的資訊</p>
+<p>這樣我們就直接給他puts@GOT然後recv他</p>
+<p>再用下面的input進行overflow</p>
+<p>這是標準解法的exp:</p>
+<p><img src="/img/2019/hitcon_training_2017/lab4_3.png" alt=""></p>
+<p>這是我自己習慣的只用一個input就達成的ret2libc：</p>
+<p><img src="/img/2019/hitcon_training_2017/lab4_4.png" alt=""></p>
+<p>用第二個解法的時候遇到一點問題</p>
+<p><img src="/img/2019/hitcon_training_2017/lab4_5.png" alt=""></p>
+<p>基本上libc 的address都是0xf7 開頭，stack則是0xff, 沒開PIE的程式碼區段</p>
+<p>address 是0x8048000開始</p>
+<p>但我們leak出看起來比較像的libc address 有兩個</p>
+<p><code>0xf76450a0</code> 和 <code>0xf75f6a50</code> 要怎麼知道哪一個才是puts的libc address呢？</p>
+<p>大概說一下ASLR的機制，ASLR並不是完全的隨機打亂，他是基於一個固定的offset<br>上去做亂數打亂的</p>
+<p>用這張圖就可以理解了</p>
+<p><img src="/img/2019/hitcon_training_2017/lab4_6.png" alt=""></p>
+<p>可以看到雖然記憶體位置是隨機變換的，但是他後三碼都是固定<code>000</code></p>
+<p>有人就透過這個機制做了一個查找libc版本號碼的<a href="http://libcdb.com/" target="_blank" rel="noopener">網站</a></p>
+<p>我們也可以利用這個機制，先看libc內的puts他的offset是多少，知道了他的offset後</p>
+<p>就可以知道哪個是我們要的address了</p>
+<p><img src="/img/2019/hitcon_training_2017/lab4_7.png" alt=""></p>
 
 
                 

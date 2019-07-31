@@ -10,6 +10,12 @@
 
     <!--Description-->
     
+        <meta name="description" content="在HITCON training 2017 看到這題後就一直想學
+這算是stack overflow 裡面蠻進階的技巧了
+但無奈花了快一個禮拜看training 的wp 還是看不懂
+因此在網路上先找一題比較簡單的來入手練習
+引用來源：https://medium.com/@ktecv2000/%E7">
+    
 
     <!--Author-->
     
@@ -18,7 +24,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="AStar&#39;s Blog"/>
+        <meta property="og:title" content="Stack Pivot(未完)"/>
     
 
     <!--Open Graph Description-->
@@ -29,7 +35,7 @@
 
     <!--Type page-->
     
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="article" />
     
 
     <!--Page Cover-->
@@ -40,7 +46,7 @@
 
     <!-- Title -->
     
-    <title>page - Archives - AStar&#39;s Blog</title>
+    <title>Stack Pivot(未完) - AStar&#39;s Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -142,129 +148,73 @@
 </nav>
 
     <!-- Main Content -->
-    
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
 
-<!-- Page Header -->
-<!-- Set your background image for this header in the theme's configuration: index_cover -->
 <header class="intro-header" style="background-image: url('https://i.imgur.com/0YWlPp2.png')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>Archives</h1>
+                <div class="post-heading">
+                    <h1>Stack Pivot(未完)</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-06-30
+                        
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
             
-                <div class="post-preview">
-    <a href="/2018/08/31/regiesters-note/">
-        <h1 class="post-title archive">
-            regiesters-note
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-31
-    </p>
-</div>
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>在HITCON training 2017 看到這題後就一直想學</p>
+<p>這算是stack overflow 裡面蠻進階的技巧了</p>
+<p>但無奈花了快一個禮拜看training 的wp 還是看不懂</p>
+<p>因此在網路上先找一題比較簡單的來入手練習</p>
+<p>引用來源：<a href="https://medium.com/@ktecv2000/%E7%B7%A9%E8%A1%9D%E5%8D%80%E6%BA%A2%E4%BD%8D%E6%94%BB%E6%93%8A%E4%B9%8B%E4%B8%89-buffer-overflow-123d6ae7236e" target="_blank" rel="noopener">https://medium.com/@ktecv2000/%E7%B7%A9%E8%A1%9D%E5%8D%80%E6%BA%A2%E4%BD%8D%E6%94%BB%E6%93%8A%E4%B9%8B%E4%B8%89-buffer-overflow-123d6ae7236e</a></p>
+<p>感謝大大提供一個簡單易懂的入門例子</p>
+<p>training的wp看了快一個禮拜看不懂，這個花一個下午就大概懂了</p>
+<p>先付source code</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// victim : rop.c</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">void nonSecure()</span><br><span class="line">&#123;</span><br><span class="line">    char name[16];</span><br><span class="line">    printf(&quot;What&apos;s your name?\n&quot;);</span><br><span class="line">    gets(name);</span><br><span class="line">    printf(&quot;Hey %s, you like ROP? I&apos;ll give you root!\n&quot;, name);</span><br><span class="line">    setuid(0);</span><br><span class="line">    system(&quot;Now_what_you_gonna_do...O_O\n&quot;);</span><br><span class="line">&#125;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    nonSecure();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我自己是把他取成pivot.c啦</p>
+<p>這題的解題思路就是把<code>name</code>放到我們自訂的bss 區段address就好了</p>
+<p>因為題目內的<code>name</code>是在stack裡面，受到ASLR的保護我們不知道他的address</p>
+<p>跟training的migration不太一樣，migration的是 他給我們得空間太小塞不進gadget</p>
+<p>但道理差不多，都是自己圍一個範圍輸入我們長長的exploit code</p>
+<p>這邊複習一個點: rbp + 4 = return address</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
             
-                <div class="post-preview">
-    <a href="/2018/08/30/Linux-exec-process-concepts/">
-        <h1 class="post-title archive">
-            Linux_exec_process_concepts(未完)
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-30
-    </p>
-</div>
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
             
-                <div class="post-preview">
-    <a href="/2018/08/25/calling_convention/">
-        <h1 class="post-title archive">
-            Calling convention on x86 CPU
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-08-25
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/07/23/some-ctf-writeup/">
-        <h1 class="post-title archive">
-            some_ctf_writeup
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-07-23
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/docker-note/">
-        <h1 class="post-title archive">
-            docker_note
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/inndy-pwn101/">
-        <h1 class="post-title archive">
-            inndy-pwn101
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/2018/05/19/hexo-on-github/">
-        <h1 class="post-title archive">
-            如何把部落格架在GitHub上
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2018-05-19
-    </p>
-</div>
-            
-            <div class="archive-before-pagination"></div>
-            <ul class="pager">
-    
-        <li class="previous"><a href="/archives/">&larr;  Newer Posts</a></li>
-    
-    
-</ul>
         </div>
     </div>
-</div>
-
+</article>
 
     <!-- Footer -->
     <hr />
