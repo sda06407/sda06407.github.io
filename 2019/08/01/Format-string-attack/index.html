@@ -306,6 +306,65 @@ Below are some format parameters which can be used and their consequences:
 <pre><code>％hn 代表限制寫入的長度為2bytes
 %hhn 代表寫入的長度限制為1bytes
 </code></pre><p>許多format string attack 的 exploit code 很常看到這種寫法，有些為求精確寫入，會 1 byte 1 byte 的改寫</p>
+<h1 id="espr"><a href="#espr" class="headerlink" title="espr"></a>espr</h1><p>影片：<a href="https://www.youtube.com/watch?v=XuzuFUGuQv0" target="_blank" rel="noopener">https://www.youtube.com/watch?v=XuzuFUGuQv0</a><br>題目：<a href="https://github.com/InfoSecIITR/write-ups/tree/master/2016/33c3-ctf-2016/pwn/espr" target="_blank" rel="noopener">https://github.com/InfoSecIITR/write-ups/tree/master/2016/33c3-ctf-2016/pwn/espr</a></p>
+<p>這題是很有意思的 Format string attack 的題目，出題隊伍 ESPR 在 HITCON CTF 2017 當導覽員的時候就見過他們，德國一支蠻有名的隊伍，33c3 CTF的題目就是他們出的</p>
+<p>這題就是把他們的隊名出成題目</p>
+<p>題目只有一張圖片</p>
+<p><img src="/img/Format_string_attack/espr_small.jpg" alt=""></p>
+<p>為求真實，因此會在以沒拿到ELF的情況下解題</p>
+<p>因為從題目看得到 <code>rsp</code> <code>rdi</code>，所以可以判定這題應該是x64的</p>
+<p>用 pwntool 幫我算offset</p>
+<p><img src="/img/Format_string_attack/esprformatstring_1.png" alt=""></p>
+<p>我們要先嘗試它有沒有開PIE, 如果有開就傷腦筋了</p>
+<p>如何確認呢？去嘗試他預設的檔頭位址就行了(<code>0x400000</code>)<br>先寫一個<code>leak.py</code></p>
+<p><img src="/img/Format_string_attack/esprformatstring_2.png" alt=""></p>
+<p>注意前面的padding要補滿8個，我就因為沒補8個一時之間還以為是 offset 算錯</p>
+<p><img src="/img/Format_string_attack/esprformatstring_3.png" alt=""></p>
+<p>看起來是沒開 PIE 的，這樣就可以準備來leak binary</p>
+<p><img src="/img/Format_string_attack/esprformatstring_4.png" alt=""></p>
+<p>這邊也要注意一些 exception 的處理</p>
+<p>在try那邊我們有針對 <code>EOFError</code> <code>(null)</code> 做例外處理</p>
+<p>雖然<code>dump.raw</code>無法執行，但以 leak binary 的角度來說夠了</p>
+<p><img src="/img/Format_string_attack/esprformatstring_5.png" alt=""></p>
+<p>我們可以用 radare2 更改 function name </p>
+<p><img src="/img/Format_string_attack/esprformatstring_6.png" alt=""></p>
+<p>整理完後大概是這個樣子：</p>
+<p><img src="/img/Format_string_attack/esprformatstring_7.png" alt=""></p>
+<p>然後可以進去各個 PLT address 得知這些function的 GOT address</p>
+<p>把它加進 exploit code</p>
+<p><img src="/img/Format_string_attack/esprformatstring_8.png" alt=""></p>
+<p>我們就可以透過 GOT address 去 leak 他的 libc address</p>
+<p>但過程中我碰到一個小bug</p>
+<p>就是當我用 <code>u64</code> 想把我 recv 回來的 address unpack 的時候一直跳 error 說長度錯誤</p>
+<p>因此我用下面的code 進行 debug</p>
+<p><img src="/img/Format_string_attack/esprformatstring_9.png" alt=""></p>
+<p>結果是…</p>
+<p><img src="/img/Format_string_attack/esprformatstring_10.png" alt=""></p>
+<p>WTF !? 長度9?</p>
+<p>而且raw還出現我沒recv的東西，順便說一下repr很好用，一些無法顯示在 shell 的 ascii 他會幫你轉成字串輸出</p>
+<p>好消息是看起來就是固定會出現那些例外的data, 所以我recv那邊做一下調整就可以了</p>
+<p><img src="/img/Format_string_attack/esprformatstring_11.png" alt=""></p>
+<p><img src="/img/Format_string_attack/esprformatstring_12.png" alt=""></p>
+<p>到這裡我們成功得到它 libc 的 address 了<br>我們可以用相同的方法把 <code>sleep</code> 和 <code>gets</code> 的 libc 都 leak 出來<br>但我們如果沒有它的 libc 版本還是不知道 system address 怎麼得到啊<br>這邊我們可以用 <code>libc_database</code> 知道他是哪個版本的libc, 但這邊我們是local端<br>就不做了直接leak libc</p>
+<p><img src="/img/Format_string_attack/esprformatstring_13.png" alt=""></p>
+<p>現在我們有了一切，但最重要的 overwrite 該怎麼做呢？</p>
+<p>要知道雖然是 ASLR, 但各 function 之間的距離沒有變，我們可以藉由我們leak出的address得知 <code>printf</code> 和 <code>system</code> 的間距是 <code>0x13ba0</code> (這個資訊後來覺得其實沒啥用XD)</p>
+<p>雖然x64無法讓我們改寫8 bytes的所有內容，但我們也不需要，只需要改寫最後3bytes就夠了</p>
+<p>假設system 的位址是 <code>0x7fa1b127a9c0</code><br>我們把 <code>0x7fa1b127a9c0</code> 跟 <code>0xff</code> 做 <code>and</code> 運算<br>這樣我們就可以取得最後 1 byte <code>0xc0</code><br>同理 <code>0x7fa1b127a9c0 &amp; 0xffff00</code> 可以得到 <code>0x27a900</code><br>但我們要寫入的應該是 <code>0x27a9</code> 而不是 <code>0x27a900</code><br>所以我們還需要把 <code>0x27a900 &gt;&gt; 8</code>  來得到 <code>0x27a9</code></p>
+<p><code>&gt;&gt; 8</code> 的意思是把數值以二進位形式往右移8位，16進位的話一個數字會由4個0和1組成，要往右移兩個數字的話當然就是移8位了</p>
+<p>詳細的介紹可以參考 <a href="&quot;http://www.runoob.com/python/python-operators.html&quot;">這裏</a></p>
+<p>我們要做的就是把 <code>printf@GOT</code> 改寫成 <code>system</code> 然後再輸入 <code>/bin/sh</code> 就可以拿到 shell 了</p>
+<p>不過要注意一點，與x86不同的是x64一定會遇到 null byte 的問題，剛剛複習了上面的寫法後，因為x64的address不會填滿 8 byte 所以會遇到<code>0x00</code>導致蓋失敗的問題</p>
+<p><img src="/img/Format_string_attack/esprformatstring_14.png" alt=""></p>
+<p>所以要更改寫法，把 <code>printf@GOT</code>放到最後改寫，變成我前面的寫入位址的 payload 都要蓋滿 8 bytes (神麻煩)</p>
+<p>我一樣先嘗試改寫最後 1 byte…. 真的很燒腦</p>
+<pre><code>payload = &quot;%&quot;+str(196)&quot;c&quot; + &quot;%8$hhn&quot;+ &quot;%8$sa&quot; + p64(printf_GOT)
+</code></pre><p><img src="/img/Format_string_attack/esprformatstring_15.png" alt=""></p>
+<p>最後看 write up 發現可以用 ljust 讓 leak 的 padding 固定，就不用在那邊算 offset 多少了</p>
+<p><img src="/img/Format_string_attack/esprformatstring_16.png" alt=""></p>
+<p>那個 <code>time.sleep(1)</code> 是怕說他還在 sleep 我們就 sendline 了，但其實好像不加也可以（？</p>
+<p><img src="/img/Format_string_attack/esprformatstring_17.png" alt=""></p>
+<p>真….真的累，光 overwrite 就研究了一整天，網路上的 payload 好難懂</p>
 
 
                 
