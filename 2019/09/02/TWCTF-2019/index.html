@@ -10,6 +10,15 @@
 
     <!--Description-->
     
+        <meta name="description" content="難得來解個水題XDD
+#warmup
+光這一題就讓我吃了不少苦…各種local端能跑remote就失敗
+來說說解題過程吧，這一題給了 source code 和 ELF
+
+
+光看 code 就知道他有 buffer overflow 和 format string attack 的問題了吧
+這一提我">
+    
 
     <!--Author-->
     
@@ -18,7 +27,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="AStar&#39;s Blog"/>
+        <meta property="og:title" content="TWCTF-2019"/>
     
 
     <!--Open Graph Description-->
@@ -29,7 +38,7 @@
 
     <!--Type page-->
     
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="article" />
     
 
     <!--Page Cover-->
@@ -40,7 +49,7 @@
 
     <!-- Title -->
     
-    <title>AStar&#39;s Blog</title>
+    <title>TWCTF-2019 - AStar&#39;s Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -143,188 +152,86 @@
 
     <!-- Main Content -->
     <!-- Page Header -->
-<!-- Set your background image for this header in the theme's configuration: index_cover -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
 <header class="intro-header" style="background-image: url('https://i.imgur.com/0YWlPp2.png')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>AStar's Blog</h1>
-                    <hr class="small">
-                    <span class="subheading"></span>
+                <div class="post-heading">
+                    <h1>TWCTF-2019</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-09-02
+                        
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            
-                <div class="post-preview">
-    <a href="/2019/09/02/TWCTF-2019/">
-        <h2 class="post-title">
-            TWCTF-2019
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2019-09-02
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2019/08/01/Format-string-attack/">
-        <h2 class="post-title">
-            Format_string_attack
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2019-08-01
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2019/06/30/stack-pivot/">
-        <h2 class="post-title">
-            Stack Pivot(未完)
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2019-06-30
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2019/06/22/HITCON-Training-2017/">
-        <h2 class="post-title">
-            HITCON_Training_2017
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2019-06-22
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2019/05/07/INSHACK-ctf-2019/">
-        <h2 class="post-title">
-            INSHACK_ctf_2019
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2019-05-07
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2019/05/01/pico-ctf-2018/">
-        <h2 class="post-title">
-            pico-ctf-2018
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2019-05-01
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2019/04/28/Use-docker-as-vm/">
-        <h2 class="post-title">
-            Use docker as vm
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2019-04-28
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2019/04/22/hxp-ctf-2018/">
-        <h2 class="post-title">
-            hxp-ctf_2018
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2019-04-22
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2019/03/17/ntust-pwn/">
-        <h2 class="post-title">
-            ntust_pwn
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2019-03-17
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2019/01/01/2019-1-1/">
-        <h2 class="post-title">
-            2019/1/1
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2019-01-01
-    </p>
-</div>
-<hr>
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
             
 
-            <ul class="pager">
-    
-    
-        <li class="next"><a href="/page/2/">Older Posts  &rarr;</a></li>
-    
-</ul>
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>難得來解個水題XDD</p>
+<p>#warmup</p>
+<p>光這一題就讓我吃了不少苦…各種local端能跑remote就失敗</p>
+<p>來說說解題過程吧，這一題給了 source code 和 ELF</p>
+<p><img src="/img/TWCTF_2019/twctf_warmup_1.png" alt=""></p>
+<p><img src="/img/TWCTF_2019/twctf_warmup_2.png" alt=""></p>
+<p>光看 code 就知道他有 buffer overflow 和 format string attack 的問題了吧</p>
+<p>這一提我自己寫了兩種 exploit code, 一個是 ret2libc, 一個是透過 leak libc address 用 format string 改寫成 system address</p>
+<p>先說 <code>ret2libc</code> 吧</p>
+<p><img src="/img/TWCTF_2019/twctf_warmup_3.png" alt=""></p>
+<p>透過 source code 可以知道他可以被 overflow</p>
+<p>我們先 leak libc address</p>
+<p><img src="/img/TWCTF_2019/twctf_warmup_4.png" alt=""></p>
+<p>阿…第9行請忽略他，因為這是我解出來後才開始寫 write up, 所以我已經知道他的 libc 是哪個版本了</p>
+<p>總之執行後他就會給你兩個 libc address </p>
+<p><img src="/img/TWCTF_2019/twctf_warmup_5.png" alt=""></p>
+<p>然後用 <code>libc_database</code> 查他是哪個版本的 libc</p>
+<p><img src="/img/TWCTF_2019/twctf_warmup_6.png" alt=""></p>
+<p>有libc版本後就是很正規的 ret2libc 然後拿shell囉</p>
+<p><img src="/img/TWCTF_2019/twctf_warmup_7.png" alt=""></p>
+<p>實測在local端跑得起來，remote 端會 EOF QQ</p>
+<p><img src="/img/TWCTF_2019/twctf_warmup_8.png" alt=""></p>
+<p>於是我用第二個方法——用format string 改寫</p>
+<p><img src="/img/TWCTF_2019/twctf_warmup_9.png" alt=""></p>
+<p>結果還是一樣在local端跑得起來遠端會 EOF @@</p>
+<p>那時候還想說是不是因為 RBP 被我蓋爛了所以 system 吃不到我 gets 輸入的參數，但想了想如果真是這樣，我的 local 端應該也跑不起來才對</p>
+<p>總之試了試最後用 <code>one_gadget</code> 偷吃步過了</p>
+<p><img src="/img/TWCTF_2019/twctf_warmup_10.png" alt=""></p>
+<p><img src="/img/TWCTF_2019/twctf_warmup_11.png" alt=""></p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
         </div>
     </div>
-</div>
-
-
+</article>
 
     <!-- Footer -->
     <hr />
