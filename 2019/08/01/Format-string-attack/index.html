@@ -365,6 +365,63 @@ Below are some format parameters which can be used and their consequences:
 <p>那個 <code>time.sleep(1)</code> 是怕說他還在 sleep 我們就 sendline 了，但其實好像不加也可以（？</p>
 <p><img src="/img/Format_string_attack/esprformatstring_17.jpg" alt=""></p>
 <p>真….真的累，光 overwrite 就研究了一整天，網路上的 payload 好難懂</p>
+<h1 id="Bypass-Stack-canary-amp-NX-amp-ASLR"><a href="#Bypass-Stack-canary-amp-NX-amp-ASLR" class="headerlink" title="Bypass Stack canary &amp; NX &amp; ASLR"></a>Bypass Stack canary &amp; NX &amp; ASLR</h1><p>一直想研究這個很久了，每次都只有口頭聽說 Format string attack 可以 byapss linux 那四個防禦機制，但都沒親身實測過</p>
+<p>網路上的資源也很少在說 bypass stack canary, 終於找到<a href="&quot;https://www.ret2rop.com/2018/08/format-string-defeating-stack-canary-nx-aslr-remote.html&quot;">這篇</a></p>
+<p>大概介紹一下 stack canary, 這個是 linux 為了防止buffer overflow所做的保護機制<br>他會在<del> rbp 與 return address 之間插入一個隨機值</del> rbp 之前插入一個隨機值<br>只要有人嘗試透過 buffer overflow 修改到這個隨機值，程式就會終止達到保護的目的</p>
+<p>我不清楚是不是每個linux都這樣，但我自己 trace 的結果是這樣，順便嘴一下誤導我的文章<br><a href="https://access.redhat.com/blogs/766093/posts/3548631" target="_blank" rel="noopener">https://access.redhat.com/blogs/766093/posts/3548631</a></p>
+<p>圖畫錯啦！</p>
+<p>source code:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line"></span><br><span class="line">void center(void)</span><br><span class="line">&#123;</span><br><span class="line">  char code[128];</span><br><span class="line">  printf(&quot;Enter secret code !\nCode: &quot;);</span><br><span class="line">  gets(code);           //take input</span><br><span class="line">  printf(&quot;Entered Command center with code &gt; %s .\n&quot;,code);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    char name[64];</span><br><span class="line">    setvbuf(stdin, 0, 2, 0);        //no buffering in stdin and stdout</span><br><span class="line">    setvbuf(stdout, 0, 2, 0);</span><br><span class="line">    memset(name, 0, sizeof(name));      //fill name buffer with null bytes</span><br><span class="line">    printf(&quot;What is your name?\nName: &quot;);</span><br><span class="line">    read(0, name, 64);          //read 64 bytes from stdin(0) to name</span><br><span class="line">    printf(&quot;Hello &quot;); printf(name);</span><br><span class="line">    center();               //call center function</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以往都是貼圖片，用這樣子好像比較好一點</p>
+<p>反正跑起來就是這樣</p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_1.png" alt=""></p>
+<p>看看他的保護機制</p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_2.png" alt=""></p>
+<p>我們用gdb debug 他看看，首先我們是進入 <code>center</code> 這個 function 進行 overflow 的，所以要先想辦法 leak <code>center</code> 的stack canary的值</p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_3.png" alt=""></p>
+<p>可以看到其中的 <code>fs:0x28</code> 就是 <code>fs</code> 這個 segment register + 0x28 的記憶體位置得到的 random value</p>
+<p><code>fs</code> base address 我們無從得知</p>
+<p>我們把斷點下在 <code>center+95</code> 看看 stack canary 的值</p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_4.png" alt=""></p>
+<p>可以看到 rax 就是 stack canary 的值,這個值與 <code>fs:0x28</code> 是相等的，如果 xor 的結果不為0就代表有 overflow 發生，程式就會 terminated</p>
+<p>這邊開始我們來 leak stack canary 的值，因為不是找 leak address 的 offset, 所以 pwntools 幫不了我們</p>
+<p>只能手動找 offset, 可以利用 <code>%lx</code> 來找 offset, 一般 leak 只能 leak 4byte, 加一個 <code>l</code> 就是 <code>long</code> 的意思</p>
+<p>我們一樣用 gdb 配合我們下斷點</p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_5.png" alt=""></p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_6.png" alt=""></p>
+<p>因為第一個 <code>Name</code> 的輸入有做長度限制，所以可以不用怕蓋到 stack canary 的值放多一點</p>
+<p>可以看到我們大概在第15個 <code>%lx|</code> 就可以 leak stack canary</p>
+<p>但能 leak stack canary 只能確保我們能進行 overflow 而已</p>
+<p>重點是能跳到哪呢？</p>
+<p>我們除了能 leak stack canary 以外，還能 leak <code>r8</code> 的值</p>
+<p>根據上面參考的連結說 <code>r8</code> 的地址和 libc base 有固定的公差</p>
+<p>libc base 可以透過 <code>vmmap</code> 得到</p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_7.png" alt=""></p>
+<p><code>0x00007ffff7fc2500 - 0x00007ffff7e00000 = 1844480</code></p>
+<p>這邊上面的教學寫錯了，他直接拿 <code>r-x</code> 的區段當 libc base</p>
+<p>這應該要從 libc 的頭來當 base, 畢竟所有的 offset 都是以 libc 的開頭來算的<br>（ 不然就是他的 libc 特別厲害都沒在切區段的全都可執行 ）</p>
+<p>稍微整理一下payload之後就是這個樣子</p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_11.png" alt=""></p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_11_1.png" alt=""></p>
+<p>這樣就得到 libc base address 和 canary 的值了，再來雖然我們前面說可以進行 overflow</p>
+<p>但具體上的offset是多少呢？</p>
+<p>不能直接用 <code>cyclic</code> 盲蓋，這樣蓋到 stack canary 會直接 crash</p>
+<p>因為我們有 ELF 所以直接用 gdb 可以數得出來</p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_8.png" alt=""></p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_9.png" alt=""></p>
+<p>在<code>0x62</code>到 canary 之間的空間就是 buffer 的空間(136)</p>
+<p>亦或是可以透過靜態分析得知</p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_10.png" alt=""></p>
+<p>我們透過 objdump 得知 stack canary 的位置在 <code>rbp-0x8</code> 的地方</p>
+<p><code>0x90 - 0x8 = 136</code></p>
+<p>他們之間的關係大概是 canary -&gt; rbp address -&gt; ret address (根據看的方向也可能倒過來)</p>
+<p>都知道了之後我們就能來進行拿 shell 的動作啦~</p>
+<p>直接跳 one gadget 可以省很多力</p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_12.png" alt=""></p>
+<p>exploit code:</p>
+<p><img src="/img/Format_string_attack/bypass_formatstring_13.png" alt=""></p>
+<p>簡單來說 payload 的構成是 <code>junk(136) + canary(8) + rbp_junk(8) + ret_address(8)</code></p>
+<p>教學多 call <code>setuid(0)</code> 來確保拿到的權限是 root 但我是在kali 就算了。</p>
 
 
                 
