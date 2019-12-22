@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="HiHi,
+被老闆出了個題目研究，就順便紀錄一下了
+相關題目跟wp可以從這邊獲得
+https://github.com/OWASP/owasp-mstg/tree/master/Crackmes
+這邊先從 Android 開始研究，看之後時間夠不夠再看 iOS (剛剛突然發現我的 Heap 研究還擱">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="OWASP Uncrackable Series"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>OWASP Uncrackable Series - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+</head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/0YWlPp2.png')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>OWASP Uncrackable Series</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-12-21
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>HiHi,</p>
+<p>被老闆出了個題目研究，就順便紀錄一下了</p>
+<p>相關題目跟wp可以從這邊獲得</p>
+<p><a href="https://github.com/OWASP/owasp-mstg/tree/master/Crackmes" target="_blank" rel="noopener">https://github.com/OWASP/owasp-mstg/tree/master/Crackmes</a></p>
+<p>這邊先從 Android 開始研究，看之後時間夠不夠再看 iOS (剛剛突然發現我的 Heap 研究還擱著..)</p>
+<h1 id="UnCrackable-App-for-Android-Level-1"><a href="#UnCrackable-App-for-Android-Level-1" class="headerlink" title="UnCrackable App for Android Level 1"></a>UnCrackable App for Android Level 1</h1><p>下載後打開來看:</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un1-1.PNG" alt=""></p>
+<p>可以看到他有 Rot Detection, 按 ok 後就關閉了</p>
+<p>我們首先要找他是哪個 function 在做這事</p>
+<p>首先把 apk 解壓後將 <code>class.dex</code> 轉成 jar 檔再用 <code>jadx</code> 打開來看</p>
+<p>這個流程網路上很多教學了</p>
+<p>我們打開 <code>MainActivity</code> 很快就可以看到 Root Detection 的 if else</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un1-2.PNG" alt=""></p>
+<p>這邊有兩個方法，一個是讓 if 內的條件式變成 false, 另一個是改寫下面的<br>a function，讓他就算 if 是 true 也不會退出</p>
+<p>以方便度來說當然只要改寫一個 a function 比較方便</p>
+<p>這邊給一個還不錯的連結</p>
+<p><a href="https://medium.com/@buff3r/root-detection-ssl-pinning-bypass-with-frida-framework-31769d31723a" target="_blank" rel="noopener">https://medium.com/@buff3r/root-detection-ssl-pinning-bypass-with-frida-framework-31769d31723a</a></p>
+<p>裡面有 frida hook function 的 js code </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(function()&#123;</span><br><span class="line">    var sample_class = Java.use(&quot;fully qualified class name&quot;);</span><br><span class="line">    //Creating object of the above class</span><br><span class="line">    var obj = sample_class.$new()</span><br><span class="line">    sample_class.function_name.implementation = function()&#123;</span><br><span class="line">    //new logic for the function here</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>我們只要改一下上面的 code 改 hook a function 就可以 bypass 了</p>
+<p>喔對，frida 記得要在手機端執行 <code>frida-server</code></p>
+<p>這是我的code:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(function()&#123;</span><br><span class="line">    var x = Java.use(&quot;sg.vantagepoint.uncrackable1.MainActivity&quot;);</span><br><span class="line">    console.log(&quot;Hook MainActivity!&quot;);</span><br><span class="line">    x.a.implementation = function()&#123;</span><br><span class="line">        console.log(&quot;In a function&quot;);                                                                                                                                                  </span><br><span class="line">    &#125;;  </span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>跑起來:</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un1-3.PNG" alt=""></p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un1-4.PNG" alt=""></p>
+<p>可以看到我們成功改寫，讓他不會跳 Root Detection 了</p>
+<p>再來我們要找他的通關密語</p>
+<p>可以在 <code>MainActivity</code> 看到有判定的 if else</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un1-5.PNG" alt=""></p>
+<p>我們追回去 code 追到這:</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un1-7.PNG" alt=""></p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un1-6.PNG" alt=""></p>
+<p>恩….太難了 (原本打算自己構一個一樣的function解出他的明文)</p>
+<p>這邊我想做的就是 hook 住<code>sg.vantagepoint.uncrackable1.a.a</code>的 return value</p>
+<p>因為 <code>sg.vantagepoint.uncrackable1.a</code> 這邊是將通關的密文與 key 設好後<br>拋去 <code>sg.vantagepoint.uncrackable1.a.a</code> 解密再跟我們的輸入做比較<br>所以<code>sg.vantagepoint.uncrackable1.a.a</code>的 return value 就是通關密語</p>
+<p>可以利用 <code>overload.implementation</code> 來達成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(function()&#123;</span><br><span class="line">    var x = Java.use(&quot;sg.vantagepoint.uncrackable1.MainActivity&quot;);</span><br><span class="line">    console.log(&quot;Hook MainActivity!&quot;);</span><br><span class="line">    x.a.implementation = function()&#123;</span><br><span class="line">        send(&quot;In a function&quot;);</span><br><span class="line">    &#125;;</span><br><span class="line">    var leak = Java.use(&quot;sg.vantagepoint.a.a&quot;)                                                                                                                                         </span><br><span class="line">    leak.a.overload(&apos;[B&apos;, &apos;[B&apos;).implementation = function(a1, a2)&#123;</span><br><span class="line">        console.log(&quot;Hook Start...&quot;);</span><br><span class="line">        var pass = &quot;&quot;</span><br><span class="line">        var passwordArray = this.a.call(this, a1, a2);</span><br><span class="line">        for(var i=0; i&lt;=passwordArray.length; i++)&#123;</span><br><span class="line">            pass += String.fromCharCode(passwordArray[i]);</span><br><span class="line">         &#125;</span><br><span class="line">        send(&quot;password:&quot; + pass);</span><br><span class="line">        return passwordArray</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>這邊我是這樣理解的:</p>
+<p>如果要重寫function就用 <code>implementation</code><br>如果要保留原本的function並且額外追加code的話用<code>overload</code>+<code>implementation</code><br>並且搭配 <code>this.call()</code> call自己取得結果</p>
+<p>這邊的 <code>[B</code> 意思就是 byte 型別，因為要 hook<br><code>public static byte[] a(byte[] bArr, byte[] bArr2)</code> 的緣故</p>
+<p>至於 <code>[B</code>, 這個是 java byte array<br><a href="https://reverseengineering.stackexchange.com/questions/17429/b-symbol-in-java-bytecode" target="_blank" rel="noopener">https://reverseengineering.stackexchange.com/questions/17429/b-symbol-in-java-bytecode</a></p>
+<p>因為是 byte array, 所以之後要用 <code>String.fromCharCode</code> 將 byte 轉回 char</p>
+<p>結果:</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un1-8.PNG" alt=""></p>
+<p>一開始他並不會馬上輸出答案，我們要先輸入錯的讓他比較後才能拿到正確的答案</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un1-9.PNG" alt=""></p>
+<p>P.S 偷吃步解法是，我們直接把判斷密語是否正確的 function 改寫為 return true</p>
+<p>這樣不管輸入什麼都會得到正確的結果了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(function()&#123;</span><br><span class="line">    var x = Java.use(&quot;sg.vantagepoint.uncrackable1.MainActivity&quot;);</span><br><span class="line">    console.log(&quot;Hook MainActivity!&quot;);</span><br><span class="line">    x.a.implementation = function()&#123;</span><br><span class="line">        send(&quot;In a function&quot;);</span><br><span class="line">    &#125;;  </span><br><span class="line">    var a = Java.use(&quot;sg.vantagepoint.uncrackable1.a&quot;);                         </span><br><span class="line">    a.a.implementation = function()&#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un1-10.PNG" alt=""></p>
+<h1 id="UnCrackable-App-for-Android-Level-2"><a href="#UnCrackable-App-for-Android-Level-2" class="headerlink" title="UnCrackable App for Android Level 2"></a>UnCrackable App for Android Level 2</h1><p>一樣我們先跑起來看:</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un2-1.PNG" alt=""></p>
+<p>我們先 decompile MainActivity 看看:</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un2-2.PNG" alt=""></p>
+<p>可以看到我們可以用老方法 bypass Root,</p>
+<p>再來就是找密語在哪了</p>
+<p>我們去看判斷密語的 if else</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un2-3.PNG" alt=""></p>
+<p><code>this.m</code> 是屬於 <code>CodeCheck</code> 這個型別的</p>
+<p>我們看 <code>CodeCheck</code></p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un2-4.PNG" alt=""></p>
+<p><code>native</code> 我找到的意思是在 JAVA層 include 非 JAVA 的程式碼來執行</p>
+<p>那我們第一時間當然會想到 <code>MainActivity</code> 裡面的 <code>System.loadLibrary(&quot;foo&quot;);</code></p>
+<p><code>unzip</code> apk 之後可以再 lib 的資料夾發現 <code>libfoo.so</code></p>
+<p>所以意思是 <code>libfoo</code> 裡面有個 function 會 return 字串是否相等</p>
+<p>我們 <code>objdump -R</code> 來看看</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un2-5.PNG" alt=""></p>
+<p>果然有用到 <code>strncmp</code></p>
+<p>接下來就是找這裡面哪個 function 有用到 <code>strncmp</code></p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un2-6.PNG" alt=""></p>
+<p>我用 <code>r2</code> 一開始就看到 <code>CodeCheck</code> 的 function, 於是馬上進去看</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un2-7.PNG" alt=""></p>
+<p>看到了像是一個字串的東西，一開始還沒有很肯定那就是要比較的密語</p>
+<p>再往下看:</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un2-8.PNG" alt=""></p>
+<p>因為 call function 並不會打亂原本 stack 內的資訊</p>
+<p>所以我在這邊會算他的 offset, 是不是真的拿上面的字串做 <code>strncmp</code></p>
+<p>這邊拿 objdump 來看可能比較好看一點</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un2-9.PNG" alt=""></p>
+<p>在 0xfbc 的位置開始算我們的 esp offset</p>
+<p>記住每 push 一個值 esp 就會 <code>-4</code>, 每 pop 一個值就會 <code>+4</code></p>
+<p>從 0xfc5 開始算:</p>
+<p>0-4-12(連三個push)+16(0x10)-8-8(連兩個push)+16(0x10)-4 = -4</p>
+<p>但最後的 <code>lea    eax,[esp+0x4]</code> 會把他補回0</p>
+<p>因此可以確定 <code>strncmp</code> 是以上面的明文做比較的，並且是取前23(0x17)個字串比較</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un2-10.PNG" alt=""></p>
+<p>這是為什麼我取 <code>Thanks for all the fish</code> 而不是 <code>Thanks for all the fishD!</code></p>
+<p>我們 bypass 完 root 後直接輸入試看看</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un2-12.PNG" alt=""></p>
+<p>喔對，在 bypass Root 我遇到這個訊息</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un2-11.PNG" alt=""></p>
+<p>原因是 <code>MainActivity</code> 有 extend c, 而 c class 裡面也有一個 a function</p>
+<p><img src="/img/2019/OWASP-Uncrackable-Series/un2-13.PNG" alt=""></p>
+<p>因為兩個 a function 裡面的 perameter 不一樣<br>用 <code>overload</code> 指定一下是哪個 a function就好了</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2019 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
