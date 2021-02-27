@@ -249,13 +249,15 @@ docker run -p 127.0.0.1:8080:80 [image id]
 docker container start f9f07a4d171a
 docker exec -it --user astar -e TERM=&quot;xterm-256color&quot;  f9f07a4d171a bash
 </code></pre><p>如果升級了images的版本，docker 並不會幫你把舊的image刪掉，導致image的庫會很多垃圾image</p>
-<p>這時候可以試試 <code>prune</code></p>
+<p>這時候可以試試 <code>prune</code> 移除 dangling component</p>
 <p>各個compoent都有對應的 <code>prune</code></p>
 <pre><code>docker container prune
 docker image prune
 docker network prune
 docker volume prune
-</code></pre><p>好像需要加<code>-a</code> 才會都刪掉<br>來源：<a href="https://stackoverflow.com/questions/32723111/how-to-remove-old-and-unused-docker-images" target="_blank" rel="noopener">https://stackoverflow.com/questions/32723111/how-to-remove-old-and-unused-docker-images</a><br>以我自己的為例子</p>
+</code></pre><p>要移除所以沒在使用的 Images 不是只有 dangling 的 Images，可以在 prune 加上 <code>-a</code></p>
+<p>來源：<br><a href="https://stackoverflow.com/questions/32723111/how-to-remove-old-and-unused-docker-images" target="_blank" rel="noopener">https://stackoverflow.com/questions/32723111/how-to-remove-old-and-unused-docker-images</a><br><a href="https://blog.clarence.tw/2019/09/10/docker-removing-containers-images-volumes-and-networks/" target="_blank" rel="noopener">https://blog.clarence.tw/2019/09/10/docker-removing-containers-images-volumes-and-networks/</a></p>
+<p>以我自己的為例子</p>
 <p>before:<br><img src="/img/docker_clean_image_before.png" alt=""></p>
 <p>after:<br><img src="/img/docker_clean_image_after.png" alt=""></p>
 <p>大概是這樣 如果後面有用到還會再補充</p>
