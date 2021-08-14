@@ -213,28 +213,30 @@ hexo s
 <h1 id="如何發文"><a href="#如何發文" class="headerlink" title="如何發文"></a>如何發文</h1><p>先是新增一篇文章</p>
 <pre><code>hexo new [layout] [title]
 </code></pre><p>預設是<code>post</code> 你可以自訂想要的layout方式，或是在_config.yml內修改預設的layout方式 hexo的layout分為<code>page</code>、<code>post</code>、<code>draft</code>， 每個layout生成後也分別在<code>source</code>內歸類好</p>
-<table>
-<thead>
-<tr>
-<th>layout</th>
-<th>locate</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>page</td>
-<td>source/</td>
-</tr>
-<tr>
-<td>post</td>
-<td>source/_post</td>
-</tr>
-<tr>
-<td>draft</td>
-<td>source/_draft</td>
-</tr>
-</tbody>
-</table>
+
+    <table class="table table-bordered table-striped table-condensed">
+      <thead>
+          <tr>
+            <th class="text-center">layout</th>
+            <th class="text-center">locate</th>
+          </tr>
+      </thead>
+      <tbody>
+        <tr>
+            <td style="text-align: center;vertical-align: middle;">page</td>
+            <td style="text-align: center;vertical-align: middle;">source/</td>
+        </tr>
+        <tr>
+            <td style="text-align: center;vertical-align: middle;">post</td>
+            <td style="text-align: center;vertical-align: middle;">source/_post</td>
+        </tr>
+         <tr>
+            <td style="text-align: center;vertical-align: middle;">draft</td>
+            <td style="text-align: center;vertical-align: middle;">source/_draft</td>
+         </tr>
+      </tbody>
+    </table>
+
 <p>生成後的檔案除了page是資料夾之外其他都是markdown檔案，可以順便讓自己練習markdown語法</p>
 <p>P.S:在hexo上好像用html刻表格的時候會顯示過多br，解決方法是不要縮排直接變成一行，個人對於hexo表格的表現方式不太滿意</p>
 <h1 id="如何deploy到自己的server上"><a href="#如何deploy到自己的server上" class="headerlink" title="如何deploy到自己的server上"></a>如何deploy到自己的server上</h1><p>編輯完文章後最重要的當然就是讓全世界的人看到自己的作品了</p>
