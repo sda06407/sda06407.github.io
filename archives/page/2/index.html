@@ -1,226 +1,368 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
 
+<!-- Head tag -->
 <head>
-    <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <meta name="author" content="AStar">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
-
-
-
-<title>Archives | AStar&#39;s Blog</title>
-
-
-
-    <link rel="icon" href="/favicon.ico">
-
-
-
-
-    <!-- stylesheets list from _config.yml -->
-    
-    <link rel="stylesheet" href="/css/style.css">
+    <!--Description-->
     
 
-
-
-    <!-- scripts list from _config.yml -->
+    <!--Author-->
     
-    <script src="/js/script.js"></script>
-    
-    <script src="/js/tocbot.min.js"></script>
+        <meta name="author" content="AStar">
     
 
-
-
+    <!--Open Graph Title-->
     
-    
-        
+        <meta property="og:title" content="AStar&#39;s Blog"/>
     
 
+    <!--Open Graph Description-->
+    
 
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="website" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>page - Archives - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
 <meta name="generator" content="Hexo 5.4.0"></head>
 
+
 <body>
-    <script>
-        // this function is used to check current theme before page loaded.
-        (() => {
-            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
-            const isDark = currentTheme === 'dark';
-            const pagebody = document.getElementsByTagName('body')[0]
-            if (isDark) {
-                pagebody.classList.add('dark-theme');
-                // mobile
-                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
-            } else {
-                pagebody.classList.remove('dark-theme');
-                // mobile
-                document.getElementById("mobile-toggle-theme").innerText = "· Light"
-            }
-        })();
-    </script>
 
-    <div class="wrapper">
-        <header>
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-header header-logo"><a href="/">ASrar&#39;s Blog</a></div>
-            <div class="menu navbar-right">
-                
-                    <a class="menu-item" href="/archives">Posts</a>
-                
-                <input id="switch_default" type="checkbox" class="switch_default">
-                <label for="switch_default" class="toggleBtn"></label>
-            </div>
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
         </div>
-    </nav>
 
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
     
-    <nav class="navbar-mobile" id="nav-mobile">
-        <div class="container">
-            <div class="navbar-header">
-                <div>
-                    <a href="/">ASrar&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+
+<!-- Page Header -->
+<!-- Set your background image for this header in the theme's configuration: index_cover -->
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading">
+                    <h1>Archives</h1>
                 </div>
-                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
-            </div>
-            <div class="menu" id="mobile-menu">
-                
-                    <a class="menu-item" href="/archives">Posts</a>
-                
             </div>
         </div>
-    </nav>
-
+    </div>
 </header>
-<script>
-    var mobileBtn = function f() {
-        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
-        var mobileMenu = document.getElementById("mobile-menu");
-        if(toggleMenu.classList.contains("active")){
-           toggleMenu.classList.remove("active")
-            mobileMenu.classList.remove("active")
-        }else{
-            toggleMenu.classList.add("active")
-            mobileMenu.classList.add("active")
-        }
-    }
-</script>
-            <div class="main">
-                <div class="post-wrap archive">
-    
-    
-        
 
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            
+                <div class="post-preview">
+    <a href="/2019/10/30/heap-exploitation/">
+        <h1 class="post-title archive">
+            heap_exploitation (未完)
+        </h1>
+    </a>
+    <p class="post-meta archive">
+        <!-- Date and Author -->
         
-            <h3>2019</h3>
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2019/10/30/heap-exploitation/">heap_exploitation (未完)</a>
-            <span class="archive-item-date">October 30, 2019</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2019/09/02/TWCTF-2019/">TWCTF-2019</a>
-            <span class="archive-item-date">September 2, 2019</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2019/06/30/stack-pivot/">Stack Pivot</a>
-            <span class="archive-item-date">June 30, 2019</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2019/06/22/HITCON-Training-2017/">HITCON_Training_2017</a>
-            <span class="archive-item-date">June 22, 2019</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2019/05/07/INSHACK-ctf-2019/">INSHACK_ctf_2019</a>
-            <span class="archive-item-date">May 7, 2019</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2019/05/01/pico-ctf-2018/">pico-ctf-2018</a>
-            <span class="archive-item-date">May 1, 2019</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2019/04/28/Use-docker-as-vm/">Use docker as vm</a>
-            <span class="archive-item-date">April 28, 2019</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2019/04/22/hxp-ctf-2018/">hxp-ctf_2018</a>
-            <span class="archive-item-date">April 22, 2019</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2019/03/17/ntust-pwn/">ntust_pwn</a>
-            <span class="archive-item-date">March 17, 2019</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2019/01/01/2019-1-1/">2019/1/1</a>
-            <span class="archive-item-date">January 1, 2019</span>
-        </article>
-    
-    
-    <nav class="pagination">
-        <a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a>
-    </nav>
-
+        2019-10-30
+    </p>
 </div>
+            
+                <div class="post-preview">
+    <a href="/2019/09/02/TWCTF-2019/">
+        <h1 class="post-title archive">
+            TWCTF-2019
+        </h1>
+    </a>
+    <p class="post-meta archive">
+        <!-- Date and Author -->
+        
+        2019-09-02
+    </p>
+</div>
+            
+                <div class="post-preview">
+    <a href="/2019/06/30/stack-pivot/">
+        <h1 class="post-title archive">
+            Stack Pivot
+        </h1>
+    </a>
+    <p class="post-meta archive">
+        <!-- Date and Author -->
+        
+        2019-06-30
+    </p>
+</div>
+            
+                <div class="post-preview">
+    <a href="/2019/06/22/HITCON-Training-2017/">
+        <h1 class="post-title archive">
+            HITCON_Training_2017
+        </h1>
+    </a>
+    <p class="post-meta archive">
+        <!-- Date and Author -->
+        
+        2019-06-22
+    </p>
+</div>
+            
+                <div class="post-preview">
+    <a href="/2019/05/07/INSHACK-ctf-2019/">
+        <h1 class="post-title archive">
+            INSHACK_ctf_2019
+        </h1>
+    </a>
+    <p class="post-meta archive">
+        <!-- Date and Author -->
+        
+        2019-05-07
+    </p>
+</div>
+            
+                <div class="post-preview">
+    <a href="/2019/05/01/pico-ctf-2018/">
+        <h1 class="post-title archive">
+            pico-ctf-2018
+        </h1>
+    </a>
+    <p class="post-meta archive">
+        <!-- Date and Author -->
+        
+        2019-05-01
+    </p>
+</div>
+            
+                <div class="post-preview">
+    <a href="/2019/04/28/Use-docker-as-vm/">
+        <h1 class="post-title archive">
+            Use docker as vm
+        </h1>
+    </a>
+    <p class="post-meta archive">
+        <!-- Date and Author -->
+        
+        2019-04-28
+    </p>
+</div>
+            
+                <div class="post-preview">
+    <a href="/2019/04/22/hxp-ctf-2018/">
+        <h1 class="post-title archive">
+            hxp-ctf_2018
+        </h1>
+    </a>
+    <p class="post-meta archive">
+        <!-- Date and Author -->
+        
+        2019-04-22
+    </p>
+</div>
+            
+                <div class="post-preview">
+    <a href="/2019/03/17/ntust-pwn/">
+        <h1 class="post-title archive">
+            ntust_pwn
+        </h1>
+    </a>
+    <p class="post-meta archive">
+        <!-- Date and Author -->
+        
+        2019-03-17
+    </p>
+</div>
+            
+                <div class="post-preview">
+    <a href="/2019/01/01/2019-1-1/">
+        <h1 class="post-title archive">
+            2019/1/1
+        </h1>
+    </a>
+    <p class="post-meta archive">
+        <!-- Date and Author -->
+        
+        2019-01-01
+    </p>
+</div>
+            
+            <div class="archive-before-pagination"></div>
+            <ul class="pager">
+    
+        <li class="previous"><a href="/archives/">&larr;  Newer Posts</a></li>
+    
+    
+        <li class="next"><a href="/archives/page/3/">Older Posts  &rarr;</a></li>
+    
+</ul>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2021 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
             </div>
-            <footer id="footer" class="footer">
-    <div class="copyright">
-        <span>© AStar | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        </div>
     </div>
 </footer>
 
-    </div>
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
 </body>
 
 </html>

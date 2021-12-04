@@ -1,205 +1,208 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
 
+<!-- Head tag -->
 <head>
-    <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <meta name="author" content="AStar">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
-
-
-
-<title>pico-ctf-2018 | AStar&#39;s Blog</title>
-
-
-
-    <link rel="icon" href="/favicon.ico">
-
-
-
-
-    <!-- stylesheets list from _config.yml -->
+    <!--Description-->
     
-    <link rel="stylesheet" href="/css/style.css">
+        <meta name="description" content="整理一下pico ctf的wp好了。
+今年的題目沒有去年多，可以的話就每一題都寫看看
+Forensics Warmup 1 - Points: 50把flag.zip解壓縮就有flag了
+
+Forensics Warmup 2 - Points: 50這一題應該是考你副檔名和header…但我直接開就有了，多虧現在的圖片瀏覽器
+
+General Warmup 1考你 ASCII code">
     
 
-
-
-    <!-- scripts list from _config.yml -->
+    <!--Author-->
     
-    <script src="/js/script.js"></script>
-    
-    <script src="/js/tocbot.min.js"></script>
+        <meta name="author" content="AStar">
     
 
-
-
+    <!--Open Graph Title-->
     
-    
-        
+        <meta property="og:title" content="pico-ctf-2018"/>
     
 
+    <!--Open Graph Description-->
+    
 
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>pico-ctf-2018 - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
 <meta name="generator" content="Hexo 5.4.0"></head>
 
+
 <body>
-    <script>
-        // this function is used to check current theme before page loaded.
-        (() => {
-            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
-            const isDark = currentTheme === 'dark';
-            const pagebody = document.getElementsByTagName('body')[0]
-            if (isDark) {
-                pagebody.classList.add('dark-theme');
-                // mobile
-                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
-            } else {
-                pagebody.classList.remove('dark-theme');
-                // mobile
-                document.getElementById("mobile-toggle-theme").innerText = "· Light"
-            }
-        })();
-    </script>
 
-    <div class="wrapper">
-        <header>
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-header header-logo"><a href="/">ASrar&#39;s Blog</a></div>
-            <div class="menu navbar-right">
-                
-                    <a class="menu-item" href="/archives">Posts</a>
-                
-                <input id="switch_default" type="checkbox" class="switch_default">
-                <label for="switch_default" class="toggleBtn"></label>
-            </div>
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
         </div>
-    </nav>
 
-    
-    <nav class="navbar-mobile" id="nav-mobile">
-        <div class="container">
-            <div class="navbar-header">
-                <div>
-                    <a href="/">ASrar&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>pico-ctf-2018</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-05-01
+                        
+                    </span>
                 </div>
-                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
-            </div>
-            <div class="menu" id="mobile-menu">
-                
-                    <a class="menu-item" href="/archives">Posts</a>
-                
             </div>
         </div>
-    </nav>
-
+    </div>
 </header>
-<script>
-    var mobileBtn = function f() {
-        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
-        var mobileMenu = document.getElementById("mobile-menu");
-        if(toggleMenu.classList.contains("active")){
-           toggleMenu.classList.remove("active")
-            mobileMenu.classList.remove("active")
-        }else{
-            toggleMenu.classList.add("active")
-            mobileMenu.classList.add("active")
-        }
-    }
-</script>
-            <div class="main">
-                <div class="container">
-    
-    
-        <div class="post-toc">
-    <div class="tocbot-list">
-    </div>
-    <div class="tocbot-list-menu">
-        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
-        <a onclick="go_top()">Back to top</a>
-        <a onclick="go_bottom()">Go to bottom</a>
-    </div>
-</div>
 
-<script>
-    document.ready(
-        function () {
-            tocbot.init({
-                tocSelector: '.tocbot-list',
-                contentSelector: '.post-content',
-                headingSelector: 'h1, h2, h3, h4, h5',
-                collapseDepth: 1,
-                orderedList: false,
-                scrollSmooth: true,
-            })
-        }
-    )
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
-    function expand_toc() {
-        var b = document.querySelector(".tocbot-toc-expand");
-        tocbot.init({
-            tocSelector: '.tocbot-list',
-            contentSelector: '.post-content',
-            headingSelector: 'h1, h2, h3, h4, h5',
-            collapseDepth: 6,
-            orderedList: false,
-            scrollSmooth: true,
-        });
-        b.setAttribute("onclick", "collapse_toc()");
-        b.innerHTML = "Collapse all"
-    }
-
-    function collapse_toc() {
-        var b = document.querySelector(".tocbot-toc-expand");
-        tocbot.init({
-            tocSelector: '.tocbot-list',
-            contentSelector: '.post-content',
-            headingSelector: 'h1, h2, h3, h4, h5',
-            collapseDepth: 1,
-            orderedList: false,
-            scrollSmooth: true,
-        });
-        b.setAttribute("onclick", "expand_toc()");
-        b.innerHTML = "Expand all"
-    }
-
-    function go_top() {
-        window.scrollTo(0, 0);
-    }
-
-    function go_bottom() {
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-
-</script>
-    
-
-    
-    <article class="post-wrap">
-        <header class="post-header">
-            <h1 class="post-title">pico-ctf-2018</h1>
-            
-                <div class="post-meta">
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
                     
-                        Author: <a itemprop="author" rel="author" href="/">AStar</a>
-                    
+                        
+
+
+<a href="/tags/write-up/">#write up</a>
+
 
                     
-                        <span class="post-time">
-                        Date: <a href="#">May 1, 2019&nbsp;&nbsp;17:36:10</a>
-                        </span>
-                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
                     
                 </div>
             
-        </header>
 
-        <div class="post-content">
-            <p>整理一下pico ctf的wp好了。</p>
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>整理一下pico ctf的wp好了。</p>
 <p>今年的題目沒有去年多，可以的話就每一題都寫看看</p>
 <h2 id="Forensics-Warmup-1-Points-50"><a href="#Forensics-Warmup-1-Points-50" class="headerlink" title="Forensics Warmup 1 - Points: 50"></a>Forensics Warmup 1 - Points: 50</h2><p>把<code>flag.zip</code>解壓縮就有flag了</p>
 <p><img src="/img/2019/pico_ctf_2018/flag.jpg" alt=""></p>
@@ -220,70 +223,76 @@
 <pre><code>nc 2018shell.picoctf.com 48696 &gt; pico
 </code></pre><h2 id="Inspect-Me"><a href="#Inspect-Me" class="headerlink" title="Inspect Me"></a>Inspect Me</h2><p>Flag 都在原始碼裡面</p>
 
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
         </div>
+    </div>
+</article>
 
-        
-            <section class="post-copyright">
-                
-                    <p class="copyright-item">
-                        <span>Author:</span>
-                        <span>AStar</span>
-                    </p>
-                
-                
-                    <p class="copyright-item">
-                        <span>Permalink:</span>
-                        <span><a href="https://sda06407.github.io/2019/05/01/pico-ctf-2018/">https://sda06407.github.io/2019/05/01/pico-ctf-2018/</a></span>
-                    </p>
-                
-                
-                
-                     <p class="copyright-item">
-                         <span>Slogan:</span>
-                         <span>stay hungry stay foolish</span>
-                     </p>
-                
+    <!-- Footer -->
+    <hr />
 
-            </section>
-        
-        <section class="post-tags">
-            <div>
-                <span>Tag(s):</span>
-                <span class="tag">
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
                     
+
                     
-                        <a href="/tags/write-up/"># write up</a>
+
                     
-                        
-                </span>
-            </div>
-            <div>
-                <a href="javascript:window.history.back();">back</a>
-                <span>· </span>
-                <a href="/">home</a>
-            </div>
-        </section>
-        <section class="post-nav">
-            
-                <a class="prev" rel="prev" href="/2019/05/07/INSHACK-ctf-2019/">INSHACK_ctf_2019</a>
-            
-            
-            <a class="next" rel="next" href="/2019/04/28/Use-docker-as-vm/">Use docker as vm</a>
-            
-        </section>
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
 
+                    
 
-    </article>
-</div>
+                    
 
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2021 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
             </div>
-            <footer id="footer" class="footer">
-    <div class="copyright">
-        <span>© AStar | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        </div>
     </div>
 </footer>
 
-    </div>
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
 </body>
 
 </html>
