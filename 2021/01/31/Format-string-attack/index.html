@@ -212,23 +212,8 @@
 <p>但他的printf因為是直接使用<code>printf(buffer)</code>來做輸出<br>因此有format string的弱點，盲測的時候可以試著輸入看看<code>%x</code>或其他printf的關鍵字。<br>只要有像這樣的回應就代表有戲(?</p>
 <p><img src="/img/Format_string_attack/liveformatstring_exec2.png" alt=""></p>
 <p>一般來說Format string可以透過<code>aaaa%N$x</code>來找offset(x86)，N是任意數，就是透過<code>aaaa%1$x</code> <code>aaaa%2$x</code>…這樣子下去爆破取得offset<br><code>%N</code>是代表第N個參數，<code>$x</code>是以hex的方式輸出，參照<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Printf_format_string">wiki</a>和<a target="_blank" rel="noopener" href="https://www.owasp.org/index.php/Format_string_attack">owasp</a>:</p>
-<pre><code>For example, printf(&quot;%2$d %2$#x; %1$d %1$#x&quot;,16,17) produces 17 0x11; 16 0x10.
-
-Below are some format parameters which can be used and their consequences:
-
-•&quot;%x&quot; Read data from the stack
-
-•&quot;%s&quot; Read character strings from the process&apos; memory
-
-•&quot;%n&quot; Write an integer to locations in the process&apos; memory
-
-%d - 輸出十進位整數
-%s - 從記憶體中讀取字串
-%x - 輸出十六進位整數
-%c - 字符 - 输出字符
-%p - 指针 - 指针地址
-%n - 寫入到目前为止所輸出的字符数
-</code></pre><p>但我懶，pwntool可以直接幫我們找到offset</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">For example, printf(&quot;%2$d %2$#x; %1$d %1$#x&quot;,16,17) produces 17 0x11; 16 0x10.</span><br><span class="line"></span><br><span class="line">Below are some format parameters which can be used and their consequences:</span><br><span class="line"></span><br><span class="line">•&quot;%x&quot; Read data from the stack</span><br><span class="line"></span><br><span class="line">•&quot;%s&quot; Read character strings from the process&#x27; memory</span><br><span class="line"></span><br><span class="line">•&quot;%n&quot; Write an integer to locations in the process&#x27; memory</span><br><span class="line"></span><br><span class="line">%d - 輸出十進位整數</span><br><span class="line">%s - 從記憶體中讀取字串</span><br><span class="line">%x - 輸出十六進位整數</span><br><span class="line">%c - 字符 - 输出字符</span><br><span class="line">%p - 指针 - 指针地址</span><br><span class="line">%n - 寫入到目前为止所輸出的字符数</span><br></pre></td></tr></table></figure>
+<p>但我懶，pwntool可以直接幫我們找到offset</p>
 <p><img src="/img/Format_string_attack/liveformatstring2.png" alt=""></p>
 <p><img src="/img/Format_string_attack/liveformatstring3.png" alt=""></p>
 <p>可看見他的offset是7</p>
