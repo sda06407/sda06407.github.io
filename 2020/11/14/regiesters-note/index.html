@@ -1,188 +1,205 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="">
 
-<!-- Head tag -->
 <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="AStar">
 
-    <!--Description-->
-    
-        <meta name="description" content="intel (2018/08/31)雖然網路上有不少資料，不過想想就當殺時間整理個吧
-文章的結尾會放上參考資料(突然覺得在咖啡廳聽Miku的歌有一種衝突爽的感覺)
-16 32 64的暫存器基本上主要的暫存器都是以擴充的方式存在然後你下面看到的 AL/AH就代表是AX的低八位元與高八位元的暫存器，而A">
-    
 
-    <!--Author-->
-    
-        <meta name="author" content="AStar">
-    
 
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="registers-note"/>
-    
 
-    <!--Open Graph Description-->
+
+<title>registers-note | AStar&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
     
-
-    <!--Open Graph Site Name-->
-    <meta property="og:site_name" content="AStar&#39;s Blog"/>
-
-    <!--Type page-->
-    
-        <meta property="og:type" content="article" />
-    
-
-    <!--Page Cover-->
-    
-
-        <meta name="twitter:card" content="summary" />
-    
-
-    <!-- Title -->
-    
-    <title>registers-note - AStar&#39;s Blog</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
-
-    <!-- Google Analytics -->
     
 
 
-    <!-- favicon -->
-    
-	
-</head>
 
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
 
-    <!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">AStar</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">ASrar&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/tags">
-                            
-                                Tags
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/categories">
-                            
-                                Categories
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/klugjo/hexo-theme-clean-blog">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
-
-<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>registers-note</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        
-                            2020-11-14
-                        
-                    </span>
-                </div>
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
             </div>
         </div>
-    </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ASrar&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
 </header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
 
-            <!-- Tags and categories -->
-           
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
 
-            <!-- Gallery -->
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">registers-note</h1>
             
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">AStar</a>
+                    
 
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <h1 id="intel-2018-08-31"><a href="#intel-2018-08-31" class="headerlink" title="intel (2018/08/31)"></a>intel (2018/08/31)</h1><p>雖然網路上有不少資料，不過想想就當殺時間整理個吧</p>
+                    
+                        <span class="post-time">
+                        Date: <a href="#">November 14, 2020&nbsp;&nbsp;4:06:01</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="intel-2018-08-31"><a href="#intel-2018-08-31" class="headerlink" title="intel (2018/08/31)"></a>intel (2018/08/31)</h1><p>雖然網路上有不少資料，不過想想就當殺時間整理個吧</p>
 <p>文章的結尾會放上參考資料<br><del>(突然覺得在咖啡廳聽Miku的歌有一種衝突爽的感覺)</del></p>
 <p>16 32 64的暫存器基本上主要的暫存器都是以擴充的方式存在<br>然後你下面看到的 <code>AL/AH</code>就代表是<code>AX</code>的低八位元與高八位元的暫存器，而<code>AX</code>就是<code>EAX</code>低16位的存在<br>同理 <code>BL/BH/BX</code> 和 <code>CL/CH/CX</code> 都是同樣的存在<br>雖然每個暫存器都能做任何事，但當初設計他們還是有目的的:</p>
 <ul>
@@ -199,9 +216,7 @@
 <li><p>DI/EDI/RDI: Destination index for string operations.<br>[目的索引暫存器]</p>
 </li>
 </ul>
-<p>舉個例子來說</p>
-<pre><code>mov eax,ebx
-</code></pre><p>是把ebx的資料放到eax內，那SI就會指向ebx的位置，DI就會指向eax位置</p>
+<p>舉個例子來說<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov eax,ebx</span><br></pre></td></tr></table></figure><br>是把ebx的資料放到eax內，那SI就會指向ebx的位置，DI就會指向eax位置</p>
 <ul>
 <li><p>SP/ESP/RSP: Stack pointer for top address of the stack.<br>[Stack裡面的指標暫存器，用來指向Stack的最上面，每push/pop一個值，SP就會-+2、ESP-+4以此類推]</p>
 </li>
@@ -221,108 +236,86 @@
 <li>FS: Extra data #2</li>
 <li>GS: Extra data #3</li>
 </ul>
-<p>因為Segment registers基本上objdump看不到，所以這邊直接引用一篇我覺得寫得很好的<a href="http://finalfrank.pixnet.net/blog/post/22992166-x86-cpu-暫存器-register-大全" target="_blank" rel="noopener">文章</a></p>
+<p>因為Segment registers基本上objdump看不到，所以這邊直接引用一篇我覺得寫得很好的<a target="_blank" rel="noopener" href="http://finalfrank.pixnet.net/blog/post/22992166-x86-cpu-暫存器-register-大全">文章</a></p>
 <p>P.S 一開始很疑惑為什麼找X86 CPU的暫存器會有AX、BX、CX這些暫存器，<br>    X86不是=32-BIT嗎?那應該是EAX、EBX、ECX才對啊</p>
-<p>仔細查了之後才發現原來我錯了，查了<a href="https://en.wikipedia.org/wiki/X86" target="_blank" rel="noopener">英文wiki</a>對照<a href="https://zh.wikipedia.org/wiki/X86" target="_blank" rel="noopener">中文WIKI</a>之後才知道原來</p>
+<p>仔細查了之後才發現原來我錯了，查了<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/X86">英文wiki</a>對照<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/X86">中文WIKI</a>之後才知道原來</p>
 <p>x86是一系列向下相容的指令及架構，基於8086的CPU在1978年被intel提出，x86是intel根據8位元的8080處理器為基底製作出的架構</p>
 <p>為什麼會叫x86的原因是8086後繼的CPU(80186, 80286, 80386 and 80486)尾數都有86所以就以x86架構為總稱</p>
-<p>所以，基於16-bit的暫存器(AX、BX、CX…)這些並沒有因為32-BIT的緣故而消失了</p>
-<pre><code>所有16位元的暫存器除了區段暫存器外都擴充為32位元。Intel在暫存器的助記符號上加入「E」來表示（因此擴充的AX變成EAX，SI變成ESI，依此類推）。
-因為有更多的暫存器數量、指令、和運算單元，因此機器碼的格式也被擴充。為了提供與先前的架構相容，包含執行碼的區段可以被標示為16或是32位元的指令集。此外，特殊的前置符號也可以用來在16位元的區段包含32位元的指令碼，反之亦然。
-</code></pre><p>同理也可以推到64BIT的暫存器上(不過x64的架構更複雜就是了)，這就是為什麼64-BIT的系統能夠執行32-BIT的程式(因為我她媽的就是你的進化版啊!!)<br>最後引用一下WIKI的文章我就要結束介紹指令集的歷史了(看的很累)</p>
-<pre><code>x86的32位元架構一般又被稱作IA-32，全名為「Intel Architecture, 32-bit」。其64位元架構由AMD率先推出，並被稱為「AMD64」。之後也被Intel採用，被其稱為「Intel 64」。一般也被稱作「x86-64」、「x64」。
-
-值得注意的是，Intel也推出過IA-64架構，雖然名字上與「IA-32」相似，但兩者完全不相容，並不屬於x86指令集架構家族。
-</code></pre><p>參考資料(一些沒貼在內文上的網址):<br><a href="https://wenku.baidu.com/view/746a9259804d2b160b4ec04d.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/746a9259804d2b160b4ec04d.html</a><br><a href="http://finalfrank.pixnet.net/blog/post/22995899" target="_blank" rel="noopener">http://finalfrank.pixnet.net/blog/post/22995899</a><br><a href="https://en.wikipedia.org/wiki/Stack_register" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Stack_register</a></p>
-<h1 id="ARM-update-in-2020-11-11"><a href="#ARM-update-in-2020-11-11" class="headerlink" title="ARM (update in 2020/11/11)"></a>ARM (update in 2020/11/11)</h1><p>source:<br><a href="https://speakerdeck.com/terrynini/ntust" target="_blank" rel="noopener">https://speakerdeck.com/terrynini/ntust</a><br><a href="https://speakerdeck.com/terrynini/ais3-firmware-security-analysis" target="_blank" rel="noopener">https://speakerdeck.com/terrynini/ais3-firmware-security-analysis</a></p>
+<p>所以，基於16-bit的暫存器(AX、BX、CX…)這些並沒有因為32-BIT的緣故而消失了<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">所有16位元的暫存器除了區段暫存器外都擴充為32位元。Intel在暫存器的助記符號上加入「E」來表示（因此擴充的AX變成EAX，SI變成ESI，依此類推）。</span><br><span class="line">因為有更多的暫存器數量、指令、和運算單元，因此機器碼的格式也被擴充。為了提供與先前的架構相容，包含執行碼的區段可以被標示為16或是32位元的指令集。此外，特殊的前置符號也可以用來在16位元的區段包含32位元的指令碼，反之亦然。</span><br></pre></td></tr></table></figure><br>同理也可以推到64BIT的暫存器上(不過x64的架構更複雜就是了)，這就是為什麼64-BIT的系統能夠執行32-BIT的程式(因為我她媽的就是你的進化版啊!!)<br>最後引用一下WIKI的文章我就要結束介紹指令集的歷史了(看的很累)<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x86的32位元架構一般又被稱作IA-32，全名為「Intel Architecture, 32-bit」。其64位元架構由AMD率先推出，並被稱為「AMD64」。之後也被Intel採用，被其稱為「Intel 64」。一般也被稱作「x86-64」、「x64」。</span><br><span class="line"></span><br><span class="line">值得注意的是，Intel也推出過IA-64架構，雖然名字上與「IA-32」相似，但兩者完全不相容，並不屬於x86指令集架構家族。</span><br></pre></td></tr></table></figure><br>參考資料(一些沒貼在內文上的網址):<br><a target="_blank" rel="noopener" href="https://wenku.baidu.com/view/746a9259804d2b160b4ec04d.html">https://wenku.baidu.com/view/746a9259804d2b160b4ec04d.html</a><br><a target="_blank" rel="noopener" href="http://finalfrank.pixnet.net/blog/post/22995899">http://finalfrank.pixnet.net/blog/post/22995899</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Stack_register">https://en.wikipedia.org/wiki/Stack_register</a></p>
+<h1 id="ARM-update-in-2020-11-11"><a href="#ARM-update-in-2020-11-11" class="headerlink" title="ARM (update in 2020/11/11)"></a>ARM (update in 2020/11/11)</h1><p>source:<br><a target="_blank" rel="noopener" href="https://speakerdeck.com/terrynini/ntust">https://speakerdeck.com/terrynini/ntust</a><br><a target="_blank" rel="noopener" href="https://speakerdeck.com/terrynini/ais3-firmware-security-analysis">https://speakerdeck.com/terrynini/ais3-firmware-security-analysis</a></p>
 <p>arm 的特性還蠻複雜的，這邊紀錄一下，以 <code>armv7</code> (32 bits) 搭配 <code>rapple</code> 進行 demo</p>
-<h2 id="register"><a href="#register" class="headerlink" title="register"></a>register</h2><p>arm 本身有 15 個 registers, 分別為 <code>R0~R15</code><br>這 15 個的作用分別為:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">r15 (pc) : Program counter (as per the instruction set specification).</span><br><span class="line">r14 (lr): Link register. The BL instruction, used in a subroutine call, stores the return address in this register.</span><br><span class="line">r13 (sp): Stack pointer. The Push/Pop instructions in &quot;Thumb&quot; operating mode use this register only.</span><br><span class="line">r12 (ip): Intra-Procedure-call scratch register.</span><br><span class="line">r11 (sp): Frame pointer. Stack base pointer for holding the address of the current stack frame (optional). Sometime it will be &quot;Local variables&quot;.</span><br><span class="line">r4 to r11: Local variables.</span><br><span class="line">r0 to r3: Argument values passed to a subroutine and results returned from a subroutine.</span><br></pre></td></tr></table></figure></p>
-<p>ref: <a href="https://en.wikipedia.org/wiki/Calling_convention" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Calling_convention</a><br>介紹完 registers 之後我們來說說 arm 的組語特性</p>
+<h2 id="register"><a href="#register" class="headerlink" title="register"></a>register</h2><p>arm 本身有 15 個 registers, 分別為 <code>R0~R15</code><br>這 15 個的作用分別為:<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">r15 (pc) : Program counter (as per the instruction set specification).</span><br><span class="line">r14 (lr): Link register. The BL instruction, used in a subroutine call, stores the return address in this register.</span><br><span class="line">r13 (sp): Stack pointer. The Push/Pop instructions in &quot;Thumb&quot; operating mode use this register only.</span><br><span class="line">r12 (ip): Intra-Procedure-call scratch register.</span><br><span class="line">r11 (sp): Frame pointer. Stack base pointer for holding the address of the current stack frame (optional). Sometime it will be &quot;Local variables&quot;.</span><br><span class="line">r4 to r11: Local variables.</span><br><span class="line">r0 to r3: Argument values passed to a subroutine and results returned from a subroutine.</span><br></pre></td></tr></table></figure><br>ref: <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Calling_convention">https://en.wikipedia.org/wiki/Calling_convention</a><br>介紹完 registers 之後我們來說說 arm 的組語特性</p>
 <p><code>mov r1,#1</code><br><img src="/img/register_arm_1.png" alt=""><br><code>mov r1,#0xff</code><br><img src="/img/register_arm_2.png" alt=""><br>armv7 的所有數字前面都要加一個 <code>#</code></p>
 <p><code>mvn r2,#0xf</code> = mov  r2, (0xffffffff - 0xf)<br><img src="/img/register_arm_3.png" alt=""></p>
 <p>在 armv8 (<code>aarch64</code>) 的暫存器還多了 <code>movw</code> 和 <code>movt</code> 兩個指令 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MOVW  把 16 位立即数放到寄存器的底16位，高16位清0</span><br><span class="line">MOVT  把 16 位立即数放到寄存器的高16位，低 16位不影响</span><br></pre></td></tr></table></figure>
-<p>ref: <a href="https://blog.csdn.net/dahailantian1/article/details/78584852" target="_blank" rel="noopener">https://blog.csdn.net/dahailantian1/article/details/78584852</a></p>
-<h2 id="ldr-str"><a href="#ldr-str" class="headerlink" title="ldr/str"></a>ldr/str</h2><p>只有 <code>ldr</code> 和 <code>str</code> 這兩個指令可以存取記憶體<br>LDR 的使用格式為</p>
-<pre><code>LDR{條件式}(optional)  暫存器 (distanation), [記憶體位置](source)
-</code></pre><p>STR 的使用格式為</p>
-<pre><code>STR{條件式}(optional) 暫存器 (source), [記憶體位置](distanation)
-</code></pre><p><code>ldr r0,[sp,#4]</code> = mov r0, [sp+4]<br><img src="/img/register_arm_4.png" alt=""></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MOVW  把 16 位立即数放到寄存器的底16位，高16位清0</span><br><span class="line">MOVT  把 16 位立即数放到寄存器的高16位，低 16位不影响</span><br></pre></td></tr></table></figure>
+<p>ref: <a target="_blank" rel="noopener" href="https://blog.csdn.net/dahailantian1/article/details/78584852">https://blog.csdn.net/dahailantian1/article/details/78584852</a></p>
+<h2 id="ldr-str"><a href="#ldr-str" class="headerlink" title="ldr/str"></a>ldr/str</h2><p>只有 <code>ldr</code> 和 <code>str</code> 這兩個指令可以存取記憶體<br>LDR 的使用格式為<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LDR&#123;條件式&#125;(optional)  暫存器 (distanation), [記憶體位置](source)</span><br></pre></td></tr></table></figure><br>STR 的使用格式為<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">STR&#123;條件式&#125;(optional) 暫存器 (source), [記憶體位置](distanation)</span><br></pre></td></tr></table></figure><br><code>ldr r0,[sp,#4]</code> = mov r0, [sp+4]<br><img src="/img/register_arm_4.png" alt=""></p>
 <p><code>str r2, [sp]</code> = mov [sp], r2<br><img src="/img/register_arm_5.png" alt=""></p>
 <p><code>str r2, [sp],#4</code> = mov [sp], r2 ; add sp, 4<br><img src="/img/register_arm_6.png" alt=""></p>
 <p><code>str r2, [sp,#-4]!</code> = sub sp, 4 ; mov [sp], r2 = push r2<br><img src="/img/register_arm_7.png" alt=""></p>
 <p><code>ldr r6,[sp],#4</code> = mov r6, [sp+0x4] ; add sp, 4 = pop r6<br><img src="/img/register_arm_8.png" alt=""></p>
 
+        </div>
 
+        
+            <section class="post-copyright">
                 
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>AStar</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://sda06407.github.io/2020/11/14/regiesters-note/">https://sda06407.github.io/2020/11/14/regiesters-note/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>stay hungry stay foolish</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
             </div>
-
-            <!-- Comments -->
-            
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
-        </div>
-    </div>
-</article>
-
-    <!-- Footer -->
-    <hr />
-
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
-
-                    
-
-                    
-                        <li>
-                            <a href="https://github.com/sda06407" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
-
-                    
-
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">&copy; 2021 AStar<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
             </div>
-        </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/01/01/2021-1-1/">2021/1/1</a>
+            
+            
+            <a class="next" rel="next" href="/2020/04/19/privilege-escalation-note/">privilege escalation note</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© AStar | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
     </div>
 </footer>
 
-
-    <!-- After footer scripts -->
-    
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-
-<!-- Disqus Comments -->
-
-
-
+    </div>
 </body>
 
 </html>

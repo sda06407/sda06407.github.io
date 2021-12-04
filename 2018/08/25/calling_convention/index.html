@@ -1,203 +1,206 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="">
 
-<!-- Head tag -->
 <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="AStar">
 
-    <!--Description-->
-    
-        <meta name="description" content="之前在寫pwn的筆記時，一直很猶豫要不要把x86的call convention(呼叫約定)特別拿出來講畢竟這是pwn的基礎，像是overflow和rop都需要這個觀念，但是網路找不到一個對此有很通篇透徹的解說，剛好最近也研究出一個結果了決定po一篇作紀錄
-在講解前可以先看看這個和這個
-個人覺得寫得">
-    
 
-    <!--Author-->
-    
-        <meta name="author" content="AStar">
-    
 
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="Calling convention on Linux"/>
-    
 
-    <!--Open Graph Description-->
+
+<title>Calling convention on Linux | AStar&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
     
-
-    <!--Open Graph Site Name-->
-    <meta property="og:site_name" content="AStar&#39;s Blog"/>
-
-    <!--Type page-->
-    
-        <meta property="og:type" content="article" />
-    
-
-    <!--Page Cover-->
-    
-
-        <meta name="twitter:card" content="summary" />
-    
-
-    <!-- Title -->
-    
-    <title>Calling convention on Linux - AStar&#39;s Blog</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
-
-    <!-- Google Analytics -->
     
 
 
-    <!-- favicon -->
-    
-	
-</head>
 
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
 
-    <!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">AStar</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">ASrar&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/tags">
-                            
-                                Tags
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/categories">
-                            
-                                Categories
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/klugjo/hexo-theme-clean-blog">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
-
-<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>Calling convention on Linux</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        
-                            2018-08-25
-                        
-                    </span>
-                </div>
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
             </div>
         </div>
-    </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ASrar&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
 </header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
 
-            <!-- Tags and categories -->
-           
-                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Calling convention on Linux</h1>
+            
+                <div class="post-meta">
                     
-                        
-
-
-<a href="/tags/PWN/">#PWN</a>
-
+                        Author: <a itemprop="author" rel="author" href="/">AStar</a>
+                    
 
                     
-                </div>
-                <div class="col-lg-4 col-md-5 post-categories">
+                        <span class="post-time">
+                        Date: <a href="#">August 25, 2018&nbsp;&nbsp;10:22:18</a>
+                        </span>
+                    
                     
                 </div>
             
+        </header>
 
-            <!-- Gallery -->
-            
-
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <p>之前在寫pwn的筆記時，一直很猶豫要不要把x86的call convention(呼叫約定)特別拿出來講<br>畢竟這是pwn的基礎，像是overflow和rop都需要這個觀念，但是網路找不到一個對此<br>有很通篇透徹的解說，剛好最近也研究出一個結果了決定po一篇作紀錄</p>
-<p>在講解前可以先看看<a href="https://blog.gtwang.org/programming/memory-layout-of-c-program/" target="_blank" rel="noopener">這個</a>和<a href="https://medium.com/@ktecv2000/%E7%B7%A9%E8%A1%9D%E5%8D%80%E6%BA%A2%E4%BD%8D%E6%94%BB%E6%93%8A%E4%B9%8B%E4%B8%80-buffer-overflow-83516aa80240" target="_blank" rel="noopener">這個</a></p>
+        <div class="post-content">
+            <p>之前在寫pwn的筆記時，一直很猶豫要不要把x86的call convention(呼叫約定)特別拿出來講<br>畢竟這是pwn的基礎，像是overflow和rop都需要這個觀念，但是網路找不到一個對此<br>有很通篇透徹的解說，剛好最近也研究出一個結果了決定po一篇作紀錄</p>
+<p>在講解前可以先看看<a target="_blank" rel="noopener" href="https://blog.gtwang.org/programming/memory-layout-of-c-program/">這個</a>和<a target="_blank" rel="noopener" href="https://medium.com/@ktecv2000/%E7%B7%A9%E8%A1%9D%E5%8D%80%E6%BA%A2%E4%BD%8D%E6%94%BB%E6%93%8A%E4%B9%8B%E4%B8%80-buffer-overflow-83516aa80240">這個</a></p>
 <p>個人覺得寫得還不錯  <del>說不定看完上面這兩篇大家都懂了也不需要我在寫這一篇了</del></p>
 <p>其中Stack Frame就是我們這次的主題(個人覺得call convention其實就是暫存器與stack之間的互動)</p>
 <h1 id="Stack-Frame"><a href="#Stack-Frame" class="headerlink" title="Stack Frame"></a>Stack Frame</h1><p>Stack Frame 就是程式在記憶體內執行的一個區間</p>
@@ -207,11 +210,11 @@
 ebp: 指向Stack Frame的最上面位置
 </code></pre><p>ebp到esp的這個位置區間我們稱之為Stack Frame</p>
 <p>一個正常的x86 Stack Frame 有下列的特徵:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ebp  -&gt; 上一個ebp存的 address</span><br><span class="line">ebp + 0x4  -&gt; return address</span><br><span class="line">ebp + 0x8  -&gt; first argv</span><br><span class="line">ebp + 0xc  -&gt; second argv</span><br><span class="line">ebp + 0x10 -&gt; third argv</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ebp  -&gt; 上一個ebp存的 address</span><br><span class="line">ebp + 0x4  -&gt; return address</span><br><span class="line">ebp + 0x8  -&gt; first argv</span><br><span class="line">ebp + 0xc  -&gt; second argv</span><br><span class="line">ebp + 0x10 -&gt; third argv</span><br></pre></td></tr></table></figure>
 <p>為什麼要用<code>ebp</code>來當基準，而不用<code>esp</code>呢?<br>因為<code>esp</code>每<code>push(pop)</code>一個值 <code>esp</code> 指向的的位置就會-(+)4<br>隨著<code>push(pop)</code>的值越多就必須讓<code>esp-(+)</code>越多的值才能得到參數的位置<br>相較於<code>esp</code>，<code>ebp</code>就是一直指著記憶體頂端，相對static<br>當初出現ebp的理由好像也是讓CPU讀取變數位置能夠更加方便</p>
-<p>至於 <code>push</code> 和 <code>pop</code> 的詳細運作情況是怎麼樣呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">push reg   &lt;= same as =&gt;      sub  esp, 4        # subtract 4 from esp</span><br><span class="line">                              mov  esp, reg      # store, using esp as the address</span><br><span class="line"></span><br><span class="line">pop  reg    &lt;= same as=&gt;      mov  reg, esp      # load, using esp as the address</span><br><span class="line">                              add  esp, 4       # add 4 to the esp</span><br></pre></td></tr></table></figure></p>
+<p>至於 <code>push</code> 和 <code>pop</code> 的詳細運作情況是怎麼樣呢？<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">push reg   &lt;= same as =&gt;      sub  esp, 4        # subtract 4 from esp</span><br><span class="line">                              mov  esp, reg      # store, using esp as the address</span><br><span class="line"></span><br><span class="line">pop  reg    &lt;= same as=&gt;      mov  reg, esp      # load, using esp as the address</span><br><span class="line">                              add  esp, 4       # add 4 to the esp</span><br></pre></td></tr></table></figure></p>
 <p>同場加映 <code>call</code> 的詳細運作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push eip</span><br><span class="line">jmp</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push eip</span><br><span class="line">jmp</span><br></pre></td></tr></table></figure>
 <p>這邊用C語言粗略的講一下Stack Frame<br>這是source code:</p>
 <p><img src="/img/stack_frame.PNG" alt=""></p>
 <p>這是main function的組合語言:</p>
@@ -234,9 +237,9 @@ add esp,4
 </code></pre><p>把esp指向的address(也就是main的esp address)先丟給EIP，esp自己再+4(因為是pop阿)<br>讓add function結束後能回到main function中斷的地方繼續執行</p>
 <p>以上就是main function呼叫add function的流程，最後用一張圖結尾<br><img src="/img/function call.PNG" alt=""></p>
 <p>而Stack overflow 就是能控制return address要去什麼地方，<br>可以跳到任何我們想要的地方執行shellcode或是跳到我們想要的函示庫(ex.libc.so)<br>先有這個概念之後再看Lays大大的ROP輕鬆談會比較友善點…</p>
-<p>最後附上參考資料:<br>ROP輕鬆談:<br><a href="https://www.slideshare.net/hackstuff/rop-40525248" target="_blank" rel="noopener">https://www.slideshare.net/hackstuff/rop-40525248</a></p>
-<p>NTUSTISC - Pwn Basic II [2018.05.10]<br><a href="https://www.youtube.com/watch?v=I7qCc0Xuhdc&amp;feature=youtu.be" target="_blank" rel="noopener">https://www.youtube.com/watch?v=I7qCc0Xuhdc&amp;feature=youtu.be</a></p>
-<p>What is the function of the push / pop instructions used on registers in x86 assembly?<br><a href="https://stackoverflow.com/questions/4584089/what-is-the-function-of-the-push-pop-instructions-used-on-registers-in-x86-ass" target="_blank" rel="noopener">https://stackoverflow.com/questions/4584089/what-is-the-function-of-the-push-pop-instructions-used-on-registers-in-x86-ass</a></p>
+<p>最後附上參考資料:<br>ROP輕鬆談:<br><a target="_blank" rel="noopener" href="https://www.slideshare.net/hackstuff/rop-40525248">https://www.slideshare.net/hackstuff/rop-40525248</a></p>
+<p>NTUSTISC - Pwn Basic II [2018.05.10]<br><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=I7qCc0Xuhdc&amp;feature=youtu.be">https://www.youtube.com/watch?v=I7qCc0Xuhdc&amp;feature=youtu.be</a></p>
+<p>What is the function of the push / pop instructions used on registers in x86 assembly?<br><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4584089/what-is-the-function-of-the-push-pop-instructions-used-on-registers-in-x86-ass">https://stackoverflow.com/questions/4584089/what-is-the-function-of-the-push-pop-instructions-used-on-registers-in-x86-ass</a></p>
 <h1 id="x64-version"><a href="#x64-version" class="headerlink" title="x64 version"></a>x64 version</h1><p>寫windows的筆記後覺得應該回過頭來補一下 x64 的呼叫約定</p>
 <p>x64因為暫存器與記憶體空間變大了，所以前6個argv會存在 register裡面</p>
 <p>依序是 <code>rdi</code> <code>rsi</code>  <code>rdx</code> <code>rcx</code> <code>r8</code> <code>r9</code> 第七個開始才會放入stack內</p>
@@ -247,85 +250,78 @@ add esp,4
 <p>當buufer overflow的時候比起x86需要多找能更改 register 內部的值的 assambly (ex: pop rdi)</p>
 <p>基本上要找相關的 assambly 是直接找 opcode 最快</p>
 <p>這部分可以交給 <code>nasmshell</code> 做到</p>
-<p><a href="https://github.com/fishstiqz/nasmshell" target="_blank" rel="noopener">https://github.com/fishstiqz/nasmshell</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fishstiqz/nasmshell">https://github.com/fishstiqz/nasmshell</a></p>
 <p>服用前記得，要 python3 並且已經 <code>apt install nasm</code> (採過坑的路過)， metasploit 好像也有，但我不習慣用那個</p>
 <p>這邊大概列一下給大家，我自己常找的opcode</p>
 <p><img src="/img/calling_x64_3.png" alt=""></p>
 <h1 id="ARM-version"><a href="#ARM-version" class="headerlink" title="ARM version"></a>ARM version</h1><p>最近因為工作因素，在更新一版 <code>ARM</code> 的<br>ARM 的環境是用 <code>dockerpi</code> 建的<br>soruce code:<br><img src="/img/calling_arm_1.png" alt=""></p>
-<p>main:<br><img src="/img/calling_arm_2.png" alt=""></p>
-<p>add_value:<br><img src="/img/calling_arm_3.png" alt=""></p>
-<p>簡單來說 </p>
+<p>main:<br><img src="/img/calling_arm_2.png" alt=""><br>其實還是跟 x86 有些許不一樣的地方，但這些不一樣的地方可能就會導致 exploit 失敗<br>主要的差別在於，x86 的 <code>call</code> 指定是將 <code>EIP+0x4</code> or <code>RIP+0x8</code> push 到 stack 內再做跳轉，然後 x86 的 BP 指向的位址存放著舊的 BP 位址<br>但 arm 的 bl 是將下一個指令的位置放到 <code>lr</code> 暫存器內，在跳過去，然後 <code>push &#123;fp, lr&#125;</code> 的順序是 <code>先 push lr 再 push fp</code>在下一條指令 <code>add fp, sp, 4</code> 是 <code>fp = sp+0x4</code>，因此做完後 <code>fp 其實會指向 lr，也就是 return address</code>，然後在最下面的 <code>sub sp, fp ,4</code>，是將 <code>sp</code> 指向舊的 fp 位置，然後 <code>pop &#123;fp, pc&#125;</code> 是<code>先 pop stack 最上面的位置的值，也就是舊的 fp 位置，pop 到 fp，再將 lr 的位置 pop 到 pc</code><br>所以在做 buffer overflow 的時候，算 offset 的時候要看 <code>r11</code> 的位置，把 r11 的位置蓋掉後最後 pop 才會正確的 pop 到 pc</p>
+<p>add_value:<br><img src="/img/calling_arm_3.png" alt=""><br>其實還是跟 x86 有些許不一樣的地方，但這些不一樣的地方可能就會導致 exploit 失敗<br>主要是，</p>
 
+        </div>
 
+        
+            <section class="post-copyright">
                 
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>AStar</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://sda06407.github.io/2018/08/25/calling_convention/">https://sda06407.github.io/2018/08/25/calling_convention/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>stay hungry stay foolish</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/PWN/"># PWN</a>
+                    
+                        
+                </span>
             </div>
-
-            <!-- Comments -->
-            
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
-        </div>
-    </div>
-</article>
-
-    <!-- Footer -->
-    <hr />
-
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
-
-                    
-
-                    
-                        <li>
-                            <a href="https://github.com/sda06407" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
-
-                    
-
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">&copy; 2021 AStar<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
             </div>
-        </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2018/08/30/Linux-exec-process-concepts/">Linux_exec_process_concepts(未完)</a>
+            
+            
+            <a class="next" rel="next" href="/2018/07/23/some-ctf-writeup/">some_ctf_writeup</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© AStar | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
     </div>
 </footer>
 
-
-    <!-- After footer scripts -->
-    
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-
-<!-- Disqus Comments -->
-
-
-
+    </div>
 </body>
 
 </html>

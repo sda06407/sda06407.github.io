@@ -1,195 +1,213 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="">
 
-<!-- Head tag -->
 <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="AStar">
 
-    <!--Description-->
-    
-        <meta name="description" content="一隻正常的ELF會用到兩種機制去執行─Static linking和Dynamic linking
-Dynamic linking的話就會需要PLT&amp;amp;GOT table去定義要呼叫的函示在哪，這個機制大大加快了程式執行的時間提到了GOT&amp;amp;PLT的話就不能不提到Lazy binding">
-    
 
-    <!--Author-->
-    
-        <meta name="author" content="AStar">
-    
 
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="got&amp;plt-note"/>
-    
 
-    <!--Open Graph Description-->
+
+<title>got&amp;plt-note | AStar&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
     
-
-    <!--Open Graph Site Name-->
-    <meta property="og:site_name" content="AStar&#39;s Blog"/>
-
-    <!--Type page-->
-    
-        <meta property="og:type" content="article" />
-    
-
-    <!--Page Cover-->
-    
-
-        <meta name="twitter:card" content="summary" />
-    
-
-    <!-- Title -->
-    
-    <title>got&amp;plt-note - AStar&#39;s Blog</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
-
-    <!-- Google Analytics -->
     
 
 
-    <!-- favicon -->
-    
-	
-</head>
 
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
 
-    <!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">AStar</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">ASrar&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/tags">
-                            
-                                Tags
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/categories">
-                            
-                                Categories
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/klugjo/hexo-theme-clean-blog">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
-
-<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>got&plt-note</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        
-                            2018-09-08
-                        
-                    </span>
-                </div>
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
             </div>
         </div>
-    </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ASrar&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
 </header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
 
-            <!-- Tags and categories -->
-           
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
 
-            <!-- Gallery -->
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">got&amp;plt-note</h1>
             
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">AStar</a>
+                    
 
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <p>一隻正常的ELF會用到兩種機制去執行─Static linking和Dynamic linking</p>
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 8, 2018&nbsp;&nbsp;10:41:50</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>一隻正常的ELF會用到兩種機制去執行─Static linking和Dynamic linking</p>
 <p>Dynamic linking的話就會需要PLT&amp;GOT table去定義要呼叫的函示在哪，這個機制大大加快了程式執行的時間<br>提到了GOT&amp;PLT的話就不能不提到Lazy binding，這些下面都會提到</p>
 <p>—-正文開始—-</p>
 <p>GOT的全名是Global Offset Table，PLT的全名是Procedure Linkage Table</p>
 <p>這兩個是ELF做dynamic linking很重要的兩個table</p>
 <p>再說GOT&amp;PLT前先科普一些知識</p>
 <p>什麼是static library和shared library呢?</p>
-<p>進階一點的人可以讀這篇<br><a href="https://www.ptt.cc/bbs/LinuxDev/M.1162669989.A.2E6.html" target="_blank" rel="noopener">https://www.ptt.cc/bbs/LinuxDev/M.1162669989.A.2E6.html</a></p>
-<p>詳細一點的話可以看看這篇<br><a href="http://fred-zone.blogspot.com/2006/03/static-shared.html" target="_blank" rel="noopener">http://fred-zone.blogspot.com/2006/03/static-shared.html</a></p>
+<p>進階一點的人可以讀這篇<br><a target="_blank" rel="noopener" href="https://www.ptt.cc/bbs/LinuxDev/M.1162669989.A.2E6.html">https://www.ptt.cc/bbs/LinuxDev/M.1162669989.A.2E6.html</a></p>
+<p>詳細一點的話可以看看這篇<br><a target="_blank" rel="noopener" href="http://fred-zone.blogspot.com/2006/03/static-shared.html">http://fred-zone.blogspot.com/2006/03/static-shared.html</a></p>
 <p>如果懶得看只想看個大概的可以看我下面的整理</p>
 <p>什麼是 static library?<br>以C語言來說，<br>今天我們需要使用到其他自定義的函式，可以寫進不同的檔案，在編譯時可以透過編譯器<br>去把他們全包再一起變成一個執行檔，優點是執行效能高(跟shared library相比)，也不會有<br>執行時找不到library的問題<br>缺點是維護成本很高，今天假如函式庫出現bug時必須要重新連結一次執行檔</p>
 <p>那什麼是 shared library呢?<br>就是我們不需要把他們全包再一起，可以把函式庫放在系統資料夾，並透過編譯器define好<br>在執行時才被動態載入，因為函式庫與main.c是分離的，所以維護性比較好，當然相應的缺點<br>就是會找不到所需的library或版本號對不上出現錯誤之類的</p>
@@ -200,79 +218,69 @@ Dynamic linking的話就會需要PLT&amp;amp;GOT table去定義要呼叫的函�
 <h2 id="lazy-binding"><a href="#lazy-binding" class="headerlink" title="lazy binding"></a>lazy binding</h2><p>Linux 的 ELF 使用了 lazy binding 的方式來加快 dynamic linking 的速度。dynamic linking 之所以會慢，原因有二，<br>一是它透過 GOT 做間接跳轉的動作。<br>二是它在 run-time 時必需做符號搜尋及位址重定的動作。</p>
 <p>而 lazy binding 的概念則是在函式第一次使用時再做 binding。<br>如果一個函式未被使用到，則它就不會被 binding。<br>假設我們呼叫一個 bar()，那在 glibc 中的 <code>_dl_runtime_resolve()</code> 則會做 binding 的動作。<br><code>dl_runtime_resolve()</code> 需要知道呼叫者 module 名字及 bar() 的名字以完成 binding 動作。<br>假設我們在 liba.so 中呼叫 bar()，則 module name 就是 liba.so，function name 則是 bar。</p>
 <p>總結上面就是─<br>程式在編譯時，編譯器會先把需要的函式全寫進PLT table裡面，這時PLT table裡面還沒有函式在libc的address，因為ASLR的緣故所以在執行時才會動態尋找<br>GOT Table原本是一張白紙，當程式執行遇到function需要呼叫時，程式會先跳去PLT Table，而PLT table會跳去GOT table裡面找對應的address，但是第一次執行時還不會知道address，所以這時候的GOT table所指的address其實是PLT table的第二行<br>(意思是 ─ 安安，這裡沒有資料歐，請你先叫人去libc找到address再來我這回報)，<br>而PLT table的第二行會push一個值進去stack內(這裡假設值是0x0)，好像還會再push一個address再呼叫<code>_dl_runtime_resolve()</code>，<br>透過push的那兩個參數可以幫助<code>_dl_runtime_resolve()</code>去libc內找到address，把它寫進GOT table內，<br>當第二次呼叫的時候，因為GOT table內已經有真正的function address，所以一樣會先跳去PLT table但是下一步直接跳過去libc內的address，達到lazy binding的目的<br>這邊附上一張示意圖<br><img src="/img/got-plt-note/printf.plt.PNG" alt=""></p>
-<p>總結再總結─所以網路上說得口沫橫飛的講Lazy binding一定會有的一個共通點─<br>程式第一次呼叫function時不會直接進去function裡面，要第二次呼叫才會，就是這個道理<br>關於運作的詳細過程，可以看看這篇蠻詳細的(只是link map&amp;index那邊真心看不懂)<br><a href="http://look3little.blogspot.com/2017/01/lazy-binding.html" target="_blank" rel="noopener">http://look3little.blogspot.com/2017/01/lazy-binding.html</a></p>
-<p>參考資料:<br><a href="http://brandon-hy-lin.blogspot.com/2015/12/shared-library-plt-got.html" target="_blank" rel="noopener">http://brandon-hy-lin.blogspot.com/2015/12/shared-library-plt-got.html</a><br><a href="http://wthung2.blogspot.com/2010/03/elf-lazy-binding.html" target="_blank" rel="noopener">http://wthung2.blogspot.com/2010/03/elf-lazy-binding.html</a><br><a href="https://blog.csdn.net/linyt/article/details/51635768" target="_blank" rel="noopener">https://blog.csdn.net/linyt/article/details/51635768</a><br><a href="http://fred-zone.blogspot.com/2006/03/static-shared.html" target="_blank" rel="noopener">http://fred-zone.blogspot.com/2006/03/static-shared.html</a></p>
+<p>總結再總結─所以網路上說得口沫橫飛的講Lazy binding一定會有的一個共通點─<br>程式第一次呼叫function時不會直接進去function裡面，要第二次呼叫才會，就是這個道理<br>關於運作的詳細過程，可以看看這篇蠻詳細的(只是link map&amp;index那邊真心看不懂)<br><a target="_blank" rel="noopener" href="http://look3little.blogspot.com/2017/01/lazy-binding.html">http://look3little.blogspot.com/2017/01/lazy-binding.html</a></p>
+<p>參考資料:<br><a target="_blank" rel="noopener" href="http://brandon-hy-lin.blogspot.com/2015/12/shared-library-plt-got.html">http://brandon-hy-lin.blogspot.com/2015/12/shared-library-plt-got.html</a><br><a target="_blank" rel="noopener" href="http://wthung2.blogspot.com/2010/03/elf-lazy-binding.html">http://wthung2.blogspot.com/2010/03/elf-lazy-binding.html</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/linyt/article/details/51635768">https://blog.csdn.net/linyt/article/details/51635768</a><br><a target="_blank" rel="noopener" href="http://fred-zone.blogspot.com/2006/03/static-shared.html">http://fred-zone.blogspot.com/2006/03/static-shared.html</a></p>
 
+        </div>
 
+        
+            <section class="post-copyright">
                 
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>AStar</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://sda06407.github.io/2018/09/08/got-plt-note/">https://sda06407.github.io/2018/09/08/got-plt-note/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>stay hungry stay foolish</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
             </div>
-
-            <!-- Comments -->
-            
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
-        </div>
-    </div>
-</article>
-
-    <!-- Footer -->
-    <hr />
-
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
-
-                    
-
-                    
-                        <li>
-                            <a href="https://github.com/sda06407" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
-
-                    
-
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">&copy; 2021 AStar<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
             </div>
-        </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/01/01/2019-1-1/">2019/1/1</a>
+            
+            
+            <a class="next" rel="next" href="/2018/08/30/Linux-exec-process-concepts/">Linux_exec_process_concepts(未完)</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© AStar | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
     </div>
 </footer>
 
-
-    <!-- After footer scripts -->
-    
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-
-<!-- Disqus Comments -->
-
-
-
+    </div>
 </body>
 
 </html>

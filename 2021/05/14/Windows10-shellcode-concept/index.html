@@ -1,190 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="">
 
-<!-- Head tag -->
 <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="AStar">
 
-    <!--Description-->
+
+
+
+
+<title>Windows10 x64 shellcode concept | AStar&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
     
-        <meta name="description" content="這一篇算是 Windows10 x64 shellcode 的前哨站，在寫 shellcode 之前發現有太多知識需要先科普，先在這邊整理一些知識後進去 windows shellcode 的領域會比較懂首先要先知道一隻 windows 程式進入記憶體會是長怎麼樣
-
-TEB 
-
-Thread Env">
-    
-
-    <!--Author-->
-    
-        <meta name="author" content="AStar">
-    
-
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="Windows10 x64 shellcode concept"/>
-    
-
-    <!--Open Graph Description-->
-    
-
-    <!--Open Graph Site Name-->
-    <meta property="og:site_name" content="AStar&#39;s Blog"/>
-
-    <!--Type page-->
-    
-        <meta property="og:type" content="article" />
-    
-
-    <!--Page Cover-->
-    
-
-        <meta name="twitter:card" content="summary" />
-    
-
-    <!-- Title -->
-    
-    <title>Windows10 x64 shellcode concept - AStar&#39;s Blog</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
-
-    <!-- Google Analytics -->
     
 
 
-    <!-- favicon -->
-    
-	
-</head>
 
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
 
-    <!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">AStar</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">ASrar&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/tags">
-                            
-                                Tags
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/categories">
-                            
-                                Categories
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/klugjo/hexo-theme-clean-blog">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
-
-<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>Windows10 x64 shellcode concept</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        
-                            2021-05-14
-                        
-                    </span>
-                </div>
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
             </div>
         </div>
-    </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ASrar&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
 </header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
-
-            <!-- Tags and categories -->
-           
-
-            <!-- Gallery -->
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Windows10 x64 shellcode concept</h1>
             
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">AStar</a>
+                    
 
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <p>這一篇算是 Windows10 x64 shellcode 的前哨站，在寫 shellcode 之前發現有太多知識需要先科普，先在這邊整理一些知識後進去 windows shellcode 的領域會比較懂<br>首先要先知道一隻 windows 程式進入記憶體會是長怎麼樣</p>
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 14, 2021&nbsp;&nbsp;16:51:55</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>這一篇算是 Windows10 x64 shellcode 的前哨站，在寫 shellcode 之前發現有太多知識需要先科普，先在這邊整理一些知識後進去 windows shellcode 的領域會比較懂<br>首先要先知道一隻 windows 程式進入記憶體會是長怎麼樣</p>
 <ul>
 <li><p>TEB </p>
 <ul>
@@ -197,8 +150,8 @@ Thread Env">
 <li><code>!_TEB</code><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_1_1.png" alt=""></li>
 <li><code>dt !_TEB</code> (資訊太多了，可以自己 trace，這邊就不貼完整的了)<br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_1.png" alt=""></li>
 <li><code>dt !_NT_TIB</code><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_2.png" alt=""></li>
-<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-teb" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-teb</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Win32_Thread_Information_Block" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Win32_Thread_Information_Block</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-teb">https://docs.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-teb</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Win32_Thread_Information_Block">https://en.wikipedia.org/wiki/Win32_Thread_Information_Block</a></li>
 <li>就我自己 Trace 的結果，我自己覺得 TIB 不等於 TEB 就是了</li>
 </ul>
 </li>
@@ -213,8 +166,8 @@ Thread Env">
 <li>64 位元 : GS[0x60] 固定存放 PEB 位址</li>
 <li><code>!peb</code><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_3.png" alt=""></li>
 <li><code>dt !_PEB</code> (資訊太多了，可以自己 trace，這邊就不貼完整)<br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_4.png" alt=""></li>
-<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-peb" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-peb</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Process_Environment_Block" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Process_Environment_Block</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-peb">https://docs.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-peb</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Process_Environment_Block">https://en.wikipedia.org/wiki/Process_Environment_Block</a></li>
 </ul>
 </li>
 <li><p>Ldr</p>
@@ -233,16 +186,12 @@ Thread Env">
 </ul>
 </li>
 </ul>
-<p>整理下來的流程圖大概是這樣 (這是 x86 的，x64 要乘以2)<br><img src="https://1.bp.blogspot.com/-qu8V9tv1p2I/T9Hby63yfAI/AAAAAAAAACA/wlwHTQMkgmU/s640/finding_kernel32.png" alt=""><br><a href="https://blog.the-playground.dk/2012/06/understanding-windows-shellcode.html" target="_blank" rel="noopener">https://blog.the-playground.dk/2012/06/understanding-windows-shellcode.html</a></p>
-<p>看一下 DLL base 可以看到是熟悉的 MZ Header，下面開始介紹 PE Structure<br><img src="https://image.slidesharecdn.com/peformat-090605102415-phpapp02/95/pe-format-1-728.jpg" alt=""><br><a href="https://www.slideshare.net/Hexxx/pe-format" target="_blank" rel="noopener">https://www.slideshare.net/Hexxx/pe-format</a></p>
+<p>整理下來的流程圖大概是這樣 (這是 x86 的，x64 要乘以2)<br><img src="https://1.bp.blogspot.com/-qu8V9tv1p2I/T9Hby63yfAI/AAAAAAAAACA/wlwHTQMkgmU/s640/finding_kernel32.png" alt=""><br><a target="_blank" rel="noopener" href="https://blog.the-playground.dk/2012/06/understanding-windows-shellcode.html">https://blog.the-playground.dk/2012/06/understanding-windows-shellcode.html</a></p>
+<p>看一下 DLL base 可以看到是熟悉的 MZ Header，下面開始介紹 PE Structure<br><img src="https://image.slidesharecdn.com/peformat-090605102415-phpapp02/95/pe-format-1-728.jpg" alt=""><br><a target="_blank" rel="noopener" href="https://www.slideshare.net/Hexxx/pe-format">https://www.slideshare.net/Hexxx/pe-format</a></p>
 <ul>
-<li><p>DOS Header (_IMAGE_DOS_HEADER)</p>
-<ul>
-<li><p>Structure </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _IMAGE_DOS_HEADER &#123;</span><br><span class="line">  	WORD  e_magic;      /* 00: MZ Header signature */</span><br><span class="line">  	WORD  e_cblp;       /* 02: Bytes on last page of file */</span><br><span class="line">  	WORD  e_cp;         /* 04: Pages in file */</span><br><span class="line">  	WORD  e_crlc;       /* 06: Relocations */</span><br><span class="line">  	WORD  e_cparhdr;    /* 08: Size of header in paragraphs */</span><br><span class="line">  	WORD  e_minalloc;   /* 0a: Minimum extra paragraphs needed */</span><br><span class="line">  	WORD  e_maxalloc;   /* 0c: Maximum extra paragraphs needed */</span><br><span class="line">  	WORD  e_ss;         /* 0e: Initial (relative) SS value */</span><br><span class="line">  	WORD  e_sp;         /* 10: Initial SP value */</span><br><span class="line">  	WORD  e_csum;       /* 12: Checksum */</span><br><span class="line">  	WORD  e_ip;         /* 14: Initial IP value */</span><br><span class="line">  	WORD  e_cs;         /* 16: Initial (relative) CS value */</span><br><span class="line">  	WORD  e_lfarlc;     /* 18: File address of relocation table */</span><br><span class="line">  	WORD  e_ovno;       /* 1a: Overlay number */</span><br><span class="line">  	WORD  e_res[4];     /* 1c: Reserved words */</span><br><span class="line">  	WORD  e_oemid;      /* 24: OEM identifier (for e_oeminfo) */</span><br><span class="line">  	WORD  e_oeminfo;    /* 26: OEM information; e_oemid specific */</span><br><span class="line">  	WORD  e_res2[10];   /* 28: Reserved words */</span><br><span class="line">  	DWORD e_lfanew;     /* 3c: Offset to extended header */</span><br><span class="line">&#125; IMAGE_DOS_HEADER, *PIMAGE_DOS_HEADER;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>RVA (Relative Virtual Address)</p>
-<ul>
+<li>DOS Header (_IMAGE_DOS_HEADER)<ul>
+<li>Structure <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _IMAGE_DOS_HEADER &#123;</span><br><span class="line">  	WORD  e_magic;      /* 00: MZ Header signature */</span><br><span class="line">  	WORD  e_cblp;       /* 02: Bytes on last page of file */</span><br><span class="line">  	WORD  e_cp;         /* 04: Pages in file */</span><br><span class="line">  	WORD  e_crlc;       /* 06: Relocations */</span><br><span class="line">  	WORD  e_cparhdr;    /* 08: Size of header in paragraphs */</span><br><span class="line">  	WORD  e_minalloc;   /* 0a: Minimum extra paragraphs needed */</span><br><span class="line">  	WORD  e_maxalloc;   /* 0c: Maximum extra paragraphs needed */</span><br><span class="line">  	WORD  e_ss;         /* 0e: Initial (relative) SS value */</span><br><span class="line">  	WORD  e_sp;         /* 10: Initial SP value */</span><br><span class="line">  	WORD  e_csum;       /* 12: Checksum */</span><br><span class="line">  	WORD  e_ip;         /* 14: Initial IP value */</span><br><span class="line">  	WORD  e_cs;         /* 16: Initial (relative) CS value */</span><br><span class="line">  	WORD  e_lfarlc;     /* 18: File address of relocation table */</span><br><span class="line">  	WORD  e_ovno;       /* 1a: Overlay number */</span><br><span class="line">  	WORD  e_res[4];     /* 1c: Reserved words */</span><br><span class="line">  	WORD  e_oemid;      /* 24: OEM identifier (for e_oeminfo) */</span><br><span class="line">  	WORD  e_oeminfo;    /* 26: OEM information; e_oemid specific */</span><br><span class="line">  	WORD  e_res2[10];   /* 28: Reserved words */</span><br><span class="line">  	DWORD e_lfanew;     /* 3c: Offset to extended header */</span><br><span class="line">&#125; IMAGE_DOS_HEADER, *PIMAGE_DOS_HEADER;</span><br></pre></td></tr></table></figure></li>
+<li>RVA (Relative Virtual Address)<ul>
 <li>在記憶體中，相對於 Binary Base 之間的 offset</li>
 <li>如果 RVA 為 0x3000, 代表實際位置在 Binary Base + 0x3000</li>
 </ul>
@@ -250,21 +199,22 @@ Thread Env">
 <li><code>e_magic</code> 通常是 File Header 也就是 0x5a4d (MZ)</li>
 <li><code>e_lfanew</code> 是 NT header 的 RVA</li>
 <li><code>dt !_IMAGE_DOS_HEADER</code><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_8.png" alt=""></li>
-<li><a href="https://docs.microsoft.com/en-us/windows/win32/debug/pe-format" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/windows/win32/debug/pe-format</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/debug/pe-format">https://docs.microsoft.com/en-us/windows/win32/debug/pe-format</a></li>
 </ul>
 </li>
-<li><p>NT Header (_IMAGE_NT_HEADERS64)</p>
+<li>NT Header (_IMAGE_NT_HEADERS64)<ul>
+<li>Structure<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _IMAGE_NT_HEADERS64 &#123;</span><br><span class="line">   DWORD Signature;</span><br><span class="line">   IMAGE_FILE_HEADER FileHeader;</span><br><span class="line">   IMAGE_OPTIONAL_HEADER64 OptionalHeader;</span><br><span class="line">&#125; IMAGE_NT_HEADERS64, *PIMAGE_NT_HEADERS64;</span><br></pre></td></tr></table></figure>
 <ul>
-<li>Structure<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _IMAGE_NT_HEADERS64 &#123;</span><br><span class="line">   DWORD Signature;</span><br><span class="line">   IMAGE_FILE_HEADER FileHeader;</span><br><span class="line">   IMAGE_OPTIONAL_HEADER64 OptionalHeader;</span><br><span class="line">&#125; IMAGE_NT_HEADERS64, *PIMAGE_NT_HEADERS64;</span><br></pre></td></tr></table></figure>
+<li>Signature</li>
+</ul>
 </li>
 </ul>
 <ul>
-<li>Signature<ul>
 <li>File Header</li>
-<li>通常為 0x4550 (PE)</li>
+<li>通常為 0x4550 (PE)<ul>
+<li>FileHeader (_IMAGE_FILE_HEADER)</li>
 </ul>
 </li>
-<li>FileHeader (_IMAGE_FILE_HEADER)<ul>
 <li>Machine<ol>
 <li>表示該執行檔的architecture
 				<table class="table table-bordered table-striped table-condensed">
@@ -296,21 +246,18 @@ Thread Env">
 <li>表示該執行檔的 Section 數量，可以透過 <code>!dh</code> 取得更詳細的資訊</li>
 </ol>
 </li>
-<li><code>dt !_IMAGE_FILE_HEADER</code><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_10_1.png" alt=""><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_10.png" alt=""></li>
+<li><code>dt !_IMAGE_FILE_HEADER</code><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_10_1.png" alt=""><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_10.png" alt=""><ul>
+<li><code>dt !_IMAGE_NT_HEADERS64</code><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_9.png" alt=""></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_nt_headers64">https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_nt_headers64</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_nt_headers32">https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_nt_headers32</a></li>
 </ul>
 </li>
-<li><code>dt !_IMAGE_NT_HEADERS64</code><br>  <img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_9.png" alt=""></li>
-<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_nt_headers64" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_nt_headers64</a></li>
-<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_nt_headers32" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_nt_headers32</a></li>
 </ul>
 </li>
 <li><p>OptionalHeader (_IMAGE_OPTIONAL_HEADER)</p>
 <ul>
-<li><p>Structure </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _IMAGE_OPTIONAL_HEADER &#123;</span><br><span class="line"> WORD                 Magic;</span><br><span class="line"> BYTE                 MajorLinkerVersion;</span><br><span class="line"> BYTE                 MinorLinkerVersion;</span><br><span class="line"> DWORD                SizeOfCode;</span><br><span class="line"> DWORD                SizeOfInitializedData;</span><br><span class="line"> DWORD                SizeOfUninitializedData;</span><br><span class="line"> DWORD                AddressOfEntryPoint;</span><br><span class="line"> DWORD                BaseOfCode;</span><br><span class="line"> DWORD                BaseOfData;</span><br><span class="line"> DWORD                ImageBase;</span><br><span class="line"> DWORD                SectionAlignment;</span><br><span class="line"> DWORD                FileAlignment;</span><br><span class="line"> WORD                 MajorOperatingSystemVersion;</span><br><span class="line"> WORD                 MinorOperatingSystemVersion;</span><br><span class="line"> WORD                 MajorImageVersion;</span><br><span class="line"> WORD                 MinorImageVersion;</span><br><span class="line"> WORD                 MajorSubsystemVersion;</span><br><span class="line"> WORD                 MinorSubsystemVersion;</span><br><span class="line"> DWORD                Win32VersionValue;</span><br><span class="line"> DWORD                SizeOfImage;</span><br><span class="line"> DWORD                SizeOfHeaders;</span><br><span class="line"> DWORD                CheckSum;</span><br><span class="line"> WORD                 Subsystem;</span><br><span class="line"> WORD                 DllCharacteristics;</span><br><span class="line"> DWORD                SizeOfStackReserve;</span><br><span class="line"> DWORD                SizeOfStackCommit;</span><br><span class="line"> DWORD                SizeOfHeapReserve;</span><br><span class="line"> DWORD                SizeOfHeapCommit;</span><br><span class="line"> DWORD                LoaderFlags;</span><br><span class="line"> DWORD                NumberOfRvaAndSizes;</span><br><span class="line"> IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];</span><br><span class="line">&#125; IMAGE_OPTIONAL_HEADER32, *PIMAGE_OPTIONAL_HEADER32;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Magic</p>
-<ul>
+<li>Structure <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _IMAGE_OPTIONAL_HEADER &#123;</span><br><span class="line"> WORD                 Magic;</span><br><span class="line"> BYTE                 MajorLinkerVersion;</span><br><span class="line"> BYTE                 MinorLinkerVersion;</span><br><span class="line"> DWORD                SizeOfCode;</span><br><span class="line"> DWORD                SizeOfInitializedData;</span><br><span class="line"> DWORD                SizeOfUninitializedData;</span><br><span class="line"> DWORD                AddressOfEntryPoint;</span><br><span class="line"> DWORD                BaseOfCode;</span><br><span class="line"> DWORD                BaseOfData;</span><br><span class="line"> DWORD                ImageBase;</span><br><span class="line"> DWORD                SectionAlignment;</span><br><span class="line"> DWORD                FileAlignment;</span><br><span class="line"> WORD                 MajorOperatingSystemVersion;</span><br><span class="line"> WORD                 MinorOperatingSystemVersion;</span><br><span class="line"> WORD                 MajorImageVersion;</span><br><span class="line"> WORD                 MinorImageVersion;</span><br><span class="line"> WORD                 MajorSubsystemVersion;</span><br><span class="line"> WORD                 MinorSubsystemVersion;</span><br><span class="line"> DWORD                Win32VersionValue;</span><br><span class="line"> DWORD                SizeOfImage;</span><br><span class="line"> DWORD                SizeOfHeaders;</span><br><span class="line"> DWORD                CheckSum;</span><br><span class="line"> WORD                 Subsystem;</span><br><span class="line"> WORD                 DllCharacteristics;</span><br><span class="line"> DWORD                SizeOfStackReserve;</span><br><span class="line"> DWORD                SizeOfStackCommit;</span><br><span class="line"> DWORD                SizeOfHeapReserve;</span><br><span class="line"> DWORD                SizeOfHeapCommit;</span><br><span class="line"> DWORD                LoaderFlags;</span><br><span class="line"> DWORD                NumberOfRvaAndSizes;</span><br><span class="line"> IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];</span><br><span class="line">&#125; IMAGE_OPTIONAL_HEADER32, *PIMAGE_OPTIONAL_HEADER32;</span><br></pre></td></tr></table></figure></li>
+<li>Magic<ul>
 <li>PE32 : 0x10b</li>
 <li>PE32+ : 0x20b</li>
 </ul>
@@ -323,23 +270,20 @@ Thread Env">
 <li>DataDirectory (_IMAGE_DATA_DIRECTORY)<ul>
 <li>依序記錄每個 Export Directory 的 RVA (VirtualAddress) 及 Size<br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_13.png" alt=""></li>
 <li>各 DataDirectory 之間的間隔為 0x8 (x64)</li>
-<li>陣列呈現的資訊是有順序的，詳情可以看官方<br><a href="https://docs.microsoft.com/zh-tw/windows/win32/api/winnt/ns-winnt-image_data_directory" target="_blank" rel="noopener">https://docs.microsoft.com/zh-tw/windows/win32/api/winnt/ns-winnt-image_data_directory</a></li>
+<li>陣列呈現的資訊是有順序的，詳情可以看官方<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/windows/win32/api/winnt/ns-winnt-image_data_directory">https://docs.microsoft.com/zh-tw/windows/win32/api/winnt/ns-winnt-image_data_directory</a></li>
 </ul>
 </li>
 <li><code>dt _IMAGE_OPTIONAL_HEADER64</code><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_11.png" alt=""><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_12.png" alt=""></li>
-<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_optional_header64" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_optional_header64</a></li>
-<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_optional_header32" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_optional_header32</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_optional_header64">https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_optional_header64</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_optional_header32">https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_optional_header32</a></li>
 </ul>
 </li>
 <li><p>Export Directory</p>
 <ul>
 <li>透過上面 DataDirectory 的第0個陣列的 VirtualAddress 可以到達</li>
 <li>windbg 沒有他的 <code>display type</code> 所以直接貼官方的圖<br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_14.png" alt=""></li>
-<li><p>Structure</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _IMAGE_EXPORT_DIRECTORY &#123;</span><br><span class="line">   DWORD   Characteristics;</span><br><span class="line">   DWORD   TimeDateStamp;</span><br><span class="line">   WORD    MajorVersion;</span><br><span class="line">   WORD    MinorVersion;</span><br><span class="line">   DWORD   Name;</span><br><span class="line">   DWORD   Base;</span><br><span class="line">   DWORD   NumberOfFunctions;</span><br><span class="line">   DWORD   NumberOfNames;</span><br><span class="line">   DWORD   AddressOfFunctions;     // RVA from base of image</span><br><span class="line">   DWORD   AddressOfNames;         // RVA from base of image</span><br><span class="line">   DWORD   AddressOfNameOrdinals;  // RVA from base of image</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>NumberOfFunctions</p>
-<ul>
+<li>Structure<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _IMAGE_EXPORT_DIRECTORY &#123;</span><br><span class="line">   DWORD   Characteristics;</span><br><span class="line">   DWORD   TimeDateStamp;</span><br><span class="line">   WORD    MajorVersion;</span><br><span class="line">   WORD    MinorVersion;</span><br><span class="line">   DWORD   Name;</span><br><span class="line">   DWORD   Base;</span><br><span class="line">   DWORD   NumberOfFunctions;</span><br><span class="line">   DWORD   NumberOfNames;</span><br><span class="line">   DWORD   AddressOfFunctions;     // RVA from base of image</span><br><span class="line">   DWORD   AddressOfNames;         // RVA from base of image</span><br><span class="line">   DWORD   AddressOfNameOrdinals;  // RVA from base of image</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>NumberOfFunctions<ul>
 <li>紀錄內部 function 的數量，與 NumberOfName 數量相等 (表示 dll 內有幾個 function)</li>
 </ul>
 </li>
@@ -366,95 +310,85 @@ Thread Env">
 </li>
 </ul>
 </li>
-<li><a href="https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#export-directory-table" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#export-directory-table</a></li>
-<li><a href="https://sites.google.com/site/peofcns/win32forth/pe-header-f/02-image_directory/01-entry_export" target="_blank" rel="noopener">https://sites.google.com/site/peofcns/win32forth/pe-header-f/02-image_directory/01-entry_export</a></li>
-<li><a href="https://ghidra.re/ghidra_docs/api/ghidra/app/util/bin/format/pe/ExportDataDirectory.html" target="_blank" rel="noopener">https://ghidra.re/ghidra_docs/api/ghidra/app/util/bin/format/pe/ExportDataDirectory.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#export-directory-table">https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#export-directory-table</a></li>
+<li><a target="_blank" rel="noopener" href="https://sites.google.com/site/peofcns/win32forth/pe-header-f/02-image_directory/01-entry_export">https://sites.google.com/site/peofcns/win32forth/pe-header-f/02-image_directory/01-entry_export</a></li>
+<li><a target="_blank" rel="noopener" href="https://ghidra.re/ghidra_docs/api/ghidra/app/util/bin/format/pe/ExportDataDirectory.html">https://ghidra.re/ghidra_docs/api/ghidra/app/util/bin/format/pe/ExportDataDirectory.html</a></li>
 </ul>
 </li>
 </ul>
 <p>該介紹的都介紹差不多了<br>這邊會示範如何 trace 出 <code>WinExec</code> 來當 example</p>
 <p>複習一下 <code>Export Table</code> 的 RVA<br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_13.png" alt=""><br>把 <code>Export Table</code> 拿出來看<br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_15.png" alt=""><br>照著上面針對 <code>Export Table</code> 介紹的 Structure 進行排列<br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_16.png" alt=""></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Characteristics = 0x00000000 # Reserved, must be 0.</span><br><span class="line">TimeDateStamp = 0xf5ff295e # The time and date that the export data was created.</span><br><span class="line">MajorVersion = 0x0000 # The major version number. The major and minor version numbers can be set by the user. </span><br><span class="line">MinorVersion = 0x0000 # The minor version number.</span><br><span class="line">Name = 0x091efa # The address of the ASCII string that contains the name of the DLL. This address is relative to the image base.</span><br><span class="line">Base = 0x1 # The starting ordinal number for exports in this image. This field specifies the starting ordinal number for the export address table. It is usually set to 1.</span><br><span class="line">NumberOfFunctions = 0x0655 # The number of entries in the export address table.</span><br><span class="line">NumberOfNames = 0x655 # The number of entries in the name pointer table. This is also the number of entries in the ordinal table.</span><br><span class="line">AddressOfFunctions = 0x08dfa8 # The address of the export address table, relative to the image base.</span><br><span class="line">AddressOfNames = 0x08f8fc # The address of the export name pointer table, relative to the image base. The table size is given by the Number of Name Pointers field.</span><br><span class="line">AddressOfNameOrdinals = 0x091250 # The address of the ordinal table, relative to the image base.</span><br></pre></td></tr></table></figure>
-<p>整個找 function RVA 的 flow 大概是這樣<br><img src="https://www.programmersought.com/images/750/7d470eb59afdf8d40bb92c6ef2e093d6.JPEG" alt=""><br>來源: <a href="https://www.programmersought.com/article/19694281094/" target="_blank" rel="noopener">https://www.programmersought.com/article/19694281094/</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Characteristics = 0x00000000 # Reserved, must be 0.</span><br><span class="line">TimeDateStamp = 0xf5ff295e # The time and date that the export data was created.</span><br><span class="line">MajorVersion = 0x0000 # The major version number. The major and minor version numbers can be set by the user. </span><br><span class="line">MinorVersion = 0x0000 # The minor version number.</span><br><span class="line">Name = 0x091efa # The address of the ASCII string that contains the name of the DLL. This address is relative to the image base.</span><br><span class="line">Base = 0x1 # The starting ordinal number for exports in this image. This field specifies the starting ordinal number for the export address table. It is usually set to 1.</span><br><span class="line">NumberOfFunctions = 0x0655 # The number of entries in the export address table.</span><br><span class="line">NumberOfNames = 0x655 # The number of entries in the name pointer table. This is also the number of entries in the ordinal table.</span><br><span class="line">AddressOfFunctions = 0x08dfa8 # The address of the export address table, relative to the image base.</span><br><span class="line">AddressOfNames = 0x08f8fc # The address of the export name pointer table, relative to the image base. The table size is given by the Number of Name Pointers field.</span><br><span class="line">AddressOfNameOrdinals = 0x091250 # The address of the ordinal table, relative to the image base.</span><br></pre></td></tr></table></figure>
+<p>整個找 function RVA 的 flow 大概是這樣<br><img src="https://www.programmersought.com/images/750/7d470eb59afdf8d40bb92c6ef2e093d6.JPEG" alt=""><br>來源: <a target="_blank" rel="noopener" href="https://www.programmersought.com/article/19694281094/">https://www.programmersought.com/article/19694281094/</a></p>
 <p>接著取得 <code>AddressOfFunctions (0x1c)</code> 的內容<br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_17.png" alt=""></p>
 <p><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_18.png" alt=""><br>簡單來說如果 Export function 如果在自己的 dll 的話就會直接給出 function 位置 (jmp)，若 Export function 在其他 dll 的話就會給出 Name pointer 的位置，這邊解釋了為什麼上面的圖沒有將每個函數地址表做對應</p>
 <p>再來看 <code>AddressOfNames (0x20)</code> 的內容<br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_19.png" alt=""></p>
 <p><code>AddressOfNameOrdinals (0x24)</code><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_20.png" alt=""></p>
-<p>直接用 <code>windbg</code> 在 AddressOfNames 尋找 <code>WinExec</code> 的字串<br>相關 command 請看<br><a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/s--search-memory-" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/s--search-memory-</a><br>長度部分使用該 Export Directory 的總大小，在這個 memory range 裡面尋找 <code>WinExec</code> 的 ASCII code<br><code>00007ff82e170000+0008f8fc</code> 是 <code>AddressOfNames</code> 的 base address<br><code>s -a (00007ff82e170000+0008f8fc) l 0xdb48 &quot;WinExec&quot;</code><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_21.png" alt=""></p>
+<p>直接用 <code>windbg</code> 在 AddressOfNames 尋找 <code>WinExec</code> 的字串<br>相關 command 請看<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/s--search-memory-">https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/s--search-memory-</a><br>長度部分使用該 Export Directory 的總大小，在這個 memory range 裡面尋找 <code>WinExec</code> 的 ASCII code<br><code>00007ff82e170000+0008f8fc</code> 是 <code>AddressOfNames</code> 的 base address<br><code>s -a (00007ff82e170000+0008f8fc) l 0xdb48 &quot;WinExec&quot;</code><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_21.png" alt=""></p>
 <p>我們知道 AddressOfNames 裡面放的都是以 4byte 為一個單位的陣列，需要找到是第幾個陣列存放 <code>WinExec</code><br>首先我們先取得 WinExec 的 Name pointer RVA<br><code>s -d (00007ff82e170000+0008f8fc) l 0xdb48 0009b59b</code><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_22.png" alt=""><br>得知 <code>00007ff82e201114</code> 存放 WinExec 的 Name pointer RVA，那是第幾個陣列呢 ?<br>把 Array 的位置扣除 AddressOfNames 的 base address 再除以 4 就是我們要的答案<br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_23.png" alt=""><br>第 0x606 個陣列，把這個數字拿去看 ordinal table，記得 0x606 要乘以 2, 因為 ordinal table 的陣列是以 2 bytes 為一個單位的陣列<br><code>00007ff82e170000+00091250</code> 是 <code>AddressOfNameOrdinals</code> 的 base address<br><code>dw (00007ff82e170000+00091250+(0x606*4))</code><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_24.png" alt=""><br>可以看到一樣是 0x606, 現在把這個數字拿去 <code>AddressOfFunctions</code> 就能求出 WinExec 的 RVA<br><code>0008dfa8+00007ff82e170000</code> 是 <code>AddressOfFunctions</code> 的 base address<br>一樣記得要把 0x606 乘以 4, 因為 <code>AddressOfFunctions</code> 是以 4 bytes 為一個單位的陣列<br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_concept_25.png" alt=""></p>
 <p>放上整個 flow<br><img src="https://1.bp.blogspot.com/-qu8V9tv1p2I/T9Hby63yfAI/AAAAAAAAACA/wlwHTQMkgmU/s640/finding_kernel32.png" alt=""><br><img src="/img/2021/windows_shellcode_concept/windows_shellcode_flow.png" alt=""></p>
-<p>至此文章就告一段落了，這篇文章主要就是在學習 windows shellcode 需要惡補的內容<br>這篇文章真的幫我很多<br><a href="http://bufferoverflow123.blogspot.com/2018/06/bufferoverflow-3-4-kernel32dl.html" target="_blank" rel="noopener">http://bufferoverflow123.blogspot.com/2018/06/bufferoverflow-3-4-kernel32dl.html</a><br><a href="https://bsodtutorials.wordpress.com/2014/03/02/import-address-tables-and-export-address-tables/" target="_blank" rel="noopener">https://bsodtutorials.wordpress.com/2014/03/02/import-address-tables-and-export-address-tables/</a><br><a href="https://docs.microsoft.com/en-us/previous-versions/ms809762(v=msdn.10)?redirectedfrom=MSDN" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/previous-versions/ms809762(v=msdn.10)?redirectedfrom=MSDN</a></p>
+<p>至此文章就告一段落了，這篇文章主要就是在學習 windows shellcode 需要惡補的內容<br>這篇文章真的幫我很多<br><a target="_blank" rel="noopener" href="http://bufferoverflow123.blogspot.com/2018/06/bufferoverflow-3-4-kernel32dl.html">http://bufferoverflow123.blogspot.com/2018/06/bufferoverflow-3-4-kernel32dl.html</a><br><a target="_blank" rel="noopener" href="https://bsodtutorials.wordpress.com/2014/03/02/import-address-tables-and-export-address-tables/">https://bsodtutorials.wordpress.com/2014/03/02/import-address-tables-and-export-address-tables/</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/previous-versions/ms809762(v=msdn.10)?redirectedfrom=MSDN">https://docs.microsoft.com/en-us/previous-versions/ms809762(v=msdn.10)?redirectedfrom=MSDN</a></p>
 
+        </div>
 
+        
+            <section class="post-copyright">
                 
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>AStar</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://sda06407.github.io/2021/05/14/Windows10-shellcode-concept/">https://sda06407.github.io/2021/05/14/Windows10-shellcode-concept/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>stay hungry stay foolish</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
             </div>
-
-            <!-- Comments -->
-            
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
-        </div>
-    </div>
-</article>
-
-    <!-- Footer -->
-    <hr />
-
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
-
-                    
-
-                    
-                        <li>
-                            <a href="https://github.com/sda06407" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
-
-                    
-
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">&copy; 2021 AStar<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
             </div>
-        </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/05/23/windows10-pwn-note/">windows10-pwn-note</a>
+            
+            
+            <a class="next" rel="next" href="/2021/01/31/Format-string-attack/">Format_string_attack</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© AStar | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
     </div>
 </footer>
 
-
-    <!-- After footer scripts -->
-    
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-
-<!-- Disqus Comments -->
-
-
-
+    </div>
 </body>
 
 </html>

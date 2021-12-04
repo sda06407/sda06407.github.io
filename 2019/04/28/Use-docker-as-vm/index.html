@@ -1,203 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="">
 
-<!-- Head tag -->
 <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="AStar">
 
-    <!--Description-->
+
+
+
+
+<title>Use docker as vm | AStar&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
     
-        <meta name="description" content="真的沒想到竟然會寫兩篇docker，原本打算把所有docker 的文章都歸類在docker note的說不過最近換mac後各種踩雷，也算學到不少，就當作紀錄吧。
-首先，docker 的 container 並不是用來作VM用途的，這點從 docker 的ps應該就能看出來了
-
-這些項目都不是一個vm">
-    
-
-    <!--Author-->
-    
-        <meta name="author" content="AStar">
-    
-
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="Use docker as vm"/>
-    
-
-    <!--Open Graph Description-->
-    
-
-    <!--Open Graph Site Name-->
-    <meta property="og:site_name" content="AStar&#39;s Blog"/>
-
-    <!--Type page-->
-    
-        <meta property="og:type" content="article" />
-    
-
-    <!--Page Cover-->
-    
-
-        <meta name="twitter:card" content="summary" />
-    
-
-    <!-- Title -->
-    
-    <title>Use docker as vm - AStar&#39;s Blog</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
-
-    <!-- Google Analytics -->
     
 
 
-    <!-- favicon -->
-    
-	
-</head>
 
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
 
-    <!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">AStar</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">ASrar&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/tags">
-                            
-                                Tags
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/categories">
-                            
-                                Categories
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/klugjo/hexo-theme-clean-blog">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
-
-<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>Use docker as vm</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        
-                            2019-04-28
-                        
-                    </span>
-                </div>
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
             </div>
         </div>
-    </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ASrar&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
 </header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
-
-            <!-- Tags and categories -->
-           
-                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Use docker as vm</h1>
+            
+                <div class="post-meta">
                     
-                        
-
-
-<a href="/tags/docker/">#docker</a>
-
+                        Author: <a itemprop="author" rel="author" href="/">AStar</a>
+                    
 
                     
-                </div>
-                <div class="col-lg-4 col-md-5 post-categories">
+                        <span class="post-time">
+                        Date: <a href="#">April 28, 2019&nbsp;&nbsp;17:18:02</a>
+                        </span>
+                    
                     
                 </div>
             
+        </header>
 
-            <!-- Gallery -->
-            
-
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <p>真的沒想到竟然會寫兩篇docker，原本打算把所有docker 的文章都歸類在<br><a href="https://sda06407.github.io/2018/05/19/docker-note/" target="_blank" rel="noopener">docker note</a>的說<br>不過最近換mac後各種踩雷，也算學到不少，就當作紀錄吧。</p>
+        <div class="post-content">
+            <p>真的沒想到竟然會寫兩篇docker，原本打算把所有docker 的文章都歸類在<br><a href="https://sda06407.github.io/2018/05/19/docker-note/">docker note</a>的說<br>不過最近換mac後各種踩雷，也算學到不少，就當作紀錄吧。</p>
 <p>首先，<code>docker 的 container 並不是用來作VM用途的</code>，這點從 docker 的ps<br>應該就能看出來了</p>
 <p><img src="/img/2019/use_docker_as_vm/use_docker_as_vm1.png" alt=""></p>
 <p>這些項目都不是一個vm服務會有的項目啊ＸＤ</p>
@@ -206,87 +146,81 @@
 <p>我他媽就是想用 docker 當虛擬機！之前 ubuntu 可以無痛當 vm 使用，但在mac上蠻痛的XDD</p>
 <p>不過終於搞定了，這邊講講我的心路歷程。</p>
 <p>這邊先科普一下Docker for MAC怎麼搞的</p>
-<p><a href="https://collabnix.com/tag/hyperkit/" target="_blank" rel="noopener">https://collabnix.com/tag/hyperkit/</a></p>
+<p><a target="_blank" rel="noopener" href="https://collabnix.com/tag/hyperkit/">https://collabnix.com/tag/hyperkit/</a></p>
 <p>這個看不懂的同學可以看我畫的簡易圖（非常粗淺的理解）</p>
 <p><img src="/img/2019/use_docker_as_vm/use_docker_as_vm2.jpeg" alt=""></p>
 <p>這個是 container 連外網的路徑，那個 VPNKit 會根據你要連的目的地轉換他要連的網卡</p>
 <p>所以像 Vbox 的 vm container 也 ping 的到，因為VPNKit會把流量導到 OSX 的 vboxnet0</p>
-<p>第一個方法——tap network<br>參考網址：<a href="http://sua7.com/2017/04/29/Docker%20for%20Mac%20%E5%AE%B9%E5%99%A8%E5%92%8C%E5%AE%BF%E4%B8%BB%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%A1%A5%E6%8E%A5/" target="_blank" rel="noopener">http://sua7.com/2017/04/29/Docker%20for%20Mac%20%E5%AE%B9%E5%99%A8%E5%92%8C%E5%AE%BF%E4%B8%BB%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%A1%A5%E6%8E%A5/</a></p>
+<p>第一個方法——tap network<br>參考網址：<a target="_blank" rel="noopener" href="http://sua7.com/2017/04/29/Docker%20for%20Mac%20%E5%AE%B9%E5%99%A8%E5%92%8C%E5%AE%BF%E4%B8%BB%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%A1%A5%E6%8E%A5/">http://sua7.com/2017/04/29/Docker%20for%20Mac%20%E5%AE%B9%E5%99%A8%E5%92%8C%E5%AE%BF%E4%B8%BB%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%A1%A5%E6%8E%A5/</a></p>
 <p>這個方法成功是成功了，雖在同一網段卻還是ping不到 XD</p>
-<p>第二個方法——dockward<br>參考網址：<a href="https://github.com/abiosoft/dockward" target="_blank" rel="noopener">https://github.com/abiosoft/dockward</a></p>
+<p>第二個方法——dockward<br>參考網址：<a target="_blank" rel="noopener" href="https://github.com/abiosoft/dockward">https://github.com/abiosoft/dockward</a></p>
 <p>這個方法比較偏門一點，不過還蠻有趣的，他是創一個container去偵測你指定的container有沒有開指定的port<br>如果有的話幫你 forward 到 OSX 的 localhost，沒有開的話就是起他自己的預設頁面<br>缺點是他是create a container 而且不是 <code>--rm</code> 會有我很討厭的 container 太多的問題<br>而且他起一個新的 port forward 也會新創一個 network config 整體來說就是會太多東西產生<br>所以這個方法雖然可行，但不會吸引我去用</p>
-<p>第三個方法——OpenVPN<br>參考網址：<a href="https://github.com/onedata/docker-openvpn-kube-for-mac" target="_blank" rel="noopener">https://github.com/onedata/docker-openvpn-kube-for-mac</a><br>照著做就成功了，這是我目前最滿意的方法，要連 container 的時候再連 VPN 就好<br>這個方法就是第一參考網址裡面提到的方法，把 container 當 VPN ， port forward<br>出來給 OSX 連進去 container 裡面，就可以 ping 到其他 container 了</p>
+<p>第三個方法——OpenVPN<br>參考網址：<a target="_blank" rel="noopener" href="https://github.com/onedata/docker-openvpn-kube-for-mac">https://github.com/onedata/docker-openvpn-kube-for-mac</a><br>照著做就成功了，這是我目前最滿意的方法，要連 container 的時候再連 VPN 就好<br>這個方法就是第一參考網址裡面提到的方法，把 container 當 VPN ， port forward<br>出來給 OSX 連進去 container 裡面，就可以 ping 到其他 container 了</p>
 
+        </div>
 
+        
+            <section class="post-copyright">
                 
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>AStar</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://sda06407.github.io/2019/04/28/Use-docker-as-vm/">https://sda06407.github.io/2019/04/28/Use-docker-as-vm/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>stay hungry stay foolish</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/docker/"># docker</a>
+                    
+                        
+                </span>
             </div>
-
-            <!-- Comments -->
-            
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
-        </div>
-    </div>
-</article>
-
-    <!-- Footer -->
-    <hr />
-
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
-
-                    
-
-                    
-                        <li>
-                            <a href="https://github.com/sda06407" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
-
-                    
-
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">&copy; 2021 AStar<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
             </div>
-        </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/05/01/pico-ctf-2018/">pico-ctf-2018</a>
+            
+            
+            <a class="next" rel="next" href="/2019/04/22/hxp-ctf-2018/">hxp-ctf_2018</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© AStar | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
     </div>
 </footer>
 
-
-    <!-- After footer scripts -->
-    
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-
-<!-- Disqus Comments -->
-
-
-
+    </div>
 </body>
 
 </html>

@@ -1,204 +1,207 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="">
 
-<!-- Head tag -->
 <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="AStar">
 
-    <!--Description-->
-    
-        <meta name="description" content="最近建服務越來越覺得docker好用
-想說來寫個note，以後忘記了可以直接翻這個看不用再google了
-相關好文:http://oomusou.io/docker/dockerfile-dockercompose/https://docs.docker.com/config/containers/">
-    
 
-    <!--Author-->
-    
-        <meta name="author" content="AStar">
-    
 
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="docker_note"/>
-    
 
-    <!--Open Graph Description-->
+
+<title>docker_note | AStar&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
     
-
-    <!--Open Graph Site Name-->
-    <meta property="og:site_name" content="AStar&#39;s Blog"/>
-
-    <!--Type page-->
-    
-        <meta property="og:type" content="article" />
-    
-
-    <!--Page Cover-->
-    
-
-        <meta name="twitter:card" content="summary" />
-    
-
-    <!-- Title -->
-    
-    <title>docker_note - AStar&#39;s Blog</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
-
-    <!-- Google Analytics -->
     
 
 
-    <!-- favicon -->
-    
-	
-</head>
 
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
 
-    <!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">AStar</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">ASrar&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/tags">
-                            
-                                Tags
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/categories">
-                            
-                                Categories
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/klugjo/hexo-theme-clean-blog">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
-
-<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>docker_note</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        
-                            2018-05-19
-                        
-                    </span>
-                </div>
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
             </div>
         </div>
-    </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ASrar&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
 </header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
 
-            <!-- Tags and categories -->
-           
-                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">docker_note</h1>
+            
+                <div class="post-meta">
                     
-                        
-
-
-<a href="/tags/docker/">#docker</a>
-
+                        Author: <a itemprop="author" rel="author" href="/">AStar</a>
+                    
 
                     
-                </div>
-                <div class="col-lg-4 col-md-5 post-categories">
+                        <span class="post-time">
+                        Date: <a href="#">May 19, 2018&nbsp;&nbsp;20:40:53</a>
+                        </span>
+                    
                     
                 </div>
             
+        </header>
 
-            <!-- Gallery -->
-            
-
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <p>最近建服務越來越覺得docker好用</p>
+        <div class="post-content">
+            <p>最近建服務越來越覺得docker好用</p>
 <p>想說來寫個note，以後忘記了可以直接翻這個看不用再google了</p>
-<p>相關好文:<br><a href="http://oomusou.io/docker/dockerfile-dockercompose/" target="_blank" rel="noopener">http://oomusou.io/docker/dockerfile-dockercompose/</a><br><a href="https://docs.docker.com/config/containers/container-networking/" target="_blank" rel="noopener">https://docs.docker.com/config/containers/container-networking/</a><br><a href="https://www.cnblogs.com/guoguojj/p/9404781.html" target="_blank" rel="noopener">https://www.cnblogs.com/guoguojj/p/9404781.html</a><br><a href="https://www.jianshu.com/p/adb0350557dc" target="_blank" rel="noopener">https://www.jianshu.com/p/adb0350557dc</a><br><a href="https://godleon.github.io/blog/Docker/docker-network-overview/" target="_blank" rel="noopener">https://godleon.github.io/blog/Docker/docker-network-overview/</a><br><a href="https://blog.yowko.com/change-container-port-mapping/" target="_blank" rel="noopener">https://blog.yowko.com/change-container-port-mapping/</a></p>
+<p>相關好文:<br><a target="_blank" rel="noopener" href="http://oomusou.io/docker/dockerfile-dockercompose/">http://oomusou.io/docker/dockerfile-dockercompose/</a><br><a target="_blank" rel="noopener" href="https://docs.docker.com/config/containers/container-networking/">https://docs.docker.com/config/containers/container-networking/</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/guoguojj/p/9404781.html">https://www.cnblogs.com/guoguojj/p/9404781.html</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/adb0350557dc">https://www.jianshu.com/p/adb0350557dc</a><br><a target="_blank" rel="noopener" href="https://godleon.github.io/blog/Docker/docker-network-overview/">https://godleon.github.io/blog/Docker/docker-network-overview/</a><br><a target="_blank" rel="noopener" href="https://blog.yowko.com/change-container-port-mapping/">https://blog.yowko.com/change-container-port-mapping/</a></p>
 <p>下載image檔:</p>
 <pre><code>docker pull [image]
 </code></pre><p>跑image檔:</p>
@@ -256,87 +259,81 @@ docker image prune
 docker network prune
 docker volume prune
 </code></pre><p>要移除所以沒在使用的 Images 不是只有 dangling 的 Images，可以在 prune 加上 <code>-a</code></p>
-<p>來源：<br><a href="https://stackoverflow.com/questions/32723111/how-to-remove-old-and-unused-docker-images" target="_blank" rel="noopener">https://stackoverflow.com/questions/32723111/how-to-remove-old-and-unused-docker-images</a><br><a href="https://blog.clarence.tw/2019/09/10/docker-removing-containers-images-volumes-and-networks/" target="_blank" rel="noopener">https://blog.clarence.tw/2019/09/10/docker-removing-containers-images-volumes-and-networks/</a></p>
+<p>來源：<br><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/32723111/how-to-remove-old-and-unused-docker-images">https://stackoverflow.com/questions/32723111/how-to-remove-old-and-unused-docker-images</a><br><a target="_blank" rel="noopener" href="https://blog.clarence.tw/2019/09/10/docker-removing-containers-images-volumes-and-networks/">https://blog.clarence.tw/2019/09/10/docker-removing-containers-images-volumes-and-networks/</a></p>
 <p>以我自己的為例子</p>
 <p>before:<br><img src="/img/docker_clean_image_before.png" alt=""></p>
 <p>after:<br><img src="/img/docker_clean_image_after.png" alt=""></p>
 <p>大概是這樣 如果後面有用到還會再補充</p>
 <h3 id="在-zsh-上自動補完"><a href="#在-zsh-上自動補完" class="headerlink" title="在 zsh 上自動補完"></a>在 zsh 上自動補完</h3><p>最近從ubnutu轉移到mac上(對發光蘋果沒有抵抗&gt;&lt;)發現很多東西都還要學習www</p>
 <p>光zsh對docker 的autocomplete 的設定又花了我一點時間<br>大概參考了這篇：</p>
-<p><a href="https://tommy.net.cn/2015/02/24/enable-zsh-completion-of-brew-under-mac-os-x/" target="_blank" rel="noopener">https://tommy.net.cn/2015/02/24/enable-zsh-completion-of-brew-under-mac-os-x/</a><br><a href="https://docs.docker.com/compose/completion/" target="_blank" rel="noopener">https://docs.docker.com/compose/completion/</a></p>
+<p><a target="_blank" rel="noopener" href="https://tommy.net.cn/2015/02/24/enable-zsh-completion-of-brew-under-mac-os-x/">https://tommy.net.cn/2015/02/24/enable-zsh-completion-of-brew-under-mac-os-x/</a><br><a target="_blank" rel="noopener" href="https://docs.docker.com/compose/completion/">https://docs.docker.com/compose/completion/</a></p>
 <p>成果：</p>
 <p><img src="https://i.imgur.com/TXJ242o.png" alt=""></p>
 
+        </div>
 
+        
+            <section class="post-copyright">
                 
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>AStar</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://sda06407.github.io/2018/05/19/docker-note/">https://sda06407.github.io/2018/05/19/docker-note/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>stay hungry stay foolish</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/docker/"># docker</a>
+                    
+                        
+                </span>
             </div>
-
-            <!-- Comments -->
-            
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
-        </div>
-    </div>
-</article>
-
-    <!-- Footer -->
-    <hr />
-
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
-
-                    
-
-                    
-                        <li>
-                            <a href="https://github.com/sda06407" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
-
-                    
-
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">&copy; 2021 AStar<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
             </div>
-        </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2018/07/23/some-ctf-writeup/">some_ctf_writeup</a>
+            
+            
+            <a class="next" rel="next" href="/2018/05/19/inndy-pwn101/">inndy-pwn101</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© AStar | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
     </div>
 </footer>
 
-
-    <!-- After footer scripts -->
-    
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-
-<!-- Disqus Comments -->
-
-
-
+    </div>
 </body>
 
 </html>

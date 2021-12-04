@@ -1,256 +1,265 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="">
 
-<!-- Head tag -->
 <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="AStar">
 
-    <!--Description-->
-    
-        <meta name="description" content="The article has been encrypted, please enter your password to view.">
-    
 
-    <!--Author-->
-    
-        <meta name="author" content="AStar">
-    
 
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="2021/1/1"/>
-    
 
-    <!--Open Graph Description-->
+
+<title>2021/1/1 | AStar&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
     
-
-    <!--Open Graph Site Name-->
-    <meta property="og:site_name" content="AStar&#39;s Blog"/>
-
-    <!--Type page-->
-    
-        <meta property="og:type" content="article" />
-    
-
-    <!--Page Cover-->
-    
-
-        <meta name="twitter:card" content="summary" />
-    
-
-    <!-- Title -->
-    
-    <title>2021/1/1 - AStar&#39;s Blog</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
-
-    <!-- Google Analytics -->
     
 
 
-    <!-- favicon -->
-    
-	
-</head>
 
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
 
-    <!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">AStar</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">ASrar&#39;s Blog</a></div>
+            <div class="menu navbar-right">
                 
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
+                    <a class="menu-item" href="/archives">Posts</a>
                 
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/tags">
-                            
-                                Tags
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/categories">
-                            
-                                Categories
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/klugjo/hexo-theme-clean-blog">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
-
-<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>2021/1/1</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        
-                            2021-01-01
-                        
-                    </span>
-                </div>
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
             </div>
         </div>
-    </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ASrar&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
 </header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
 
-            <!-- Tags and categories -->
-           
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
 
-            <!-- Gallery -->
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">2021/1/1</h1>
             
-
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <script src="/crypto-js.js"></script><script src="/mcommon.js"></script><h3 id="encrypt-message">Please enter the password to read the blog.</h3><link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"> <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"> <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script> <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> <div id="security"> <div> <div class="input-group"> <input type="text" class="form-control" aria-label="Enter the password." id="pass"/> <div class="input-group-btn"> <button type="button" class="btn btn-default" onclick="decryptAES()">Decrypt</button> </div> </div> </div> </div> <div id="encrypt-blog" style="display:none"> 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 </div>
-
-                
-            </div>
-
-            <!-- Comments -->
-            
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">AStar</a>
                     
 
-
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 1, 2021&nbsp;&nbsp;11:41:15</a>
+                        </span>
+                    
+                    
                 </div>
             
+        </header>
+
+        <div class="post-content">
+            <script src="/crypto-js.js"></script><script src="/mcommon.js"></script><h3 id="encrypt-message">Please enter the password to read the blog.</h3><link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"> <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"> <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script> <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> <div id="security"> <div> <div class="input-group"> <input type="text" class="form-control" aria-label="Enter the password." id="pass"/> <div class="input-group-btn"> <button type="button" class="btn btn-default" onclick="decryptAES()">Decrypt</button> </div> </div> </div> </div> <div id="encrypt-blog" style="display:none"> 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 </div>
         </div>
-    </div>
-</article>
 
-    <!-- Footer -->
-    <hr />
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>AStar</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://sda06407.github.io/2021/01/01/2021-1-1/">https://sda06407.github.io/2021/01/01/2021-1-1/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>stay hungry stay foolish</span>
+                     </p>
+                
 
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
                     
-
-                    
-
-                    
-                        <li>
-                            <a href="https://github.com/sda06407" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
-
-                    
-
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">&copy; 2021 AStar<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+                </span>
             </div>
-        </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/01/31/Format-string-attack/">Format_string_attack</a>
+            
+            
+            <a class="next" rel="next" href="/2020/11/14/regiesters-note/">registers-note</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© AStar | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
     </div>
 </footer>
 
-
-    <!-- After footer scripts -->
-    
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-
-<!-- Disqus Comments -->
-
-
-
+    </div>
 </body>
 
 </html>
