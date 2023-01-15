@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="莫名妙的又過了一年，新年真的越來越懶了，剛剛才發現去年竟然連照片都沒拍 XDD，今年一定拍！
+去年給T姊算命後他說我 2022 年的工作會超忙，忙到沒時間談戀愛的那種，果真去年七月開始有金融業13家銀行的聯合攻防演練，那真的要死人組內基本上技術部分只有我在扛，也一如去年初說的一樣，我在 12/07 提了離職，預計 1/7 離開，太累了，那也一如去年說的一樣，我不知道下一家在哪XDD，裸辭！不過有另外得到的回饋是今年會有點桃花…..? 聽聽就好聽聽就好，不抱期待
+回想一下去年幹了什麼事情，要說前年受到獅子很多影響的話，去年受到 RD 很多的照顧，受到他們的影響比較多，沒辦法 SST 真的獲得有限了今年主要買了兩隻 yubikey，兩隻配合 Cloudflare 的 coupon 含運收 800，對比原價一隻破千真的很划算之後就開始研究個人的資安，把重要的服務，像是 1password 和 google 和 facebook 等帳號都鎖上 security key 了，有關 security key 的應用我單獨發一篇出來了再來就是跟同事小T買了他二手的 roouter ( hEX - MikroTik )，目前套了一些比較基本的 firewall rule，像是 block ip scanner 之類的，還有就是把 router dns 設定成 nextdns，方便做管控，目前卡在我想要弄 wireguard 讓身在咖啡廳的我只需要 ipad 就能連回家裡的 windows 進行操作，或是連回家裡的樹莓派弄手遊，目前知道的應該就是走 ZeroTier 或是 Tailscale，今年不知道是否能搞起來
+說到今年真的拿到不少東西，除了 yubikey 以外還有被推坑買了 ipad pro m1 大概花了 19500…還有拿到一個免費的 rpi400，can 爸給我的還有花 500 拿到的那台 router買了 iphone 13 mini (2020 買的 iphone se 在去年過年的時候摔壞了…)訂閱了 ocf 每個月 300買了一個短域名，並且把他的 dns 托給 Cloudflare，今年應該也會玩不少 CF 的功能加入了 uccu 並且參與了線下聚會還有12月拿到熱騰騰的 flipper zero，海豚很可愛，他也是我今年想玩的玩具—實體安全還有為了上面那隻海豚特別去光華買了 nrf24 模組（想玩 mousejacking）
+去年的文章產出量真的很少，比較多是補充既有的文章內容，畢竟舊坑都補不完了還要忙著開新坑….再來就是工作太累了，不得不說在 LKC 的那個案子時期比勤業還累…，很多時候都忙到半夜
+今年感覺又更認識自己了，可以看到上面的一堆東西都跟 pwn 無關對自己的認知轉變就是，感覺對資訊（資安）的熱情還在，但並不僅止於 pwn，對於 pwn 去年還是生了一篇 brop，然後 file structure exploit 還卡在 libc 2.27 怎麼突破＠＠今年很怕這樣學一學最後變成四不像，什麼都不專精導致沒人要;w;
+再看看吧今年，希望今年能達成包兩萬紅包給爸媽的願望（感覺就是以前我完全不會說的話
+2023/01/01 20:40">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="2023/01/01"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>2023/01/01 - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>2023/01/01</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2023-01-01
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>莫名妙的又過了一年，新年真的越來越懶了，剛剛才發現去年竟然連照片都沒拍 XDD，今年一定拍！</p>
+<p>去年給T姊算命後他說我 2022 年的工作會超忙，忙到沒時間談戀愛的那種，果真去年七月開始有金融業13家銀行的聯合攻防演練，那真的要死人<br>組內基本上技術部分只有我在扛，也一如去年初說的一樣，我在 12/07 提了離職，預計 1/7 離開，太累了，那也一如去年說的一樣，我不知道下一家在哪XDD，裸辭！<br>不過有另外得到的回饋是今年會有點桃花…..? 聽聽就好聽聽就好，不抱期待</p>
+<p>回想一下去年幹了什麼事情，要說前年受到獅子很多影響的話，去年受到 RD 很多的照顧，受到他們的影響比較多，沒辦法 SST 真的獲得有限了<br>今年主要買了兩隻 yubikey，兩隻配合 Cloudflare 的 coupon 含運收 800，對比原價一隻破千真的很划算<br>之後就開始研究個人的資安，把重要的服務，像是 1password 和 google 和 facebook 等帳號都鎖上 security key 了，有關 security key 的應用我單獨發一篇出來了<br>再來就是跟同事小T買了他二手的 roouter ( hEX - MikroTik )，目前套了一些比較基本的 firewall rule，像是 block ip scanner 之類的，還有就是把 router dns 設定成 nextdns，方便做管控，目前卡在我想要弄 wireguard 讓身在咖啡廳的我只需要 ipad 就能連回家裡的 windows 進行操作，或是連回家裡的樹莓派弄手遊，目前知道的應該就是走 ZeroTier 或是 Tailscale，今年不知道是否能搞起來</p>
+<p>說到今年真的拿到不少東西，除了 yubikey 以外還有被推坑買了 ipad pro m1 大概花了 19500…<br>還有拿到一個免費的 rpi400，can 爸給我的<br>還有花 500 拿到的那台 router<br>買了 iphone 13 mini (2020 買的 iphone se 在去年過年的時候摔壞了…)<br>訂閱了 ocf 每個月 300<br>買了一個短域名，並且把他的 dns 托給 Cloudflare，今年應該也會玩不少 CF 的功能<br>加入了 uccu 並且參與了線下聚會<br>還有12月拿到熱騰騰的 flipper zero，海豚很可愛，他也是我今年想玩的玩具—實體安全<br>還有為了上面那隻海豚特別去光華買了 nrf24 模組（想玩 mousejacking）</p>
+<p>去年的文章產出量真的很少，比較多是補充既有的文章內容，畢竟舊坑都補不完了還要忙著開新坑….<br>再來就是工作太累了，不得不說在 LKC 的那個案子時期比勤業還累…，很多時候都忙到半夜</p>
+<p>今年感覺又更認識自己了，可以看到上面的一堆東西都跟 pwn 無關<br>對自己的認知轉變就是，感覺對資訊（資安）的熱情還在，但並不僅止於 pwn，對於 pwn 去年還是生了一篇 brop，然後 file structure exploit 還卡在 libc 2.27 怎麼突破＠＠<br>今年很怕這樣學一學最後變成四不像，什麼都不專精導致沒人要;w;</p>
+<p>再看看吧今年，希望今年能達成包兩萬紅包給爸媽的願望（感覺就是以前我完全不會說的話</p>
+<p><img src="/img/2023/2023-01-01 20.41.17.jpg" alt=""><br>2023/01/01 20:40</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2023 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

