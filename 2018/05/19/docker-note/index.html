@@ -237,6 +237,10 @@ docker run -p 127.0.0.1:8080:80 [image id]
 <pre><code>dokcer rmi [image id]
 </code></pre><p>移除全部的image</p>
 <pre><code>docker rmi $(docker images -q)
+</code></pre><p>清除特定 container 的 log ( debug 用 )</p>
+<pre><code>truncate -s 0 $(docker inspect --format=&apos;&#123;&#123;.LogPath&#125;&#125;&apos; &lt;container_name_or_id&gt;)
+</code></pre><p>列出 docker 目前容量的佔用情況</p>
+<pre><code>docker system df -v
 </code></pre><p>像ctfd有自己的docker-compose 不用pull image可以直接產container<br>只要進去資料夾內進行指定command</p>
 <pre><code>docker-compose up
 </code></pre><p>之後要啟動(停止)服務要到該資料夾內</p>
@@ -270,12 +274,27 @@ docker volume prune
 <p>以我自己的為例子</p>
 <p>before:<br><img src="/img/docker_clean_image_before.png" alt=""></p>
 <p>after:<br><img src="/img/docker_clean_image_after.png" alt=""></p>
+<p>根據 docker 官方的說法是，資料部分盡量不要留在 container，所以這時候就需要 mount 的指令了<br>推薦這個筆記，很詳盡，這邊列出我會用到的而已<br><a target="_blank" rel="noopener" href="https://medium.com/alberthg-docker-notes/docker%E7%AD%86%E8%A8%98-%E8%AE%93%E8%B3%87%E6%96%99%E9%81%A0%E9%9B%A2container-%E4%BD%BF%E7%94%A8-volume-bind-mount-%E8%88%87-tmpfs-mount-6908da341d11">https://medium.com/alberthg-docker-notes/docker%E7%AD%86%E8%A8%98-%E8%AE%93%E8%B3%87%E6%96%99%E9%81%A0%E9%9B%A2container-%E4%BD%BF%E7%94%A8-volume-bind-mount-%E8%88%87-tmpfs-mount-6908da341d11</a></p>
+<p>綁定的參數分為 <code>-v</code> 與 <code>--mount</code><br>根據上面的文章可以想成 <code>-v</code> 是 <code>--mount</code> 的簡化版</p>
+<p>使用 <code>--mount</code> 的話需要給更詳盡的參數</p>
+<p>使用 -v 進行掛載<br>$ docker run -d -v [host dir]:[container dir] [image name]</p>
+<p><code>docker run --rm -it -p 8081:80 -v /tmp/test:/var/www vulnerables/web-dvwa</code><br>如果 host 的路徑不存在資料夾的話會創建一個</p>
+<p>docker run –mount type=bind,source=[host dir],target=[container dir] [image name]<br>(type 有 bind volume tmpfs，預設值為 volume)<br><code>docker run --rm -it -p 8081:80 --mount type=bind,source=/tmp/test,target=/var/www vulnerables/web-dvwa</code></p>
+<p>下這個 command 是把 host 的資料夾資訊取代原有 container 的資料夾內容，以 dvwa 這個為例，這個 command 下去，container 內的 <code>/var/www</code> 就會被取代成 host 的 <code>/tmp/test</code></p>
+<p>如果是想做到像是 VM 那樣 mount 一個共用資料夾並保留 container 原本的資料的話需要用 volume</p>
+<p>創建 volume<br><code>docker volume create --name testVolumn</code></p>
+<p>這時候在 <code>/var/lib/docker/volumes/</code> 裡面就有我們創好的 volume 了，只是裡面的 <code>_data</code> 內容還是空的<br>mount 的路徑可以透過 <code>docker inspect [container name] | grep -i Volumn</code> 知道</p>
+<p>這時候下<br><code>docker run --rm -it -p 8081:80 -v testVolumn:/var/www vulnerables/web-dvwa</code><br>或 mount 多個<br><code>docker run --rm -it -p 8081:80 -v testVolumn:/var/www -v testVolumn2:/etc/ vulnerables/web-dvwa</code><br>再次進去 <code>_data</code> 裡面看就會發現裡面的內容跟 container 內的 <code>/var/www</code> 會是一樣的，並且複寫的的邏輯依照我自己嘗試的結果應該是這樣</p>
+<p>如果 container 有這個檔案 host 沒有 → container 的檔案直接寫<br>如果 container 有這個檔案 host 也有 → 依 host 檔案為主</p>
+<p>另外如果 docker run 有加上 <code>--rm</code> 就算退出 container volume 的內容也不會消失</p>
+<p>移除 volume<br><code>docker volume rm [volume name]</code></p>
+<p>注意先確認沒有 container mount 他了</p>
 <p>大概是這樣 如果後面有用到還會再補充</p>
 <h3 id="在-zsh-上自動補完"><a href="#在-zsh-上自動補完" class="headerlink" title="在 zsh 上自動補完"></a>在 zsh 上自動補完</h3><p>最近從ubnutu轉移到mac上(對發光蘋果沒有抵抗&gt;&lt;)發現很多東西都還要學習www</p>
 <p>光zsh對docker 的autocomplete 的設定又花了我一點時間<br>大概參考了這篇：</p>
 <p><a target="_blank" rel="noopener" href="https://tommy.net.cn/2015/02/24/enable-zsh-completion-of-brew-under-mac-os-x/">https://tommy.net.cn/2015/02/24/enable-zsh-completion-of-brew-under-mac-os-x/</a><br><a target="_blank" rel="noopener" href="https://docs.docker.com/compose/completion/">https://docs.docker.com/compose/completion/</a></p>
 <p>成果：</p>
-<p><img src="https://i.imgur.com/TXJ242o.png" alt=""></p>
+<p><img src="/img/TXJ242o.png" alt=""></p>
 
 
                 
@@ -323,7 +342,7 @@ docker volume prune
 
                     
                 </ul>
-                <p class="copyright text-muted">&copy; 2023 AStar<br></p>
+                <p class="copyright text-muted">&copy; 2024 AStar<br></p>
                 <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
                 <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
             </div>

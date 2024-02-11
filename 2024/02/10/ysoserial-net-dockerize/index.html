@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="最近遇到了需要打反序列化的靶機，產 payload 的工具想當然第一時間會想到 ysoserial
+但這次我要的是 .net 的版本而不是一般常見的 JAVA 版本，喜歡把工具都裝到 Linux 上的我於是在想 .net 版本的有沒有跟 JAVA 一樣有 docker 版本
+但很遺憾地找到這篇 issuehttps://github.com/pwntester/ysoserial.net/issues/47
+既然作者覺得沒辦法，那我就自己想辦法弄一個出來吧，實際研究下去後才知道為什麼作者覺得不可行，一個完整的 docker build 應該是不需要跟使用者有任何交互的需求就能完成，但受限 .net framework 的安裝一定需要交互才能
+但我主要的目的是不想汙染現有環境跟不想折騰 wine 的安裝，想要弄一個穩定的環境來跑，需不需要 interactive 對我來說並不重要
+廢話說那麼多，直接給做法
+安裝 ysoserial.net 的 reference:https://medium.com/@hypri0n/run-ysoserial-exe-on-kali-linux-47b344ddff27
+使用的 docker image:https://github.com/scottyhardy/docker-wine首先確定 docker-wine 可以跑成功
+如果只打算跑一次 ysoserial.net 的話可以這樣下:1./docker-wine --as-root /bin/bash -c &amp;#x27;winetricks dotnet48;rm -rf /root/.wine;wget https://github.com/pwntester/ysoserial.net/releases/download/v1.36/ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9.zip -O /tmp/ysoserial.zip;unzip /tmp/ysoserial.zip -d /tmp/ ;winetricks dotnet48;wine /tmp/Release/ysoserial.exe [your argv]&amp;#x27;">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="ysoserial.net dockerize"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>ysoserial.net dockerize - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>ysoserial.net dockerize</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2024-02-10
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>最近遇到了需要打反序列化的靶機，產 payload 的工具想當然第一時間會想到 ysoserial</p>
+<p>但這次我要的是 .net 的版本而不是一般常見的 JAVA 版本，喜歡把工具都裝到 Linux 上的我於是在想 .net 版本的有沒有跟 JAVA 一樣有 <a target="_blank" rel="noopener" href="https://github.com/frohoff/ysoserial/blob/master/Dockerfile">docker 版本</a></p>
+<p>但很遺憾地找到這篇 issue<br><a target="_blank" rel="noopener" href="https://github.com/pwntester/ysoserial.net/issues/47">https://github.com/pwntester/ysoserial.net/issues/47</a></p>
+<p>既然作者覺得沒辦法，那我就自己想辦法弄一個出來吧，實際研究下去後才知道為什麼作者覺得不可行，一個完整的 docker build 應該是不需要跟使用者有任何交互的需求就能完成，但受限 .net framework 的安裝一定需要交互才能</p>
+<p>但我主要的目的是不想汙染現有環境跟不想折騰 wine 的安裝，想要弄一個穩定的環境來跑，需不需要 interactive 對我來說並不重要</p>
+<p>廢話說那麼多，直接給做法</p>
+<p>安裝 ysoserial.net 的 reference:<br><a target="_blank" rel="noopener" href="https://medium.com/@hypri0n/run-ysoserial-exe-on-kali-linux-47b344ddff27">https://medium.com/@hypri0n/run-ysoserial-exe-on-kali-linux-47b344ddff27</a></p>
+<p>使用的 docker image:<br><a target="_blank" rel="noopener" href="https://github.com/scottyhardy/docker-wine">https://github.com/scottyhardy/docker-wine</a><br>首先確定 docker-wine 可以跑成功</p>
+<p>如果只打算跑一次 ysoserial.net 的話可以這樣下:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./docker-wine --as-root /bin/bash -c <span class="string">&#x27;winetricks dotnet48;rm -rf /root/.wine;wget https://github.com/pwntester/ysoserial.net/releases/download/v1.36/ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9.zip -O /tmp/ysoserial.zip;unzip /tmp/ysoserial.zip -d /tmp/ ;winetricks dotnet48;wine /tmp/Release/ysoserial.exe [your argv]&#x27;</span> </span><br></pre></td></tr></table></figure></p>
+<p>因為使用到 winetricks 需要用到 root 權限，所以需要 <code>--as-root</code></p>
+<p>另外為什麼需要創一個 .wine 的環境後又 <code>rm /root/.wine</code> 再創一個 .wine 環境呢? (winetricks的當下就會 init wine 的環境了)，因為第一次下 winetricks 他只會安裝 .net 4.0 不會安裝到 .net 4.8，可是把他刪除再跑一次安裝的話就會安裝了 (我也不知道原因，多次嘗試出來的結果)</p>
+<p>如果想要 keep 住這個環境的話，只需要把 docker-wine 裡面有關 <code>--rm</code> 那邊的 code 註解掉 (<code>add_run_arg --rm</code>)，直接用 <code>--as-root</code> 進去下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/bash -c <span class="string">&#x27;winetricks dotnet48;rm -rf /root/.wine;wget https://github.com/pwntester/ysose    rial.net/releases/download/v1.36/ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9.zip -O /tmp/ysoserial.zip;unzip     /tmp/ysoserial.zip -d /tmp/ ;winetricks dotnet48&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>就好了，或是你可以手動 trace 看看，說不定你的環境不用砍 .wine 那麼麻煩</p>
+<p>另外如果遇到這個問題<br><img src="/img/2024/ysoserial-net-dockerize/GgQebQS.png" alt=""></p>
+<p>砍掉 .wine 再跑一次 <code>winetricks dotnet48</code> 應該就好了，基本上就是要安裝玩 .net 4.8 才算可以跑</p>
+<p>之後也有打算把一些 windows 才有的 exe 工具整進去這個 docker-wine 裡面，弄一個屬於自己的大補帖，也提供給各為一個參考</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2024 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
