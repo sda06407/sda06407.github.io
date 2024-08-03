@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="繼續補坑…ref: https://www.youtube.com/watch?v=gI0nZR4z7_M
+ubuntu 可以直接用 snap 裝 ghidra
+sudo snap install ghidra
+照著影片說，第一步要先修長度
+僅需打勾 PE Header Annotation
+照教學說，惡意程式是把 shellcode append 在 .text 區段後面，所以這一段就是要把 .text 區段做 patch，在這一步要做的就是把 physical address 與 virtual address 跟 size of raw data 對齊記得要 enable editing of bytes全選後選 extract and import
+analysis options 多選 Decompiler Parameter ID 與 WindowsPE x86 Propagate External Parameters前者是為了獲得較正確的變數名稱，後者是可以會將 function 的參數資訊以註解方式顯示如果有看到 FUN_0051B908 那就代表 patch 成功了
+Dump payload根據動態分析(process monitor)可以得知他會寫一個 idx.ini
+ok，先從 write 開始追像這種 Library function 不看，要看的是在 User 寫的程式有 call 的最後只有FUN_00401810 符合要求照著教學把 function name 改成 write_somthing 這個名稱然後透過 CreateFileW 得知 param_2 是 file_name然後找到是誰 call write_somthing 的然後一樣改參數名稱也順便把能識別的 function 做命名至於那個 0x88 到底是什麼呢? 回頭去看 write_somthing 怎麼使用這個變數的">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Ghidra and ShadowHammer"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Ghidra and ShadowHammer - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Ghidra and ShadowHammer</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2024-07-10
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>繼續補坑…<br>ref: <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=gI0nZR4z7_M">https://www.youtube.com/watch?v=gI0nZR4z7_M</a></p>
+<p>ubuntu 可以直接用 snap 裝 ghidra</p>
+<p><code>sudo snap install ghidra</code></p>
+<p>照著影片說，第一步要先修長度<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_setup_config.png" alt=""></p>
+<p>僅需打勾 <code>PE Header Annotation</code><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_analysis_options.png" alt=""></p>
+<p>照教學說，惡意程式是把 shellcode append 在 .text 區段後面，所以這一段就是要把 .text 區段做 patch，<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_patch_.text.png" alt=""><br>在這一步要做的就是把 physical address 與 virtual address 跟 size of raw data 對齊<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_patch_byte.png" alt=""><br>記得要 enable editing of bytes<br>全選後選 extract and import<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_extract_and_import.png" alt=""></p>
+<p>analysis options 多選 <code>Decompiler Parameter ID</code> 與 <code>WindowsPE x86 Propagate External Parameters</code><br>前者是為了獲得較正確的變數名稱，後者是可以會將 function 的參數資訊以註解方式顯示<br>如果有看到 <code>FUN_0051B908</code> 那就代表 patch 成功了<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_0051b908.png" alt=""></p>
+<h3 id="Dump-payload"><a href="#Dump-payload" class="headerlink" title="Dump payload"></a>Dump payload</h3><p>根據動態分析(process monitor)可以得知他會寫一個 <code>idx.ini</code><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_create_idx.ini.png" alt=""></p>
+<p>ok，先從 <code>write</code> 開始追<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_show_ref_to.png" alt=""><br>像這種 Library function 不看，要看的是在 User 寫的程式有 call 的<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_library_function.png" alt=""><br>最後只有<code>FUN_00401810</code> 符合要求<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_fun_00401810.png" alt=""><br>照著教學把 function name 改成 <code>write_somthing</code> 這個名稱<br>然後透過 <code>CreateFileW</code> 得知 <code>param_2</code> 是 file_name<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_CreateFileW.png" alt=""><br>然後找到是誰 call write_somthing 的<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_find_ref_to_write.png" alt=""><br>然後一樣改參數名稱<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_rename_local_25c.png" alt=""><br>也順便把能識別的 function 做命名<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_rename_printf_function.png" alt=""><br>至於那個 <code>0x88</code> 到底是什麼呢? 回頭去看 write_somthing 怎麼使用這個變數的<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_findresourcew.png" alt=""></p>
+<p>找msdn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-tw/windows/win32/api/libloaderapi/nf-libloaderapi-findresourcew">https://learn.microsoft.com/zh-tw/windows/win32/api/libloaderapi/nf-libloaderapi-findresourcew</a><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_findresourcew_msdn.png" alt=""></p>
+<p>從這邊可以知道 0x88 是 exe 的 Resource ID<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_rsec_88_exe.png" alt=""><br>嘗試把他解出看<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_rsrc_88_extract_and_import.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_rsrc_88_setup_config.png" alt=""><br>但沒什麼好看的，有可能 shellcode 是動態寫入的，用靜態來看只會看到一堆 gadget<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_rsrc_88_asm.png" alt=""><br>於是透過 offset 來找看看有沒有其他東西，將 Resource Address 扣除 ImageBaseAddress<br><code>0x0056ec78 - 0x400000 = 0x16ec78</code> (ImageBaseAddress直接看程式最上面的address就有了)<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_search_offset_in_memory.png" alt=""><br>第一個不看，二三個都在同一個 funtcion<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_use_offset_function.png" alt=""><br>首先第14行感覺是拿 module base address，所以改一下變數名稱 <code>pHVar3</code> 變成 <code>module_addr_400000</code><br>然後看一下到底是誰會用他，發現到它是被包含在 <code>__crtExitProcess</code> 內，有可能是一個被 Modify 過的 standard lib<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_call_shellcode.png" alt=""><br>再回去 function 內，要如何推出其他 offset 的 function 呢?<br>看一下這一行，這個是透過 <code>0x16ec78</code> 找到的，而這個 <code>0x16ec78</code> 是使用 ImageBaseAddress 加上 offset 得到的<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_calculate_offset_function.png" alt=""><br>所以可以透過一樣的方法，看 asm 去推導其他的 function<br>看 <code>pcVar1</code>，他是使過 <code>0x11c27c</code> 跟 ImageBaseAddress 相加得到的，把這兩個相加後去看會得到什麼<br><code>0x11c27c+0x400000=0x51c27c</code><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_VirtualAlloc_function" alt=""><br>基本上看到查到這邊後，就直接把 <code>FUN_0051B908</code> 改成 <code>shellcode</code> 了<br>然後 <code>pcVar1</code> 也改成 <code>VirtualAlloc</code>，順道連 DataType 一起改 (右鍵-&gt;Retype Variable)<br><code>0x40</code> 的部分改成 <code>PAGE_EXECUTE_READWRITE</code>，<code>0x1000</code> 的部分改成 <code>MEM_COMMIT</code> (右鍵-&gt; Set Equate..)<br>需要的話可以再加註解 (右鍵-&gt;Comments)<br>全部大概長這樣<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_reset_shellcode_function.png" alt=""><br>繼續追下去，這次要看，程式拿這個 VirtualAlloc 的 Buffer 要幹什麼事情<br>進去 <code>FUN_0051B802</code>，看到這個感覺就很像是 decode function<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_FUN_0051B802_.png" alt=""><br>看完 decode function 之後回來 shellcode，需要知道 decode 之後他的 entry point 在哪<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_decode.png" alt=""><br>首先第42行，將 Resource Buffer 的內容複製進 VirtualAlloc buffer 內，後面就是做 count，在47行對 VirtualAlloc Buffer 做 decode 之後，48行就是 shellcode 的 entry point，0xfab 是 entry 的 offset<br>照教學的做法是直接將 asm 轉 C 然後編譯程式後直接利用他 decode，但…這一塊要處理很多 exception 很麻煩，我覺得更快的方法還是直接做動態分析把 shellcode 拉出來(我們已經知道 shellcode會存放在哪了)</p>
+<p>首先因為系統會有 ASLR，所以要先知道 Ghidra 與 Windbg 的 ImageBaseAddress 的 offset 多少</p>
+<p>透過 <code>u $exentry</code> 取得 entry point address，透過圖中方法可以找到 MZ header，其實透過 <code>!peb</code> 也可以<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_windbg_exentry.png" alt=""><br>然後把 Windbg 的 base address 扣掉 ghidra 的 0x400000 就取得 offset 了<br><code>0x10f0000-0x400000=0xcf0000</code><br>然後下斷點在 <code>0x51b9b8+0xcf0000=0x120b9b8</code>，然後看一下 register<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_windbg_fab.png" alt=""><br>就可以知道解完的 shellcode 在 <code>0xcb0000</code>，<code>0xcb0fab</code> 是 entry point<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_windbgshellcode_entry.png" alt=""><br>然後順勢使用 <code>.writemem [file path] 0xcb0000 L?[mem range]</code>，這邊我直接碰到底端，就直接全 dump<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_windbg_writemem.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_windbgshellcode_entry_ghidra.png" alt=""></p>
+<h3 id="Analysis-Payload"><a href="#Analysis-Payload" class="headerlink" title="Analysis Payload"></a>Analysis Payload</h3><p>接著來看 decode 後的 shellcode 長怎樣</p>
+<p>首先在 <code>0xfb6</code> 看到針對 FS:0x18 做事情<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_fs.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_FS_18.png" alt=""><br>這邊改一下 DATA TYPE<br>相關需要的可以在這下載<br><a target="_blank" rel="noopener" href="https://github.com/0x6d696368/ghidra-data/tree/master/typeinfo">https://github.com/0x6d696368/ghidra-data/tree/master/typeinfo</a><br><a target="_blank" rel="noopener" href="http://terminus.rewolf.pl/terminus/">http://terminus.rewolf.pl/terminus/</a><br>Change <code>unaff_FS_OFFSET</code> to <code>NT_TIB*</code><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_fab_retype_FS.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_fab_NT_TIB.png" alt=""><br>Change Self to <code>TEB*</code><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_fab_retype_Field.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_fab_TEB.png" alt=""></p>
+<p>Change <code>p_Var2</code> to <code>LDR_DATA_ENTRY</code><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_fab_p_Var2_1.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_fab_p_Var2_2.png" alt=""></p>
+<p>Create a new structure <code>LDR_DATA_TABLE_ENTRY_0x10</code><br>首先複製要更改的 struct 其他地方<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_copy_LDR_DATA_TABLE_ENTRY.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_edit_LDR_DATA_TABLE_ENTRY.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_delete_LDR_DATA_TABLE_ENTRY_struct.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_local_c_LDR_DATA_TABLE_ENTRY_0x10.png" alt=""><br>Change <code>local_64</code> to <code>LDR_DATA_TABLE_ENTRY*</code><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_change_local64_LDR_DATA_TABLE_ENTRY.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_entry_final.png" alt=""><br>從 22 跟 23 行可以看出他針對 <code>Kernel32.dll</code> 做 dllname 的遍例尋找</p>
+<h4 id="Import-Table-Hash"><a href="#Import-Table-Hash" class="headerlink" title="Import Table Hash"></a>Import Table Hash</h4><p>接下來看 <code>FUN_00000010</code>，但這邊不曉得是不是因為我是直接動態 leak 出來的，怎麼樣都解不出教學的樣子，索性直接貼成果<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN_00000010.png" alt=""><br>下一步，嘗試 leak function hash list<br>把 <code>FUN_00000010</code> 拿來改一下<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN_00000010_sourcecode.png" alt=""><br>改完後的<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &lt;stdlib.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line"><span class="built_in">int</span> main(<span class="built_in">int</span> argc, char** argv)</span><br><span class="line">&#123;</span><br><span class="line">  char cVar1;</span><br><span class="line">  char *name;</span><br><span class="line">  <span class="built_in">int</span> iVar2;</span><br><span class="line">  char *pcVar3;</span><br><span class="line">  <span class="built_in">int</span> local_c;</span><br><span class="line">  <span class="built_in">int</span> local_8;</span><br><span class="line"></span><br><span class="line">  local_8 = <span class="number">0</span>;</span><br><span class="line">      local_c = <span class="number">0</span>;</span><br><span class="line">      pcVar3 = name = argv[<span class="number">1</span>];</span><br><span class="line">      cVar1 = *pcVar3;</span><br><span class="line">      <span class="keyword">while</span> (cVar1 != <span class="string">&#x27;\0&#x27;</span>) &#123;</span><br><span class="line">        local_c = local_c * <span class="number">0x21</span> + (<span class="built_in">int</span>)cVar1;</span><br><span class="line">        pcVar3 = pcVar3 + <span class="number">1</span>;</span><br><span class="line">        cVar1 = *pcVar3;</span><br><span class="line">      &#125;</span><br><span class="line">      printf(<span class="string">&quot;%s: %x\n&quot;</span>, name, local_c);</span><br><span class="line">    //&#125; <span class="keyword">while</span> (local_8 &lt; *(<span class="built_in">int</span> *)(iVar2 + <span class="number">0x18</span>));</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>然後 clone <a target="_blank" rel="noopener" href="https://github.com/0x6d696368/ghidra-data.git">https://github.com/0x6d696368/ghidra-data.git</a></p>
+<p><code>cat * | grep -Eo NAME=.+\&quot; | awk -F \&quot; &#123;&#39;print $2&#39;&#125; | grep -v .dll &gt; functionNames</code><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_list_function_name.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_calculate_function_hash.png" alt=""><br>這樣就有 function hash list 了</p>
+<p>然後看一下 shellcode 找的 function 是那些<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_function_hash_find.png" alt=""></p>
+<p>然後繼續修 function type …<br>先創一個 structure<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_new_structure.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_function_structure.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN0000009a_param_type.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN0000009a_param_type_2.png" alt=""></p>
+<p><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_change_local_14_type.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_change_local_14_type_after.png" alt=""></p>
+<p><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_change_hash_type.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_change_hash_type_after.png" alt=""></p>
+<p><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_change_hash_type.png" alt=""></p>
+<p><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_df894b12.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_modify_structure.png" alt=""><br>照著 hash table 一個一個壓上去<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_modify_structure_final.png" alt=""></p>
+<p>接著回到 entry 看最後一個 function，<code>FUN_00000950</code><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN_00000950.png" alt=""><br>發現他有用到 EAX 的 register，看一下 EAX 誰會用到<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_get_process_eax.png" alt=""><br>編輯一下 <code>FUN_00000950</code>，幫他加個參數<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN_00000950_edit_function.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN_00000950_edit_function_param.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN_00000950_edit_function_final.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN_00000950_edit_function_result.png" alt=""></p>
+<p>接著看 <code>FUN_000002e1</code><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN_000002e1_func_struct.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN_000002e1_.png" alt=""></p>
+<p><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_paylolad_no_match.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN_0000064c.png" alt=""><br>idx.txt<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN_0000064c_idx.txt.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_FUN_0000064c_idx.png" alt=""></p>
+<p>c2<br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_paylolad_c2.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_c2_structure.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_c2.png" alt=""><br><img src="/img/2024/Ghidra-and-ShadowHammer/ghidra_shadow_hammer_shellcode_c2_link.png" alt=""></p>
+<p>conclusion</p>
+<ol>
+<li>透過 <code>GetAdaptersInfo</code> 取得 MAC 資訊</li>
+<li>透過 <code>MD5Init, MD5Update 和 MD5Final</code> 計算 MAC 的 MD5 值</li>
+<li>當 Match 到 MD5 的值時，從 <code>asushotfix[.]com</code> 下載 shellcode 並執行</li>
+<li>如果沒 Match 的話， write something to idx.txt</li>
+</ol>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2024 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
