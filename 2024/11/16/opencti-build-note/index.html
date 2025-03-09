@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="一年快過了，回來做年度回顧才發現今年竟然只發了一篇文章，希望之後能高產一點
+這一年最主要的就是在弄 opencti，過了一年多有了一些心得，來記錄一下
+ref:https://docs.opencti.io/latest/deployment/installation/
+使用 docker build 進行構建
+這邊可以說幾個小細節
+OPENCTI_BASE_URL 可以根據你 build 的方法來決定要不要設定以我的經驗來說，如果你打算將 https 做在 azure app getway 或是 nginx 上的話，我會建議不要設定，如果設定的話，在 taxii discovery url 那一段會被強制改寫成 base_url 的 domain，除非你在 nginx 上強制改寫，沒設定 base_url 的話會根據你 access 的 domain 動態更改 api_roots 上呈現的 domain
+ELASTIC_MEMORY_SIZE 設定 Elasticsearch 能使用的最大 memory size
+以上是 env 變數的設定，接下來看 docker-compose.yml 的設定
+ref: https://github.com/OpenCTI-Platform/docker
+docker-compose 基本上就需要注意兩個地方─ redis 與 elasticsearch">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="opencti_build_note"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>opencti_build_note - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>opencti_build_note</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2024-11-16
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>一年快過了，回來做年度回顧才發現今年竟然只發了一篇文章，希望之後能高產一點</p>
+<p>這一年最主要的就是在弄 opencti，過了一年多有了一些心得，來記錄一下</p>
+<p>ref:<a target="_blank" rel="noopener" href="https://docs.opencti.io/latest/deployment/installation/">https://docs.opencti.io/latest/deployment/installation/</a></p>
+<p>使用 docker build 進行構建</p>
+<p>這邊可以說幾個小細節</p>
+<p><code>OPENCTI_BASE_URL</code> 可以根據你 build 的方法來決定要不要設定<br>以我的經驗來說，如果你打算將 https 做在 azure app getway 或是 nginx 上的話，我會建議不要設定，如果設定的話，在 taxii discovery url 那一段會被強制改寫成 base_url 的 domain，除非你在 nginx 上強制改寫，沒設定 base_url 的話會根據你 access 的 domain 動態更改 <code>api_roots</code> 上呈現的 domain</p>
+<p><code>ELASTIC_MEMORY_SIZE</code> 設定 Elasticsearch 能使用的最大 memory size</p>
+<p>以上是 env 變數的設定，接下來看 docker-compose.yml 的設定</p>
+<p>ref: <a target="_blank" rel="noopener" href="https://github.com/OpenCTI-Platform/docker">https://github.com/OpenCTI-Platform/docker</a></p>
+<p>docker-compose 基本上就需要注意兩個地方─ redis 與 elasticsearch </p>
+<ul>
+<li><p>elasticsearch<br><code>thread_pool.search.queue_size</code> 可以根據自己的設備需求做調整，一定要加，不然 request 來太多的時候會塞住<br><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html">https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html</a></p>
+</li>
+<li><p>redis<br>這個算是最費我心思的，主要是使用的時間一久之後，他的記憶體使用量會直線上升</p>
+</li>
+</ul>
+<p>透過 <code>redis-cli --bigkeys</code> 得知是 <code>stream.opencti</code> 用量暴增</p>
+<p>因此建議定期清 key <code>redis-cli DEL stream.opencti</code></p>
+<p>剩下的照官方文件 <code>docker compose up</code> 就好</p>
+<p>build 起來後，再來就是針對 docker 的日常維運了</p>
+<p>除了 <code>redis-cli DEL stream.opencti</code> 之外<br>我還會定期下<br><code>/usr/bin/docker image prune -a -f</code><br><code>/usr/bin/docker volume prune -a -f</code></p>
+<p>還有限制 docker logs 的大小 (這部分我還在研究)<br>一樣是透過排成定期下以下指令<br><code>docker ps --no-trunc --format &quot;table &#123;&#123;.ID&#125;&#125;\t&#123;&#123;.Names&#125;&#125;&quot; | grep opencti | cut -d &quot; &quot; -f 1 | xargs -i sed -i -e :a -e &#39;$q;N;2000,$D;ba&#39; /var/lib/docker/containers/&#123;&#125;/&#123;&#125;-json.log</code><br>只不過要用 root 執行，還是頗髒，2000 是可以自己選擇要留最新的幾行</p>
+<p>另一種方法是寫 log driver，但沒辦法套用到舊的 container 上，參考:<br><code>docker run --log-driver json-file --log-opt max-size=10m --log-opt max-file=10  alpine echo hello world</code><br>新增 <code>/etc/docker/daemon.json</code><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;log-driver&quot;: &quot;json-file&quot;,</span><br><span class="line">  &quot;log-opts&quot;: &#123;</span><br><span class="line">    &quot;max-size&quot;: &quot;20m&quot;,</span><br><span class="line">    &quot;max-file&quot;: &quot;5&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><code>systemctl daemon-reload</code><br><code>systemctl restart docker</code></p>
+<p>在 feed 的部分，我會透過 pycti 寫 python 跟 opencti 做串接，然後將 error 傳到一個檔案內<br>透過 <code>inotifywait</code> 監控檔案變動傳訊息給我，或是直接在 <code>except</code> 裡面使用 <code>requests.get</code> 送也行，只是我覺得 monitor 檔案變動這件事我之後應該會用到，先用起來不虧</p>
+<ul>
+<li>SAML<br>如果是企業的話，多半一定想要串 SSO 吧，有關 SAML 的設定可以參考這裡<br><a target="_blank" rel="noopener" href="https://docs.opencti.io/latest/deployment/authentication/#saml-button">https://docs.opencti.io/latest/deployment/authentication/#saml-button</a><br>老實說照著 example 設定還是有出錯的可能<br>我這邊是參考 issue 裡面官方的回答<br><a target="_blank" rel="noopener" href="https://github.com/OpenCTI-Platform/opencti/issues/7662">https://github.com/OpenCTI-Platform/opencti/issues/7662</a><br>把冒號換成等號就可以了，那個是放在 conf file 裡面才需要這樣設定<br>然後還多加了<br><code>PROVIDERS__SAML__CONFIG__AUDIENCE=$(the value that that is under &lt;AudienceRestriction&gt;&lt;Audience&gt; in the SAML xml file)</code><br><code>PROVIDERS__SAML__CONFIG__WANT_AUTHN_RESPONSE_SIGNED=false</code><br><code>PROVIDERS__SAML__CONFIG__WANT_ASSERTIONS_SIGNED=true</code><br><code>PROVIDERS__SAML__CONFIG__DISABLE_REQUESTED_AUTHN_CONTEXT=true</code></li>
+</ul>
+<p>可以參考 issue 裡面的內容</p>
+<p>大概先這樣，有更新就會更新</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2025 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

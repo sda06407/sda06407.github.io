@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="今年整個忙於工作，實在沒辦法騰出好時間寫文章，但其實研究的步調並沒有落下，所以於是就想說針對常看到YT挑一些有趣的東西拿來寫
+首先附上REF: https://www.youtube.com/watch?v=mAond4BkCfM
+主要的利用工具是這個 iexpress.exe
+相關介紹https://zh.wikipedia.org/zh-tw/IExpresshttps://ss64.com/nt/iexpress.html
+其實透過 iexpress 產生惡意程式 loader 好像不是什麼新鮮事了https://blog.csdn.net/cssxn/article/details/102294173
+它的使用方法也很簡單首先打開他，記得要用 admin 權限開，不然到後面會有 error
+這邊選第一個取標題名稱詢問是否需要提示 prompt詢問是否需要 pop license選擇需要打包的軟體選擇執行安裝的軟體，同時也可以選擇安裝完成後要額外執行的軟體選擇是否要顯示安裝視窗安裝完成後的訊息欄選擇 Package 要存哪如果這邊選了 Store files 那個選項的話，會跳出提示，這邊我們不選安裝完是否需要重新啟動選擇 SED 要存在哪最後給他跑如果這邊不是用 admin 權限跑的話就會出現以下錯誤最後執行完成
+到這邊流程告一段落，來看看產生的檔案如何
+可以看到印有 Micorsoft 的字串，並且沒有簽章
+透過 process explorer 長這樣">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="John Hammond Self-Extracting Executables for Hackers"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>John Hammond Self-Extracting Executables for Hackers - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>John Hammond Self-Extracting Executables for Hackers</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2024-12-28
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>今年整個忙於工作，實在沒辦法騰出好時間寫文章，但其實研究的步調並沒有落下，所以於是就想說針對常看到YT挑一些有趣的東西拿來寫</p>
+<p>首先附上<br>REF: <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=mAond4BkCfM">https://www.youtube.com/watch?v=mAond4BkCfM</a></p>
+<p>主要的利用工具是這個 <code>iexpress.exe</code><br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_1.png" alt=""></p>
+<p>相關介紹<br><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-tw/IExpress">https://zh.wikipedia.org/zh-tw/IExpress</a><br><a target="_blank" rel="noopener" href="https://ss64.com/nt/iexpress.html">https://ss64.com/nt/iexpress.html</a></p>
+<p>其實透過 iexpress 產生惡意程式 loader 好像不是什麼新鮮事了<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/cssxn/article/details/102294173">https://blog.csdn.net/cssxn/article/details/102294173</a></p>
+<p>它的使用方法也很簡單<br>首先打開他，記得要用 admin 權限開，不然到後面會有 error</p>
+<p><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_1.png" alt=""><br>這邊選第一個<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_2.png" alt=""><br>取標題名稱<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_3.png" alt=""><br>詢問是否需要提示 prompt<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_4.png" alt=""><br>詢問是否需要 pop license<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_5.png" alt=""><br>選擇需要打包的軟體<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_6.png" alt=""><br>選擇執行安裝的軟體，同時也可以選擇安裝完成後要額外執行的軟體<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_7.png" alt=""><br>選擇是否要顯示安裝視窗<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_8.png" alt=""><br>安裝完成後的訊息欄<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_9.png" alt=""><br>選擇 Package 要存哪<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_10.png" alt=""><br>如果這邊選了 <code>Store files</code> 那個選項的話，會跳出提示，這邊我們不選<br>安裝完是否需要重新啟動<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_12.png" alt=""><br>選擇 SED 要存在哪<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_13.png" alt=""><br>最後給他跑<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_14.png" alt=""><br>如果這邊不是用 admin 權限跑的話就會出現以下錯誤<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_no_admin.png" alt=""><br>最後執行完成<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_15.png" alt=""><br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_usage_16.png" alt=""></p>
+<p>到這邊流程告一段落，來看看產生的檔案如何<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_properties.png" alt=""></p>
+<p>可以看到印有 Micorsoft 的字串，並且沒有簽章<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_help.png" alt=""></p>
+<p>透過 process explorer 長這樣<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_process_explorer.png" alt=""></p>
+<p>然後 iexpress 可以透過 cmd 呼叫<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_help.png" alt=""></p>
+<p>所以還可以只傳送 SED file，讓他透過 cmd 產生 exe<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_create_exe.png" alt=""><br>細部打開 SED file 內部長這樣子</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Version]</span></span><br><span class="line"><span class="attr">Class</span>=IEXPRESS</span><br><span class="line"><span class="attr">SEDVersion</span>=<span class="number">3</span></span><br><span class="line"><span class="section">[Options]</span></span><br><span class="line"><span class="attr">PackagePurpose</span>=InstallApp</span><br><span class="line"><span class="attr">ShowInstallProgramWindow</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">HideExtractAnimation</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">UseLongFileName</span>=<span class="number">0</span></span><br><span class="line"><span class="attr">InsideCompressed</span>=<span class="number">0</span></span><br><span class="line"><span class="attr">CAB_FixedSize</span>=<span class="number">0</span></span><br><span class="line"><span class="attr">CAB_ResvCodeSigning</span>=<span class="number">0</span></span><br><span class="line"><span class="attr">RebootMode</span>=N</span><br><span class="line"><span class="attr">InstallPrompt</span>=%InstallPrompt%</span><br><span class="line"><span class="attr">DisplayLicense</span>=%DisplayLicense%</span><br><span class="line"><span class="attr">FinishMessage</span>=%FinishMessage%</span><br><span class="line"><span class="attr">TargetName</span>=%TargetName%</span><br><span class="line"><span class="attr">FriendlyName</span>=%FriendlyName%</span><br><span class="line"><span class="attr">AppLaunched</span>=%AppLaunched%</span><br><span class="line"><span class="attr">PostInstallCmd</span>=%PostInstallCmd%</span><br><span class="line"><span class="attr">AdminQuietInstCmd</span>=%AdminQuietInstCmd%</span><br><span class="line"><span class="attr">UserQuietInstCmd</span>=calc.exe</span><br><span class="line"><span class="attr">SourceFiles</span>=SourceFiles</span><br><span class="line"><span class="section">[Strings]</span></span><br><span class="line"><span class="attr">InstallPrompt</span>=</span><br><span class="line"><span class="attr">DisplayLicense</span>=</span><br><span class="line"><span class="attr">FinishMessage</span>=</span><br><span class="line"><span class="attr">TargetName</span>=C:\Users\users\Documents\iexpress_test\installer.EXE</span><br><span class="line"><span class="attr">FriendlyName</span>=installer</span><br><span class="line"><span class="attr">AppLaunched</span>=calc.exe</span><br><span class="line"><span class="attr">PostInstallCmd</span>=calc.exe</span><br><span class="line"><span class="attr">AdminQuietInstCmd</span>=</span><br><span class="line"><span class="attr">UserQuietInstCmd</span>=</span><br><span class="line"><span class="attr">FILE0</span>=<span class="string">&quot;calc.exe&quot;</span></span><br><span class="line"><span class="section">[SourceFiles]</span></span><br><span class="line"><span class="attr">SourceFiles0</span>=C:\Windows\System32\</span><br><span class="line"><span class="section">[SourceFiles0]</span></span><br><span class="line">%FILE0%=</span><br></pre></td></tr></table></figure>
+<p><code>TargetName</code> 就是實際 exe 會產生的位置，無論在哪邊解 SED file 最後都會在 <code>TargetName</code> 產生 exe<br><code>AppLaunched</code> 就是實際 exe 會執行的內容，這邊可以替換為後門程式，但要注意，需要在 <code>SourceFiles0</code> 指定的 path 能找到對應的檔案名稱才行 </p>
+<p>當把 calc.exe 改為 notepad.exe 的時候會發現一個有趣的現象<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_notepad_process_explorer.png" alt=""><br>這個 process tree 看起來合理多了，為什麼呼叫 calc.exe 的時候不是直接從 installer.exe spawn 呢?<br>還好現在有 chatgpt 可以解答我的疑問..</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">你所描述的情況，當你運行 calc.exe（計算器）時，它似乎是由 sihost.exe 進程啟動，而不是由你的父進程啟動，同時 notepad.exe（記事本）則由父進程啟動，在 Process Explorer 中顯示為父子關係，這可能與 Windows 如何處理進程和用戶界面（UI）進程的管理方式有關。</span><br><span class="line"></span><br><span class="line">1. Sihost.exe 和 Windows Shell</span><br><span class="line">Sihost.exe（Shell Infrastructure Host）是 Windows 操作系統中的一個系統進程，負責處理一些與用戶界面（UI）相關的圖形元素，比如透明效果、主題、視覺特效等。</span><br><span class="line">Sihost.exe 是 Windows Shell 的一部分，負責管理桌面環境的某些視覺元素。在你運行像 calc.exe（計算器）這樣的應用程序時，它可能會通過 sihost.exe 來啟動，因為 sihost.exe 需要處理與桌面 UI 相關的任務。</span><br><span class="line">Sihost.exe 作為父進程來啟動 UI 類應用程序（如 calc.exe），是為了更好地管理窗口和視覺效果，這是與 Windows 用戶界面相關的一種設計行為。</span><br><span class="line">2. Notepad 和父進程</span><br><span class="line">Notepad.exe（記事本）通常會直接從你的父進程（如 explorer.exe 或你的用戶會話進程）啟動。這是因為 notepad.exe 是一個簡單的應用程序，它不需要依賴 sihost.exe 來管理視覺效果或桌面環境。</span><br><span class="line">Notepad 是一個比較簡單的程序，只是打開文本編輯窗口，因此它不需要像 calc.exe 那樣與 sihost.exe 進行交互。這樣它就可以直接從 explorer.exe（Windows 的桌面進程）或者啟動它的父進程啟動。</span><br><span class="line">3. 進程樹的行為</span><br><span class="line">Windows 進程樹：Windows 的進程樹有時候比我們預期的更複雜，尤其是像 sihost.exe 這樣的進程，它負責管理 UI 元素，會在一定情況下作為父進程啟動其他進程。即使 calc.exe（計算器）看似是從 sihost.exe 啟動的，它依然是作為一部分用來管理桌面界面的一個過程。</span><br><span class="line">為什麼會這樣：</span><br><span class="line"></span><br><span class="line">Windows UI 管理：Windows 操作系統會優先考慮一些進程，比如 sihost.exe，來處理用戶界面和視覺效果。所以像 calc.exe 這樣的應用程序需要與桌面環境的視覺元素兼容，因此它會通過 sihost.exe 啟動。</span><br><span class="line">Notepad 的簡單性：Notepad 是一個比較簡單的應用程序，它不需要與 sihost.exe 交互來處理視覺效果，因此它會直接從父進程（如 explorer.exe）啟動。</span><br><span class="line">4. 為什麼會有 Sihost.exe 參與</span><br><span class="line">Sihost.exe 負責處理 Windows 系統中的一些圖形界面元素，包括桌面透明效果、開始菜單、任務欄等。當你運行像 calc.exe（計算器）這樣的程序時，Windows 需要確保這些應用能夠正確顯示並與系統視覺元素兼容。因此，這類應用可能會通過 sihost.exe 啟動，以確保它們的視覺效果能夠正常運行。</span><br><span class="line">這意味著，當你啟動 calc.exe 時，Windows 會通過 sihost.exe 來協調與視覺界面的交互，從而使應用程序的窗口顯示正常。</span><br><span class="line">5. Process Explorer 中的父子關係</span><br><span class="line">Process Explorer 顯示的父子進程關係是根據 Windows 系統記錄的啟動過程來顯示的，這可能不完全反映進程啟動的實際邏輯。它所顯示的父進程可能是 sihost.exe，但實際上這只是進程樹中的一個顯示，並不代表 sihost.exe 真正是啟動 calc.exe 的進程。</span><br><span class="line">Notepad 出現直接從父進程（如 explorer.exe）啟動，可能是因為它是簡單的應用程序，不需要過多的 UI 管理。這些進程在 Process Explorer 中的顯示可能讓你覺得它們是從父進程啟動的，但其實 Windows 是根據需要來處理每個應用的啟動方式的。</span><br><span class="line">6. 結論</span><br><span class="line">Sihost.exe 會管理 calc.exe 的啟動，是因為 sihost.exe 負責 Windows 系統的圖形界面管理和視覺效果。Notepad.exe 則直接由父進程啟動，是因為它是一個簡單的應用程序，並不依賴於這些 UI 管理。</span><br><span class="line">Process Explorer 顯示的進程樹可能會讓你感覺 calc.exe 由 sihost.exe 啟動，而 notepad.exe 由父進程啟動，這實際上是 Windows 根據不同應用程序的需求來管理進程的結果。</span><br></pre></td></tr></table></figure>
+<p>另外產生出來的 exe 也有參數可以呼叫喔<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_exe_help.png" alt=""><br>所以可以做到這樣，明明 SED 的參數是呼叫 notepad.exe, 卻可以透過 <code>/C</code> 改寫呼叫的程式(指令)，這裡的說明是安裝指令，代表可以不需要看 <code>SourceFiles0</code><br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_run_program.png" alt=""><br>可以任意指定參數<br><img src="/img/2024/John-Hammond-Self-Extracting-Executables-for-Hackers/iexpress_parameter.png" alt=""></p>
+<p>另外在文章中有引出另一篇推特文章<br><a target="_blank" rel="noopener" href="https://x.com/0gtweet/status/1759868814148133078">https://x.com/0gtweet/status/1759868814148133078</a><br>基本上就是把 iexpress 當作 loader 了<br>看到後當然會想試一下<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">echo [Version] &gt; lol.sed </span><br><span class="line">echo Class=IEXPRESS &gt;&gt; lol.sed</span><br><span class="line">echo SEDVersion=3 &gt;&gt; lol.sed</span><br><span class="line">echo [Options] &gt;&gt; lol.sed</span><br><span class="line">echo TargetName=.\LOLBin.EXE &gt;&gt; lol.sed</span><br><span class="line">echo AppLaunched=&quot;cmd.exe /c start calc.exe&quot; &gt;&gt; lol.sed</span><br><span class="line">echo PostInstallCmd=^&lt;None^&gt; &gt;&gt; lol.sed</span><br><span class="line">echo SourceFiles-SourceFiles &gt;&gt; lol.sed</span><br><span class="line">echo [SourceFiles] &gt;&gt; lol.sed</span><br><span class="line">echo SourceFiles0=. &gt;&gt; lol.sed</span><br><span class="line">echo [SourceFiles0] &gt;&gt; lol.sed</span><br><span class="line">echo lol.sed-lol.sed &gt;&gt; lol.sed iexpress.exe /n lol.sed</span><br><span class="line">LOLBin.exe</span><br></pre></td></tr></table></figure></p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2025 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

