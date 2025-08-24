@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="最近需要回來熟悉一下 ghidra，而且還有 wannaCry 的債要還…先用這個比較簡單的
+ref:https://www.youtube.com/watch?v=4urMITJKQQs
+我覺得寫得不錯，流程很簡單，就是抓舊版的韌體，透過 GHIDRA 從中找出 AES KEY 之後拿來解密新版本的韌體
+首先抓 moxa v1.11 的韌體，這邊抓 v1.11的韌體根據是他的 release note:裡面提到了可以直升 v2.0 以上的加密韌體，代表裡面要有 key 才能解
+根據影片可以去
+https://www.moxa.com/en/products/industrial-edge-connectivity/serial-device-servers/wireless-device-servers/nport-w2150a-w2250a-series#resources
+找看看，但是現在網站上已經沒有 1.11 韌體的下載點了透過 archive.org 有找到舊版的韌體
+好玩的地方來了，我在 archive.org 上抓的 1.11 版韌體有加密，在官方 link 上抓得沒有(官方 link 還活著，只是從官網上移除入口而已)
+
+上面是中間的小插曲，然後也同步把 2.2(加密) 版本抓下來了照著影片方法取個別檔案的 entropy">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Breaking an embedded firmware encryption scheme"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Breaking an embedded firmware encryption scheme - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Breaking an embedded firmware encryption scheme</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2025-08-06
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>最近需要回來熟悉一下 ghidra，而且還有 wannaCry 的債要還…先用這個比較簡單的</p>
+<p>ref:<br><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=4urMITJKQQs">https://www.youtube.com/watch?v=4urMITJKQQs</a></p>
+<p>我覺得寫得不錯，流程很簡單，就是抓舊版的韌體，透過 GHIDRA 從中找出 AES KEY 之後拿來解密新版本的韌體</p>
+<p>首先抓 moxa v1.11 的韌體，這邊抓 v1.11的韌體根據是他的 release note:<br><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_v11_release.png" alt=""><br>裡面提到了可以直升 v2.0 以上的加密韌體，代表裡面要有 key 才能解</p>
+<p>根據影片可以去</p>
+<p><a target="_blank" rel="noopener" href="https://www.moxa.com/en/products/industrial-edge-connectivity/serial-device-servers/wireless-device-servers/nport-w2150a-w2250a-series#resources">https://www.moxa.com/en/products/industrial-edge-connectivity/serial-device-servers/wireless-device-servers/nport-w2150a-w2250a-series#resources</a></p>
+<p>找看看，但是現在網站上已經沒有 1.11 韌體的下載點了<br>透過 archive.org 有找到舊版的韌體</p>
+<p>好玩的地方來了，我在 archive.org 上抓的 1.11 版韌體有加密，在官方 link 上抓得沒有(官方 link 還活著，只是從官網上移除入口而已)<br><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_binwalk.png" alt=""></p>
+<p><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_binwalk_encrypt.png" alt=""></p>
+<p>上面是中間的小插曲，然後也同步把 2.2(加密) 版本抓下來了<br>照著影片方法取個別檔案的 entropy</p>
+<p><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_v2.2_entropy.png" alt=""></p>
+<p><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_v1.1_entropy.png" alt=""></p>
+<p>這邊快速科普一下 entropy</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">在資訊理論中，entropy（熵） 描述的是資料的「不確定性」或「隨機性」。在 binwalk 的分析中：</span><br><span class="line"></span><br><span class="line">熵的值範圍是從 0 到 8（以位元為單位，代表每 byte 的平均熵）。</span><br><span class="line"></span><br><span class="line">0 表示資料完全沒有隨機性（例如全部是 0x00 或 0xFF）。</span><br><span class="line"></span><br><span class="line">8 表示資料極度隨機，可能是加密或壓縮的內容。</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">熵值範圍	意義</span><br><span class="line">0 ~ 3	很低熵，資料很重複，例如清空區域</span><br><span class="line">3 ~ 6	中度熵，普通未壓縮資料</span><br><span class="line">6 ~ 8	高熵，可能是壓縮或加密資料</span><br><span class="line">= 8	完全隨機，幾乎一定是加密或壓縮過的內容</span><br></pre></td></tr></table></figure>
+<p>binwalk 的 Entropy x/y 軸分別代表 offset 與 entropy，但為什麼 Y 軸的 entropy 最大值不是 8 呢?<br>在 binwalk 的 source code 可以找到答案 (最後 return 的時候 / 8)<br><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_shannon_entropy_py.png" alt=""><br>source: <a target="_blank" rel="noopener" href="https://github.com/foreni-packages/binwalk/blob/master/src/binwalk/modules/entropy.py">https://github.com/foreni-packages/binwalk/blob/master/src/binwalk/modules/entropy.py</a></p>
+<p>所以在 binwalk 來說:</p>
+<table>
+<thead>
+<tr>
+<th>Y 值</th>
+<th>實際 entropy</th>
+<th>意義範例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>8.0 bits</td>
+<td>非常隨機（加密或壓縮資料）</td>
+</tr>
+<tr>
+<td>0.75</td>
+<td>6.0 bits</td>
+<td>高 entropy（壓縮內容可能性高）</td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>4.0 bits</td>
+<td>中等 entropy（普通程式碼或資料）</td>
+</tr>
+<tr>
+<td>0.25</td>
+<td>2.0 bits</td>
+<td>很低 entropy（可能是填充區）</td>
+</tr>
+<tr>
+<td>0.0</td>
+<td>0.0 bits</td>
+<td>完全重複（0x00、0xFF 填充）</td>
+</tr>
+</tbody>
+</table>
+<p>但這是舊版 (python) 的 binwalk 才是這樣呈現<br>新版 (Rust) 的最大值就是 8</p>
+<p><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_shannon_entropy_rs.png" alt=""><br>ref: <a target="_blank" rel="noopener" href="https://github.com/ReFirmLabs/binwalk/blob/master/src/entropy.rs">https://github.com/ReFirmLabs/binwalk/blob/master/src/entropy.rs</a></p>
+<p>總之解完韌體後，會出現 <code>squashfs-root</code> 的資料夾，我們需要在裡面找韌體升級的相關檔案<br>但在這之前記得先 <code>sudo chmod -R +rx squashfs-root</code> 不然會有權限問題</p>
+<p><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_find_upgrade.png" alt=""></p>
+<p>可以看到在 <code>squashfs-root-0</code> 有找到相關檔案<br>現在嘗試用 ghidra 解他看看，在 analysis 選項部份可以打勾<br><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_ghidra_analysis_options.png" alt=""></p>
+<p>透過選擇工具列上的 <code>Window-&gt;Functions</code> 呼叫出 Function List 清單，搜尋關鍵字</p>
+<p><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_ghidra_find_decrypt.png" alt=""></p>
+<p>然後選擇工具列上的 <code>Window-&gt;Functions Graph</code> 可以用圖的方式呈現 control flow</p>
+<p><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_fw_decrypt_call_graph.png" alt=""><br>然後我們再往下追 <code>ecb128Decrypt</code> 的關聯性，可以看到有一個 <code>AES_set_decrypt_key</code><br><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_ecb128_call_graph.png" alt=""></p>
+<p><code>AES_set_decrypt_key</code> 裡面雖然沒東西(應該是解析失敗)，但沒關係，我們追到這邊就取得 function 的 return type 跟 parameter type<br><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_AES_set_Decrypt_key.png" alt=""></p>
+<p>所以我們回去 <code>ecb128Decrypt</code> 修改相關的 value type</p>
+<p><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_ecb128.png" alt=""></p>
+<p>首先把 <code>AES_set_decrypt_key(auStack_30,0x80,&amp;AStack_124);</code> 改 <code>AES_set_decrypt_key(userKey,128,&amp;aes_key);</code> (中間的十六進位轉十進位透過滑鼠右鍵就能了)</p>
+<p>往下看到 13 14 行<br>可以看到他把計算後的結果又過一個 <code>uchar *</code> 的轉換，然後在 function parameter 的型別卻是 void，這邊我們把它改的好看一下，直接 retype parameter 變成 <code>uchar *</code> (滑鼠右鍵 -&gt; Retype Variable)<br><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_retype_argument.png" alt=""></p>
+<p>AES_ecb_encrypt 的 function spec 在下面<br><a target="_blank" rel="noopener" href="https://github.com/openssl/openssl/blob/master/crypto/aes/aes_ecb.c">https://github.com/openssl/openssl/blob/master/crypto/aes/aes_ecb.c</a><br>整體改完的樣子長這樣:<br><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_ecb128Decrypt.png" alt=""></p>
+<p>接著到 <code>fw_decrypt</code> 也就是 call <code>ecb128Decrypt</code> 的 function</p>
+<p><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_fw_decrypt.png" alt=""></p>
+<p>我的習慣是先照著已知型別的變數先改 type，也就是上一個我們看完的 function 參數的型別</p>
+<p>首先 <code>param_1</code> retype 成 <code>uchar *</code>，然後 <code>uVar2</code> 改 int，這樣他就會顯示 -1,-2 正常的呈現</p>
+<p>然後 <code>pbVar3</code> 應該就是明文密碼了</p>
+<p>最後的 return 很奇怪<br><code>return CONCAT44(param_1,uVar2)</code></p>
+<p>這邊可以細解一下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">根據 AAPCS (ARM Architecture Procedure Call Standard)：</span><br><span class="line"></span><br><span class="line">整數 / 指標</span><br><span class="line"></span><br><span class="line">回傳值放在 R0</span><br><span class="line"></span><br><span class="line">如果 64-bit (例如 long long)，會用 R0:R1 (低位在 R0，高位在 R1)</span><br><span class="line"></span><br><span class="line">浮點數（在支援 VFP/NEON 的情況下）</span><br><span class="line"></span><br><span class="line">用 S0 / D0 浮點暫存器回傳</span><br><span class="line"></span><br><span class="line">沒有硬體浮點的話，會退化成 R0 傳遞整數格式的浮點數</span><br><span class="line"></span><br><span class="line">結構體 (struct)</span><br><span class="line"></span><br><span class="line">如果結構體小到能塞進一個寄存器，就用 R0</span><br><span class="line"></span><br><span class="line">如果比較大，會由 caller 提供一個記憶體位置，函式透過寫入那個位置「回傳」</span><br><span class="line"></span><br><span class="line">總結</span><br><span class="line"></span><br><span class="line">主要看 R0</span><br><span class="line"></span><br><span class="line">如果是 64-bit 整數 → 看 R0:R1</span><br><span class="line"></span><br><span class="line">如果是浮點數 → 看 S0 / D0</span><br><span class="line"></span><br><span class="line">大結構 → 回傳值其實是寫到記憶體，不會只在寄存器裡</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>總之就是看 r0</p>
+<p>而 <code>uVar</code> 放的在 r0</p>
+<p>然後最後明明是 <code>ldmia</code> 的指令，為什麼 c 語言會有 return</p>
+<p>這邊說一下 <code>ldmia</code> 是幹嘛的</p>
+<p>以這為例子<br><code>LDMIA R1!, &#123;R0, R2, R3&#125;</code></p>
+<p>假設 R1 = 0x1000</p>
+<p>記憶體內容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[0x1000] = 0xAAAA</span><br><span class="line"></span><br><span class="line">[0x1004] = 0xBBBB</span><br><span class="line"></span><br><span class="line">[0x1008] = 0xCCCC</span><br></pre></td></tr></table></figure>
+<p>執行後：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">R0 = 0xAAAA</span><br><span class="line"></span><br><span class="line">R2 = 0xBBBB</span><br><span class="line"></span><br><span class="line">R3 = 0xCCCC</span><br><span class="line"></span><br><span class="line">R1 = 0x100C （因為有 !，所以會寫回更新後的位置）</span><br></pre></td></tr></table></figure>
+<p>讓我們來看看最後 return 指向的 ARM</p>
+<p><code>ldmia sp!,&#123;param_2,passwd,r3,r4,r5,r6,r7,r8,r10,pc&#125;</code></p>
+<p>可以看到他有動到最後的 <code>pc</code> register 所以會有跳轉的行為<br>再加上 <code>uVar2</code> 在 r0，所以可以得出他僅 return <code>uVar2</code> 的值，<code>uVar2</code> 為 int，因此改 function return type 為 int</p>
+<p><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_fw_decrypt_0.png" alt=""></p>
+<p><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_fw_decrypt_1.png" alt=""></p>
+<p>最後的最後 就是解密啦<br>透過這段可以知道密碼被存在 <code>passwd.3309</code> 裡面<br><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_fw_decrypt_part.png" alt=""></p>
+<p>但要取多長呢?<br>在 <code>ecb128Decrypt</code> 可以知道 key 的長度是 0x10<br><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_0x10_length.png" alt=""></p>
+<p>因此就已 0x10 為長度取 <code>passwd.3309</code> 的 byte</p>
+<p><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_passwd_bytes.png" alt=""></p>
+<p>複製出來後順著 c code 的呈現寫一個 python 取出 key</p>
+<p><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_password.png" alt=""></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">passwd = [<span class="number">0x95</span>, <span class="number">0xb3</span>, <span class="number">0x15</span>, <span class="number">0x32</span>, <span class="number">0xe4</span>, <span class="number">0xe4</span>, <span class="number">0x43</span>, <span class="number">0x6b</span>, <span class="number">0x90</span>, <span class="number">0xbe</span>, <span class="number">0x1b</span>, <span class="number">0x31</span>, <span class="number">0xa7</span>, <span class="number">0x8b</span>, <span class="number">0x2d</span>, <span class="number">0x05</span>]</span><br><span class="line"></span><br><span class="line">i=<span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> (i &lt; <span class="built_in">len</span>(passwd)):</span><br><span class="line">    passwd[i] = passwd[i] ^ <span class="number">0xa7</span>;</span><br><span class="line">    passwd[i+<span class="number">1</span>] = passwd[i+<span class="number">1</span>] ^ <span class="number">0x8b</span>;</span><br><span class="line">    passwd[i+<span class="number">2</span>] = passwd[i+<span class="number">2</span>] ^ <span class="number">0x2d</span>;</span><br><span class="line">    passwd[i+<span class="number">3</span>] = passwd[i+<span class="number">3</span>] ^ <span class="number">5</span>;</span><br><span class="line">    i = i + <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(passwd)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> passwd:</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">hex</span>(x),end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>因為我們要餵進去 openssl 解密，所以給16進位key</p>
+<p>又不要 <code>0x</code> 所以我選擇用這種方式</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">astar@blog:/tmp$ python3 passwd.py | tr -d <span class="string">&#x27;0x&#x27;</span></span><br><span class="line">[5, 56, 56, 55, 67, 111, 11, 11, 55, 53, 54, 52, , , , ]</span><br><span class="line">32383837436f6e6e37353634</span><br><span class="line"></span><br><span class="line">astar@blog:/tmp$</span><br></pre></td></tr></table></figure>
+<p>還有一個點 細看 decrypt 的過程，透過 decrypt_size-0x28可以得知，要解密的開頭是往後數第 40 個 bytes 開始<br><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_decrypt_offset.png" alt=""></p>
+<p>這部分可以用 dd 解決</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ dd <span class="keyword">if</span>=./moxa-nport-w2150a-w2250a-series-firmware-v2.2.rom of=moxa-nport-w2150a-w2250a-series-firmware-v2.2.rom.offset bs=1 skip=40</span><br><span class="line"></span><br><span class="line">8874768+0 records <span class="keyword">in</span></span><br><span class="line">8874768+0 records out</span><br><span class="line">8874768 bytes (8.9 MB, 8.5 MiB) copied, 9.00683 s, 985 kB/s</span><br></pre></td></tr></table></figure>
+<p>然後再用 openssl 解密</p>
+<p><code>openssl aes-128-ecb -d -K &quot;32383837436f6e6e373536340000&quot; -in ./moxa-nport-w2150a-w2250a-series-firmware-v2.2.rom.offset -out decrypt_firmware</code><br><img src="/img/2025/Breaking-an-embedded-firmware-encryption-scheme/Breaking-an-embedded-firmware-encryption-scheme_final.png" alt=""></p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2025 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

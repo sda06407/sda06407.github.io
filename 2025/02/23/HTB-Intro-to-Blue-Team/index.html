@@ -507,6 +507,255 @@ wtmp 可以用 utmpdump 看其中的內容
 </ul>
 </li>
 </ol>
+<h1 id="Logjammer"><a href="#Logjammer" class="headerlink" title="Logjammer"></a>Logjammer</h1><p>解壓縮後有以下幾個 event log file</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Powershell-Operational.evtx</span><br><span class="line">System.evtx</span><br><span class="line">Windows Firewall-Firewall.evtx</span><br><span class="line">Security.evtx</span><br><span class="line">Windows Defender-Operational.evtx</span><br></pre></td></tr></table></figure>
+<p>如果是 real world 想要 dump 對應的檔案可以使用以下 command</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wevtutil epl &quot;Microsoft-Windows-PowerShell/Operational&quot; &quot;C:\Path\To\Export\Powershell-Operational.evtx&quot;</span><br><span class="line">wevtutil epl &quot;System&quot; &quot;C:\Path\To\Export\System.evtx&quot;</span><br><span class="line">wevtutil epl &quot;Microsoft-Windows-Windows Firewall With Advanced Security/Firewall&quot; &quot;C:\Path\To\Export\Firewall.evtx&quot;</span><br><span class="line">wevtutil epl &quot;Security&quot; &quot;C:\Path\To\Export\Security.evtx&quot;</span><br><span class="line">wevtutil epl &quot;Microsoft-Windows-Windows Defender/Operational&quot; &quot;C:\Path\To\Export\Defender-Operational.evtx&quot;</span><br></pre></td></tr></table></figure>
+<p>或是 powershell</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Get-WinEvent -LogName &quot;Microsoft-Windows-PowerShell/Operational&quot; | Export-Csv -Path &quot;C:\Path\To\Export\Powershell-Operational.csv&quot; -NoTypeInformation</span><br><span class="line">Get-WinEvent -LogName &quot;System&quot; | Export-Csv -Path &quot;C:\Path\To\Export\System.csv&quot; -NoTypeInformation</span><br><span class="line">Get-WinEvent -LogName &quot;Microsoft-Windows-Windows Firewall With Advanced Security/Firewall&quot; | Export-Csv -Path &quot;C:\Path\To\Export\Firewall.csv&quot; -NoTypeInformation</span><br><span class="line">Get-WinEvent -LogName &quot;Security&quot; | Export-Csv -Path &quot;C:\Path\To\Export\Security.csv&quot; -NoTypeInformation</span><br><span class="line">Get-WinEvent -LogName &quot;Microsoft-Windows-Windows Defender/Operational&quot; | Export-Csv -Path &quot;C:\Path\To\Export\Defender-Operational.csv&quot; -NoTypeInformation</span><br></pre></td></tr></table></figure>
+<p>如果遇到這個錯誤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">無法匯出記錄檔</span><br><span class="line">找不到指定的通道。</span><br></pre></td></tr></table></figure>
+<p>確保要匯出的紀錄檔有被列在</p>
+<p><code>Get-WinEvent -ListLog *</code> 的結果內</p>
+<p>個別 event log file 的描述如下</p>
+<table>
+<thead>
+<tr>
+<th><strong>事件日誌文件名</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Powershell-Operational.evtx</strong></td>
+<td>記錄 PowerShell 的操作性事件，對應 PowerShell 命令和腳本的執行。</td>
+</tr>
+<tr>
+<td><strong>System.evtx</strong></td>
+<td>記錄與操作系統和硬體相關的事件，包含系統錯誤、驅動程式事件等。</td>
+</tr>
+<tr>
+<td><strong>Windows Firewall-Firewall.evtx</strong></td>
+<td>記錄防火牆相關事件，包括防火牆規則變更、網路流量監控等。</td>
+</tr>
+<tr>
+<td><strong>Security.evtx</strong></td>
+<td>記錄與系統安全相關的事件，如用戶登入、身份驗證、權限變更等。</td>
+</tr>
+<tr>
+<td><strong>Windows Defender-Operational.evtx</strong></td>
+<td>記錄 Windows Defender 防病毒軟體的操作事件，包括病毒掃描結果、威脅檢測等。</td>
+</tr>
+</tbody>
+</table>
+<p>從 <strong>事故回應 (Incident Response, IR)</strong> 的角度來看，這些 Windows 事件日誌檔案的用途非常重要，因為它們能提供關於系統行為、安全事件和異常活動的關鍵資訊。以下是每個日誌檔案在 IR 中的具體用途：</p>
+<h3 id="1-Powershell-Operational-evtx"><a href="#1-Powershell-Operational-evtx" class="headerlink" title="1. Powershell-Operational.evtx"></a>1. <strong>Powershell-Operational.evtx</strong></h3><ul>
+<li><p><strong>用途</strong>：PowerShell 是攻擊者常用的工具之一，許多滲透測試和攻擊行為都會利用 PowerShell 來執行命令或下載惡意腳本。這個日誌可以幫助 IR 團隊檢測和分析有關 PowerShell 的操作性事件，如是否有可疑的命令執行、腳本運行或異常的 PowerShell 會話。</p>
+</li>
+<li><p><strong>IR 角度分析</strong>：</p>
+<ul>
+<li><p><strong>可疑活動</strong>：監控是否有攻擊者利用 PowerShell 進行腳本執行、反向連接或滲透工具的下載。</p>
+</li>
+<li><p><strong>腳本範本追蹤</strong>：如果攻擊者使用特定的 PowerShell 腳本或命令執行攻擊，這些日誌將有助於追蹤腳本的執行歷史。</p>
+</li>
+<li><p><strong>惡意活動調查</strong>：如果檢測到異常或未授權的腳本執行，IR 團隊可以進一步調查是否有進一步的滲透或惡意行為。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-System-evtx"><a href="#2-System-evtx" class="headerlink" title="2. System.evtx"></a>2. <strong>System.evtx</strong></h3><ul>
+<li><p><strong>用途</strong>：這是系統的事件日誌，記錄與操作系統和硬體相關的事件，如驅動程式加載、硬體故障、系統崩潰等。這些資訊對 IR 團隊分析系統是否遭遇攻擊或異常非常重要，特別是當系統出現崩潰、服務停止或其他異常行為時。</p>
+</li>
+<li><p><strong>IR 角度分析</strong>：</p>
+<ul>
+<li><p><strong>系統崩潰和重啟</strong>：攻擊者可能會故意造成系統崩潰或強制重啟，IR 團隊需要檢查此類事件以確定是否與攻擊活動相關。</p>
+</li>
+<li><p><strong>硬體或驅動程式異常</strong>：異常的硬體故障或不明的驅動程式安裝可能是攻擊的跡象，IR 團隊可以根據這些資訊進行深度分析。</p>
+</li>
+<li><p><strong>篡改檢測</strong>：如果有系統服務突然停止或啟動，可能與攻擊者利用權限提升或控制系統服務有關。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-Windows-Firewall-Firewall-evtx"><a href="#3-Windows-Firewall-Firewall-evtx" class="headerlink" title="3. Windows Firewall-Firewall.evtx"></a>3. <strong>Windows Firewall-Firewall.evtx</strong></h3><ul>
+<li><p><strong>用途</strong>：此日誌記錄 Windows 防火牆的活動，包括入站和出站流量的允許或拒絕、規則的變更等。這對 IR 團隊至關重要，因為它能幫助檢測未授權的網路訪問或防火牆配置的異常。</p>
+</li>
+<li><p><strong>IR 角度分析</strong>：</p>
+<ul>
+<li><p><strong>未授權的網路流量</strong>：如果防火牆阻止了可疑的外部 IP 地址或入站連接，這可能是攻擊行為的跡象，IR 團隊可以追蹤此類事件來確定攻擊源。</p>
+</li>
+<li><p><strong>防火牆規則變更</strong>：攻擊者可能會嘗試更改防火牆規則以開放特定端口或允許特定流量。此日誌有助於發現此類異常行為。</p>
+</li>
+<li><p><strong>網路攻擊調查</strong>：若發現網路攻擊（如 DDoS 或端口掃描），這些防火牆日誌能提供來自特定 IP 或區域的可疑活動跡象。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-Security-evtx"><a href="#4-Security-evtx" class="headerlink" title="4. Security.evtx"></a>4. <strong>Security.evtx</strong></h3><ul>
+<li><p><strong>用途</strong>：安全日誌記錄與身份驗證和安全性相關的所有事件，包括用戶登錄、登出、權限授予、以及與安全策略相關的警告和錯誤。這是 IR 團隊用來追蹤潛在內部和外部攻擊的重要日誌。</p>
+</li>
+<li><p><strong>IR 角度分析</strong>：</p>
+<ul>
+<li><p><strong>可疑登錄行為</strong>：通過查看異常的登錄事件（如來自不尋常的地理位置、時間或設備的登錄）來檢測潛在的帳戶劫持或非法登錄。</p>
+</li>
+<li><p><strong>帳戶鎖定或失敗的登錄嘗試</strong>：攻擊者可能會通過暴力破解嘗試獲取帳戶存取權，這些事件能幫助 IR 團隊識別是否有此類攻擊行為。</p>
+</li>
+<li><p><strong>權限提升和可疑權限變更</strong>：追蹤是否有不正當的權限變更或系統設定，這是內部威脅或被滲透的跡象。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-Windows-Defender-Operational-evtx"><a href="#5-Windows-Defender-Operational-evtx" class="headerlink" title="5. Windows Defender-Operational.evtx"></a>5. <strong>Windows Defender-Operational.evtx</strong></h3><ul>
+<li><p><strong>用途</strong>：此日誌記錄 Windows Defender 防病毒軟體的活動，包含病毒掃描的結果、威脅檢測、病毒隔離、以及防病毒防護的錯誤或警告。在 IR 團隊進行惡意軟體調查時，這些日誌能提供有關威脅檢測和防護的重要資訊。</p>
+</li>
+<li><p><strong>IR 角度分析</strong>：</p>
+<ul>
+<li><p><strong>惡意程式檢測</strong>：Windows Defender 偵測到的病毒或惡意軟體活動是 IR 團隊調查的重點，這些事件能幫助團隊了解攻擊者是否已經在系統內部安裝了惡意軟體。</p>
+</li>
+<li><p><strong>隔離和清除</strong>：如果有惡意程式被隔離，這表明系統已經遭到感染。IR 團隊可以根據這些日誌追蹤惡意軟體的行為和影響範圍。</p>
+</li>
+<li><p><strong>防護錯誤</strong>：如果 Windows Defender 防護無法啟動或遇到錯誤，可能是攻擊者故意禁用防病毒軟體。這些事件能幫助 IR 團隊識別是否有防病毒防護被破壞。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>從 <strong>資訊回應 (Incident Response, IR)</strong> 的角度來看，了解每個事件日誌文件中的特定 <strong>Event ID</strong> 是至關重要的，因為這些 <strong>Event ID</strong> 代表了特定的事件或異常情況。以下是每個日誌文件中應該關注的一些關鍵 <strong>Event ID</strong>，這些對 IR 分析有重要的意義。</p>
+<h3 id="1-Powershell-Operational-evtx-1"><a href="#1-Powershell-Operational-evtx-1" class="headerlink" title="1. Powershell-Operational.evtx"></a>1. <strong>Powershell-Operational.evtx</strong></h3><ul>
+<li><p><strong>Event ID 4104</strong>: 輸出 PowerShell 腳本執行。當 PowerShell 執行腳本時，這個事件 ID 記錄了腳本的內容。攻擊者可能會執行惡意腳本來執行命令。</p>
+</li>
+<li><p><strong>Event ID 403</strong>: PowerShell 執行命令。這個事件 ID 記錄了所有執行的 PowerShell 命令。當有可疑命令執行時，這是需要重點關注的事件。</p>
+</li>
+<li><p><strong>Event ID 4103</strong>: PowerShell 執行遠端命令。這通常是攻擊者用來在目標系統上執行遠端命令的手段。</p>
+</li>
+</ul>
+<h3 id="2-System-evtx-1"><a href="#2-System-evtx-1" class="headerlink" title="2. System.evtx"></a>2. <strong>System.evtx</strong></h3><p><code>System.evtx</code> 記錄的是與操作系統和硬體相關的事件，這對於分析操作系統的異常行為非常有用。</p>
+<ul>
+<li><p><strong>Event ID 6008</strong>: 異常關機事件。此事件記錄了計算機異常關機的時間。這可能是因為攻擊或系統故障。</p>
+</li>
+<li><p><strong>Event ID 55</strong>: 文件系統損壞。這與文件系統錯誤或損壞有關，可能與攻擊活動（如勒索病毒）有關。</p>
+</li>
+<li><p><strong>Event ID 1001</strong>: 應用程式錯誤。當應用程式崩潰或錯誤時，此事件會記錄詳細資訊，這可能是攻擊或病毒感染的指標。</p>
+</li>
+</ul>
+<h3 id="3-Windows-Firewall-Firewall-evtx-1"><a href="#3-Windows-Firewall-Firewall-evtx-1" class="headerlink" title="3. Windows Firewall-Firewall.evtx"></a>3. <strong>Windows Firewall-Firewall.evtx</strong></h3><p>防火牆日誌對於追蹤網路攻擊行為非常有用，這些事件可以幫助 IR 團隊發現不明流量或異常的防火牆規則變動。</p>
+<ul>
+<li><p><strong>Event ID 2004</strong>: 新增一條防火牆規則</p>
+</li>
+<li><p><strong>Event ID 2005</strong>: 修改防火牆規則</p>
+</li>
+<li><p><strong>Event ID 3004</strong>: 防火牆規則更改。這是攻擊者可能會修改防火牆規則的標誌，可能是為了允許某些流量進入或出去。</p>
+</li>
+<li><p><strong>Event ID 4004</strong>: 防火牆錯誤。記錄防火牆運行過程中的錯誤或異常，可能與攻擊有關。</p>
+</li>
+</ul>
+<h3 id="4-Security-evtx-1"><a href="#4-Security-evtx-1" class="headerlink" title="4. Security.evtx"></a>4. <strong>Security.evtx</strong></h3><p><code>Security.evtx</code> 是 IR 團隊最常關注的日誌之一，因為它記錄了關鍵的安全事件，如登錄、登出、權限變更等。</p>
+<ul>
+<li><p><strong>Event ID 4624</strong>: 登錄成功。此事件記錄用戶成功登錄系統。IR 團隊需要查看哪些用戶帳戶進行了登錄，尤其是可疑帳戶。</p>
+</li>
+<li><p><strong>Event ID 4625</strong>: 登錄失敗。這通常表示暴力破解嘗試或未經授權的登錄，特別是當多次失敗的登錄嘗試來自相同的帳戶或 IP 時。</p>
+</li>
+<li><p><strong>Event ID 4732</strong>: 用戶帳戶組變更。這個事件記錄了帳戶的組成員資格變更，可能是攻擊者在試圖提升權限時進行的操作。</p>
+</li>
+<li><p><strong>Event ID 4688</strong>: 新進程創建。這個事件會顯示哪些進程被創建，包括其父進程。如果有可疑的進程被創建，這可能指示系統被滲透並執行了惡意軟體。</p>
+</li>
+</ul>
+<h3 id="5-Windows-Defender-Operational-evtx-1"><a href="#5-Windows-Defender-Operational-evtx-1" class="headerlink" title="5. Windows Defender-Operational.evtx"></a>5. <strong>Windows Defender-Operational.evtx</strong></h3><p>這個日誌記錄與 Windows Defender 防病毒軟體相關的操作性事件，是 IR 團隊檢查惡意程式和病毒活動的重要資料來源。</p>
+<ul>
+<li><p><strong>Event ID 1002</strong>: 反惡意代碼掃描在完成之前已停止。</p>
+</li>
+<li><p><strong>Event ID 1116</strong>: 反惡意代碼引擎發現惡意代碼或其他潛在的垃圾軟體。這個事件記錄 Windows Defender 偵測到的惡意程式或病毒，並標記威脅的類型。</p>
+</li>
+<li><p><strong>Event ID 1117</strong>: 防毒執行了一項操作以保護你的電腦。</p>
+</li>
+<li><p><strong>Event ID 1009</strong>: 威脅已被隔離。此事件記錄 Windows Defender 隔離了惡意軟體，這對 IR 團隊調查已經隔離的病毒或惡意程式很有用。</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-tw/defender-endpoint/troubleshoot-microsoft-defender-antivirus">Microsoft Defender 防病毒軟體事件標識碼和錯誤碼 - Microsoft Defender for Endpoint | Microsoft Learn</a></p>
+<ol>
+<li>When did the cyberjunkie user first successfully log into his computer? (UTC)<ul>
+<li>27/03/2023 14:37:09</li>
+</ul>
+</li>
+</ol>
+<p>這個首先要找 login successful 的 id，然後下 <code>cat [csv] |  awk -F , &#39;&#123;if ($4==4624) &#123;print $0&#125;&#125;&#39; | grep -i cyberjunkie</code> </p>
+<p><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-logon_success.png" alt=""></p>
+<ol start="2">
+<li>The user tampered with firewall settings on the system. Analyze the firewall event logs to find out the Name of the firewall rule added?<ul>
+<li>Metasploit C2 Bypass</li>
+</ul>
+</li>
+</ol>
+<p>這一題就看防火牆，需要查看 rule add 的 event log<br>首先用 <code>cat 20250413170330_EvtxECmd_Output.csv | awk -F , &#39;&#123;if ($4==2004) &#123;print $0&#125;&#125;&#39;</code> 輸出成csv檔案，從登入時間 <code>2023/3/27</code> 號開始往下找可以看到</p>
+<p><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-fw-rule-add.png" alt=""></p>
+<ol start="3">
+<li>Whats the direction of the firewall rule?<ul>
+<li>Outbound</li>
+</ul>
+</li>
+</ol>
+<p>同理可以在同一行看到</p>
+<ol start="4">
+<li>The user changed audit policy of the computer. Whats the Subcategory of this changed policy?<ul>
+<li>Other Object Access Events</li>
+</ul>
+</li>
+</ol>
+<p>在 <code>Security</code> 裡面 grep 4719 event id (System audit policy was changed)<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-change-audit-event.png" alt=""></p>
+<p><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-4719.png" alt=""></p>
+<p>將 <code>SubcategoryGuid</code> 拿去搜尋</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gpac/77878370-0712-47cd-997d-b07053429f6d">https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gpac/77878370-0712-47cd-997d-b07053429f6d</a></p>
+<p><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-SubcategoryGuid.png" alt=""></p>
+<ol start="5">
+<li>The user “cyberjunkie” created a scheduled task. Whats the name of this task?<ul>
+<li>HTB-AUTOMATION</li>
+</ul>
+</li>
+</ol>
+<p>一樣找 create scheduled task event id<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-create-schdule-task.png" alt=""></p>
+<p><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-4698.png" alt=""></p>
+<ol start="6">
+<li>Whats the full path of the file which was scheduled for the task?<ul>
+<li>C:\Users\CyberJunkie\Desktop\Automation-HTB.ps1</li>
+</ul>
+</li>
+</ol>
+<p><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-command.png" alt=""></p>
+<ol start="7">
+<li>What are the arguments of the command?<ul>
+<li>-A <a href="mailto:cyberjunkie@hackthebox.eu">cyberjunkie@hackthebox.eu</a></li>
+</ul>
+</li>
+</ol>
+<p><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-command.png" alt=""></p>
+<ol start="8">
+<li>The antivirus running on the system identified a threat and performed actions on it. Which tool was identified as malware by antivirus?<ul>
+<li>SharpHound</li>
+</ul>
+</li>
+</ol>
+<p>一開始先用 malware 當關鍵字下去找，然後找到一堆 5007<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-malware.png" alt=""></p>
+<p>把它過濾排除掉順著往下看就大概看出來有關病毒偵測的 event id 是 1116 或 1117<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-1116.png" alt=""></p>
+<p><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-1117.png" alt=""></p>
+<p>但不是 vmtoolsd…順著往下才最後找到另一個 <code>SharpHound</code><br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-SharpHound.png" alt=""></p>
+<ol start="9">
+<li><p>Whats the full path of the malware which raised the alert?</p>
+<ul>
+<li>Quarantine<br><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-Quarantine.png" alt=""></li>
+</ul>
+</li>
+<li><p>What action was taken by the antivirus?</p>
+<ul>
+<li>Quarantine</li>
+</ul>
+</li>
+</ol>
+<ol start="11">
+<li>The user used Powershell to execute commands. What command was executed by the user?<ul>
+<li>Get-FileHash -Algorithm md5 .\Desktop\Automation-HTB.ps1</li>
+</ul>
+</li>
+</ol>
+<p><img src="/img/2025/HTB-Intro-to-Blue-Team/HTB-Intro-to-Blue-Team-logjammer-ScriptBlockText.png" alt=""></p>
 
 
                 
