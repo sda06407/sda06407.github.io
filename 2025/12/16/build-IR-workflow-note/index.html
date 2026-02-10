@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="最近在上 Hackthebox 的 CDSA，上到 windows 取證的章節的時候，深覺要收的東西好多好雜，於是就在想有沒有什麼工具是可以自動幫我收我已知跟我未知的 artifacts然後又能在一個平台上統一查詢跟看的
+首先第一個當然就是收集證據的 script這邊列出我考量的幾個點
+
+有 GUI
+有簽章
+背後有知名組織或公司
+免費
+
+※更，實際部屬後發現 AI 功能無法幫助人員判斷，因為檔案的 metadata 都能被修改，如果AI判讀錯誤的 metadata 給出錯誤的反饋反而會造成誤導與困擾，因此思考後捨棄 AI 功能，只是寫得當下有考量進去就還是列出來了
+這邊列出三套工具的優劣提供參考
+
+
+
+.wide-table-wrapper {
+  overflow-x: auto;  /* 保留滾動條 */
+}
+
+/* 基本表格樣式（所有表格都可用） */
+table.hexo-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em auto;
+}
+
+.hexo-table th,
+.hexo-table td {
+  border: 1px solid #333;
+  padding: 8px;
+  vertical-align: middle;
+  word-wrap: break-word;   /* 🔹 確保文字在格子內換行 */
+  overflow-wrap: break-word; 
+  white-space: normal;     /* 🔹 允許文字換行 */
+}
+
+.hexo-table th {
+  background-color: #f2f2f2;
+}
+
+/* 🔥 只有寬表才套用 */
+table.hexo-table.wide {
+  width: auto;             /* 🔹 自動寬度，根據內容延伸 */
+  max-width: none;         
+  table-layout: fixed;     /* 🔹 固定列寬，文字換行不溢出 */
+}
+
+/* 對齊與列寬保持原本設定 */
+.c-center { text-align: center; width: 7%; }
+.c-medium { text-align: center; width: 10%; }
+.c-text   { text-align: left;   width: 18%; }
+
+
+
+  
+    
+      
+        工具
+        平台限制
+        GUI
+        程式簽章
+        客製化能力
+        授權 / 成本
+        主要優點
+        主要缺點
+        適合情境
+      
+    
+    
+      
+        KAPE
+        僅 Windows
+        有
+        有
+        高（模組化 Artifact / Target）
+        公司內部免費
+        成熟穩定、模組化彈性高、有 SANS 背書、取證流程標準化
+        僅支援 Windows、非完全開源、偏企業導向
+        企業 IR、DFIR 團隊、SOP 化的事件回應
+      
+      
+        CDIR
+        僅 Windows
+        無
+        有
+        低（固定撈取項目）
+        免費（GPL 2.0）
+        輕量、簡單、可信任簽章、適合快速蒐證
+        客製化能力不足、無 GUI、平台受限
+        快速初步蒐證、既定取證清單環境
+      
+      
+        CyLR
+        Windows / Linux / macOS
+        無
+        無
+        高（自訂撈取檔案）
+        免費（GPL 3.0）
+        跨平台、彈性高、適合進階使用者與研究用途
+        無簽章、專案維護風險、信任度較低
+        跨平台事件、研究測試、客製化取證需求
+      
+    
+  
+
+
+接著尋找分析平台，可以讓我做綜觀的事件分析這邊列出考量要點
+
+免費
+介面直觀
+支援 SSO
+架構可擴充
+可匯入 Sigma 等規則
+有 AI 輔助功能
+
+下面是選擇的三款事件分析平台
+
+ELK
+Timesketch
+Velociraptor">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="AStar">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="build IR workflow note"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="AStar&#39;s Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>build IR workflow note - AStar&#39;s Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AStar</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://i.imgur.com/mUijvOa.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>build IR workflow note</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2025-12-16
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>最近在上 Hackthebox 的 CDSA，上到 windows 取證的章節的時候，深覺要收的東西好多好雜，於是就在想有沒有什麼工具是可以自動幫我收我已知跟我未知的 artifacts<br>然後又能在一個平台上統一查詢跟看的</p>
+<p>首先第一個當然就是收集證據的 script<br>這邊列出我考量的幾個點</p>
+<ul>
+<li>有 GUI</li>
+<li>有簽章</li>
+<li>背後有知名組織或公司</li>
+<li>免費</li>
+</ul>
+<p>※更，實際部屬後發現 AI 功能無法幫助人員判斷，因為檔案的 metadata 都能被修改，如果AI判讀錯誤的 metadata 給出錯誤的反饋反而會造成誤導與困擾，因此思考後捨棄 AI 功能，只是寫得當下有考量進去就還是列出來了</p>
+<p>這邊列出三套工具的優劣提供參考</p>
+
+
+<style>
+.wide-table-wrapper {
+  overflow-x: auto;  /* 保留滾動條 */
+}
+
+/* 基本表格樣式（所有表格都可用） */
+table.hexo-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em auto;
+}
+
+.hexo-table th,
+.hexo-table td {
+  border: 1px solid #333;
+  padding: 8px;
+  vertical-align: middle;
+  word-wrap: break-word;   /* 🔹 確保文字在格子內換行 */
+  overflow-wrap: break-word; 
+  white-space: normal;     /* 🔹 允許文字換行 */
+}
+
+.hexo-table th {
+  background-color: #f2f2f2;
+}
+
+/* 🔥 只有寬表才套用 */
+table.hexo-table.wide {
+  width: auto;             /* 🔹 自動寬度，根據內容延伸 */
+  max-width: none;         
+  table-layout: fixed;     /* 🔹 固定列寬，文字換行不溢出 */
+}
+
+/* 對齊與列寬保持原本設定 */
+.c-center { text-align: center; width: 7%; }
+.c-medium { text-align: center; width: 10%; }
+.c-text   { text-align: left;   width: 18%; }
+</style>
+
+<div class="wide-table-wrapper">
+  <table class="hexo-table wide">
+    <thead>
+      <tr>
+        <th class="c-center">工具</th>
+        <th class="c-medium">平台限制</th>
+        <th class="c-center">GUI</th>
+        <th class="c-center">程式簽章</th>
+        <th class="c-center">客製化能力</th>
+        <th class="c-medium">授權 / 成本</th>
+        <th class="c-center">主要優點</th>
+        <th class="c-center">主要缺點</th>
+        <th class="c-center">適合情境</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="c-center">KAPE</td>
+        <td class="c-medium">僅 Windows</td>
+        <td class="c-center">有</td>
+        <td class="c-center">有</td>
+        <td class="c-text">高（模組化 Artifact / Target）</td>
+        <td class="c-medium">公司內部免費</td>
+        <td class="c-text">成熟穩定、模組化彈性高、有 SANS 背書、取證流程標準化</td>
+        <td class="c-text">僅支援 Windows、非完全開源、偏企業導向</td>
+        <td class="c-text">企業 IR、DFIR 團隊、SOP 化的事件回應</td>
+      </tr>
+      <tr>
+        <td class="c-center">CDIR</td>
+        <td class="c-medium">僅 Windows</td>
+        <td class="c-center">無</td>
+        <td class="c-center">有</td>
+        <td class="c-text">低（固定撈取項目）</td>
+        <td class="c-medium">免費（GPL 2.0）</td>
+        <td class="c-text">輕量、簡單、可信任簽章、適合快速蒐證</td>
+        <td class="c-text">客製化能力不足、無 GUI、平台受限</td>
+        <td class="c-text">快速初步蒐證、既定取證清單環境</td>
+      </tr>
+      <tr>
+        <td class="c-center">CyLR</td>
+        <td class="c-medium">Windows / Linux / macOS</td>
+        <td class="c-center">無</td>
+        <td class="c-center">無</td>
+        <td class="c-text">高（自訂撈取檔案）</td>
+        <td class="c-medium">免費（GPL 3.0）</td>
+        <td class="c-text">跨平台、彈性高、適合進階使用者與研究用途</td>
+        <td class="c-text">無簽章、專案維護風險、信任度較低</td>
+        <td class="c-text">跨平台事件、研究測試、客製化取證需求</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>接著尋找分析平台，可以讓我做綜觀的事件分析<br>這邊列出考量要點</p>
+<ul>
+<li>免費</li>
+<li>介面直觀</li>
+<li>支援 SSO</li>
+<li>架構可擴充</li>
+<li>可匯入 Sigma 等規則</li>
+<li>有 AI 輔助功能</li>
+</ul>
+<p>下面是選擇的三款事件分析平台</p>
+<ul>
+<li>ELK</li>
+<li>Timesketch</li>
+<li>Velociraptor</li>
+</ul>
+
+
+<style>
+/* 外層容器，實現橫向滾動 */
+.table-wrapper {
+  overflow-x: auto;        /* 突破窄螢幕時出現滾動條 */
+  margin: 1em -40px;       /* 突破 Hexo 主題容器 padding */
+  padding: 0 10px;         /* 避免貼邊太緊 */
+}
+
+/* 表格本身 */
+table.hexo-table {
+  border-collapse: collapse;
+  width: max-content;      /* 根據內容自動寬度 */
+  min-width: 100%;         /* 至少填滿容器 */
+  margin: 0 auto;
+  table-layout: auto;
+  background-color: #fff;
+}
+
+/* 表頭與表格格線 */
+.hexo-table th,
+.hexo-table td {
+  border: 1px solid #333;
+  padding: 8px 12px;
+  white-space: nowrap;     /* 避免自動換行 */
+  vertical-align: middle
+}
+
+.hexo-table th {
+  background-color: #f2f2f2;
+}
+
+/* 文字對齊 */
+.c-center { text-align: center; }
+.c-text   { text-align: left; }
+/* 垂直置中 */
+
+.c-table td, .c-table th {
+  text-align: center;      /* 水平置中 */
+  vertical-align: middle;  /* 垂直置中 */
+  padding: 10px;
+}
+
+/* 避免超長連結溢出 */
+.hexo-table a {
+  word-break: break-word;
+  color: #0366d6;
+  text-decoration: none;
+}
+.hexo-table a:hover {
+  text-decoration: underline;
+}
+
+/* 手機適配 */
+@media screen and (max-width: 768px) {
+  .hexo-table th,
+  .hexo-table td {
+    white-space: normal;   /* 手機上允許換行 */
+    padding: 6px 8px;
+  }
+}
+</style>
+
+<div class="table-wrapper">
+  <table class="hexo-table">
+    <thead>
+      <tr>
+        <th class="c-center">平台</th>
+        <th class="c-center">背景 / 定位</th>
+        <th class="c-center">主要特性</th>
+        <th class="c-center">LLM / AI 支援</th>
+        <th class="c-center">備註 / 相關連結</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:100%;">
+        <td class="c-center">ELK Stack</td>
+        <td class="c-center">Elastic 生態系，成熟的搜尋與分析平台</td>
+        <td class="c-text">
+          • 支援 SSO<br>
+          • Search pattern 成熟<br>
+          • 學習成本相對低
+        </td>
+        <td class="c-center">支援 LLM</td>
+        <td class="c-text">
+          <a href="https://www.elastic.co/docs/solutions/security/ai/set-up-connectors-for-large-language-models-llm" target="_blank">
+            Elastic LLM Connector 文件
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td class="c-center">Timesketch</td>
+        <td class="c-text">Google 開發，專注 DFIR 時間軸分析</td>
+        <td class="c-text">
+          • 專注時間軸分析<br>
+          • 介面簡潔<br>
+          • 適合事件重建
+        </td>
+        <td class="c-center">支援 LLM</td>
+        <td class="c-text">
+          <a href="https://timesketch.org/guides/admin/llm-features/" target="_blank">
+            Timesketch LLM 功能說明
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td class="c-center">Velociraptor</td>
+        <td class="c-text">Rapid7 支援的開源 DFIR 專案</td>
+        <td class="c-text">
+          • DFIR 開源專案<br>
+          • 功能強但介面不友善<br>
+          • 偏工程導向
+        </td>
+        <td class="c-center">非原生（可串接 Tool）</td>
+        <td class="c-text">
+          <a href="https://www.rapid7.com/about/press-releases/rapid7-acquires-digital-forensics-and-incident-response-open-source-project-velociraptor/" target="_blank">
+            Rapid7 收購說明
+          </a>
+          <br />
+          <a href="https://github.com/mgreen27/mcp-velociraptor" target="_blank">
+            Velociraptor mcp tool
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>當我用 KAPE 撈完 artifacts，準備匯入 Timesketch 的時候發現了一個問題─怎麼匯入?<br>按照官方的文件<br><a target="_blank" rel="noopener" href="https://timesketch.org/guides/user/import-from-json-csv/">https://timesketch.org/guides/user/import-from-json-csv/</a><br>不管是 json 或是 csv 都需轉成他指定的格式才能匯入，最省事的辦法是轉成 plaso檔案<br><a target="_blank" rel="noopener" href="https://github.com/log2timeline/plaso">https://github.com/log2timeline/plaso</a></p>
+<p>但遇到另一個問題─我如果把全部的 artifacts 轉成單一 plaso 匯入 timesketch 會太久<br>因此透過 GPT 幫我寫了一跳能自動爬取資料夾，把單一資料夾內的 artifacts 轉成一個 plaso<br>這樣可以分散式匯入加快時間</p>
+<p>流程是這樣</p>
+<ol>
+<li>KAPE 先做一次蒐集</li>
+<li>用以下腳本針對 KAPE 產出的資料夾再跑一次 (這邊用 KapeTriage 為範例)，需要更改的地方你可以搜尋 <code>please change it</code>，如果你用 CDIR 的話就沒有這個問題，他當幫忙分類到對應資料夾了</li>
+</ol>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">setlocal</span> enabledelayedexpansion</span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">REM Source path, please change it</span></span><br><span class="line"><span class="built_in">set</span> Tsource=G:\C\  </span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">REM Numeric timestamp using WMIC</span></span><br><span class="line"><span class="keyword">for</span> /f <span class="variable">%%i</span> <span class="keyword">in</span> (&#x27;wmic os get LocalDateTime ^| <span class="built_in">find</span> &quot;.&quot;&#x27;) <span class="keyword">do</span> <span class="built_in">set</span> ldt=<span class="variable">%%i</span></span><br><span class="line"><span class="built_in">set</span> timestamp=<span class="variable">!ldt:~0,14!</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">REM Output folder relative to current directory</span></span><br><span class="line"><span class="built_in">set</span> OutputBase=<span class="variable">%CD%</span>\output_<span class="variable">!timestamp!</span></span><br><span class="line"><span class="built_in">mkdir</span> &quot;<span class="variable">!OutputBase!</span>&quot;</span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">REM Log file</span></span><br><span class="line"><span class="built_in">set</span> LogFile=<span class="variable">!OutputBase!</span>\kape_log.txt</span><br><span class="line"><span class="built_in">echo</span> KAPE collection started: <span class="variable">%date%</span> <span class="variable">%time%</span> &gt; &quot;<span class="variable">!LogFile!</span>&quot;</span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">REM Kape Targets profile, please change it</span></span><br><span class="line"><span class="built_in">set</span> Targets=Antivirus CloudStorage_Metadata EventLogs EvidenceOfExecution FileSystem LNKFilesAndJumpLists Notepad PowerShellConsole RecycleBin_InfoFiles RegistryHives RemoteAccess ScheduledTasks SRUM SUM WER WBEM WebBrowsers WindowsTimeline</span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">REM Loop through targets</span></span><br><span class="line"><span class="keyword">for</span> <span class="variable">%%T</span> <span class="keyword">in</span> (<span class="variable">%Targets%</span>) <span class="keyword">do</span> (</span><br><span class="line">    <span class="built_in">set</span> Tdest=<span class="variable">!OutputBase!</span>\<span class="variable">%%T</span></span><br><span class="line">    <span class="built_in">mkdir</span> &quot;<span class="variable">!Tdest!</span>&quot;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">echo</span> ------------------------------------ &gt;&gt; &quot;<span class="variable">!LogFile!</span>&quot;</span><br><span class="line">    <span class="built_in">echo</span> Collecting Target: <span class="variable">%%T</span> -&gt; <span class="variable">!Tdest!</span> &gt;&gt; &quot;<span class="variable">!LogFile!</span>&quot;</span><br><span class="line">    <span class="built_in">echo</span> ------------------------------------ &gt;&gt; &quot;<span class="variable">!LogFile!</span>&quot;</span><br><span class="line"></span><br><span class="line">    kape.exe --tsource <span class="variable">!Tsource!</span> --target <span class="variable">%%T</span> --tdest &quot;<span class="variable">!Tdest!</span>&quot; --flatten --tflush &gt;&gt; &quot;<span class="variable">!LogFile!</span>&quot; <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">echo</span> Completed Target: <span class="variable">%%T</span> - <span class="variable">%date%</span> <span class="variable">%time%</span> &gt;&gt; &quot;<span class="variable">!LogFile!</span>&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> ------------------------------ &gt;&gt; &quot;<span class="variable">!LogFile!</span>&quot;</span><br><span class="line"><span class="built_in">echo</span> KAPE collection finished - <span class="variable">%date%</span> <span class="variable">%time%</span> &gt;&gt; &quot;<span class="variable">!LogFile!</span>&quot;</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/img/2025/build-IR-workflow-note/kape_bat_result.png" alt=""></p>
+<ol start="3">
+<li>然後再用下面的 sh 檔案呼叫 plaso 將一個個的資料夾內的 artifacts 轉成 plaso 檔，記得 <code>&lt;HOST_INPUT&gt; &lt;HOST_OUTPUT&gt;</code> 都要是絕對路徑<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># === Usage ===</span></span><br><span class="line"><span class="comment"># ./run_plaso.sh &lt;host_input_folder&gt; &lt;host_output_folder&gt;</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Example:</span></span><br><span class="line"><span class="comment"># ./run_plaso.sh /home/user/IR/ /tmp/IR/plaso</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># === Parse arguments ===</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$#</span>&quot;</span> -ne 2 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;❌ 錯誤：缺少參數&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;使用方式：&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;  <span class="variable">$0</span> &lt;HOST_INPUT&gt; &lt;HOST_OUTPUT&gt;&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;例子：&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;  <span class="variable">$0</span> /home/user/IR/ /tmp/IR/plaso&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">HOST_INPUT=<span class="string">&quot;<span class="variable">$1</span>&quot;</span></span><br><span class="line">HOST_OUTPUT=<span class="string">&quot;<span class="variable">$2</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># plaso version</span></span><br><span class="line">IMG=<span class="string">&quot;log2timeline/plaso:20250918&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># === Validate Input Path ===</span></span><br><span class="line"><span class="keyword">if</span> [ ! -d <span class="string">&quot;<span class="variable">$HOST_INPUT</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;❌ 錯誤：輸入資料夾不存在：<span class="variable">$HOST_INPUT</span>&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">mkdir -p <span class="string">&quot;<span class="variable">$HOST_OUTPUT</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;📁 Host Input:  <span class="variable">$HOST_INPUT</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;📁 Host Output: <span class="variable">$HOST_OUTPUT</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;🐳 Docker Image: <span class="variable">$IMG</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># === Process Each Subfolder Inside Input ===</span></span><br><span class="line"><span class="keyword">for</span> category <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$HOST_INPUT</span>&quot;</span>/*; <span class="keyword">do</span></span><br><span class="line">    [ -d <span class="string">&quot;<span class="variable">$category</span>&quot;</span> ] || <span class="built_in">continue</span></span><br><span class="line"></span><br><span class="line">    folder_name=$(basename <span class="string">&quot;<span class="variable">$category</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;➡️ 產生 <span class="variable">$folder_name</span>.plaso (來源: <span class="variable">$category</span>)&quot;</span></span><br><span class="line"></span><br><span class="line">    docker run --rm \</span><br><span class="line">        -v <span class="string">&quot;<span class="variable">$HOST_INPUT</span>&quot;</span>:/input \</span><br><span class="line">        -v <span class="string">&quot;<span class="variable">$HOST_OUTPUT</span>&quot;</span>:/output \</span><br><span class="line">        <span class="string">&quot;<span class="variable">$IMG</span>&quot;</span> \</span><br><span class="line">        log2timeline.py \</span><br><span class="line">            --storage_file <span class="string">&quot;/output/<span class="variable">$&#123;folder_name&#125;</span>.plaso&quot;</span> \</span><br><span class="line">            <span class="string">&quot;/input/<span class="variable">$&#123;folder_name&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;✔ 完成：<span class="variable">$folder_name</span>.plaso&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span></span><br></pre></td></tr></table></figure>
+<img src="/img/2025/build-IR-workflow-note/kape_to_plaso.png" alt=""></li>
+</ol>
+<p>因為我 plaso 都用 docker 跑，所以才會用這種方式</p>
+<p>timesketch 比較普通，照官方的方式 build<br><a target="_blank" rel="noopener" href="https://timesketch.org/guides/admin/install/">https://timesketch.org/guides/admin/install/</a></p>
+<p>接著可以透過 CLI 達成自動匯入&amp;自動上色的效果<br><a target="_blank" rel="noopener" href="https://timesketch.org/guides/user/cli-client/">https://timesketch.org/guides/user/cli-client/</a></p>
+<p><img src="/img/2025/build-IR-workflow-note/timesketch_mimikatz.png" alt=""></p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/sda06407" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2026 AStar<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
